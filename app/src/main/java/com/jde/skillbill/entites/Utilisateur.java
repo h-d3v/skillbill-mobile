@@ -12,6 +12,13 @@ public class Utilisateur {
     private int numeroTelephone;
     private Monnaie monnaieUsuelle;
 
+    public Utilisateur(String prenom, String nom, String courriel) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.courriel = courriel;
+    }
+
+
     public String getPrenom() {
         return prenom;
     }
