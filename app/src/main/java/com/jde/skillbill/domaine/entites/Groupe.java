@@ -1,6 +1,8 @@
 package com.jde.skillbill.domaine.entites;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -8,7 +10,11 @@ public class Groupe {
 
     private String nomGroupe;
     private Date dateCreation;
-    private Set<Utilisateur> utilisateurs;
+    private List<Utilisateur> utilisateurs;
+    private List<Facture> factures;
+
+    public Groupe(String nom, Utilisateur utilisateurCreateur, Monnaie monnaieAUtiliserDansLeGroupe) {
+    }
 
     public String getNomGroupe() {
         return nomGroupe;
@@ -26,11 +32,11 @@ public class Groupe {
         this.dateCreation = dateCreation;
     }
 
-    public Set<Utilisateur> getUtilisateurs() {
+    public List<Utilisateur> getUtilisateurs() {
         return utilisateurs;
     }
 
-    public void setUtilisateurs(Set<Utilisateur> utilisateurs) {
+    public void setUtilisateurs(List<Utilisateur> utilisateurs) {
         this.utilisateurs = utilisateurs;
     }
 
@@ -40,6 +46,14 @@ public class Groupe {
 
     public void setSoldeParUtilisateur(Map<Utilisateur, Double> soldeParUtilisateur) {
         this.soldeParUtilisateur = soldeParUtilisateur;
+    }
+
+    public List<Facture> getFactures() {
+        return factures;
+    }
+
+    public void setFactures(List<Facture> factures) {
+        this.factures = factures;
     }
 
     public Monnaie getMonnaieDuGroupe() {

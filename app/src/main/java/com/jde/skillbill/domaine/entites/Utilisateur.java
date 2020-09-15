@@ -1,6 +1,5 @@
 package com.jde.skillbill.domaine.entites;
 
-import java.util.Set;
 
 public class Utilisateur {
 
@@ -75,13 +74,4 @@ public class Utilisateur {
         this.monnaieUsuelle = monnaieUsuelle;
     }
 
-    public Set<Groupe> getGroupeAbonnes() {
-        return groupeAbonnes;
-    }
-
-    public void setGroupeAbonnes(Set<Groupe> groupeAbonnes) {
-        this.groupeAbonnes = groupeAbonnes;
-    }
-
-    private Set<Groupe> groupeAbonnes;
 }

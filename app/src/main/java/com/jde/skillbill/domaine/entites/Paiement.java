@@ -8,6 +8,7 @@ public class Paiement {
     private Utilisateur utilisateurPayeur;
     private Utilisateur utilisateurPaye;
     private Date datePaiement;
+    private double montant;
 
     public Groupe getGroupe() {
         return groupe;
@@ -39,5 +40,13 @@ public class Paiement {
 
     public void setDatePaiement(Date datePaiement) {
         this.datePaiement = datePaiement;
+    }
+
+    public double getMontant() {
+        return montant;
+    }
+
+    public void setMontant(double montant) {
+        this.montant = montant;
     }
 }
