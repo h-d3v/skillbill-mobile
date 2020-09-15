@@ -11,7 +11,7 @@ public class Utilisateur {
     private int numeroTelephone;
     private Monnaie monnaieUsuelle;
 
-    public Utilisateur(String prenom, String nom, String courriel) {
+    public Utilisateur(String prenom, String nom, String courriel, String motPasse) {
         this.prenom = prenom;
         this.nom = nom;
         this.courriel = courriel;
