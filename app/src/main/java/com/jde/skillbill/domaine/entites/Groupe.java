@@ -1,4 +1,4 @@
-package com.jde.skillbill.entites;
+package com.jde.skillbill.domaine.entites;
 
 import java.util.Date;
 import java.util.Map;

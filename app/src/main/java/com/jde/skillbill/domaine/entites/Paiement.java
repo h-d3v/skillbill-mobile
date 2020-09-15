@@ -1,4 +1,4 @@
-package com.jde.skillbill.entites;
+package com.jde.skillbill.domaine.entites;
 
 import java.util.Date;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 public class Paiement {
     private Groupe groupe;
     private Utilisateur utilisateurPayeur;
-    private List<Facture> factures;
     private Utilisateur utilisateurPaye;
     private Date datePaiement;
 
@@ -24,14 +23,6 @@ public class Paiement {
 
     public void setUtilisateurPayeur(Utilisateur utilisateurPayeur) {
         this.utilisateurPayeur = utilisateurPayeur;
-    }
-
-    public List<Facture> getFacture() {
-        return factures;
-    }
-
-    public void setFacture(List<Facture> factures) {
-        this.factures = factures;
     }
 
     public Utilisateur getUtilisateurPaye() {
