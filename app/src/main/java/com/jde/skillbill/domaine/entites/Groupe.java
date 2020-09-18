@@ -14,7 +14,10 @@ public class Groupe {
     private Monnaie monnaieDuGroupe;
     private Utilisateur utilisateurCreateurGroupe;
 
-    public Groupe(String nom, Utilisateur utilisateurCreateur, Monnaie monnaieAUtiliserDansLeGroupe) {
+    public Groupe(String nomGroupe, Utilisateur utilisateurCreateurGroupe,  Monnaie monnaieDuGroupe) {
+        this.nomGroupe = nomGroupe;
+        this.monnaieDuGroupe = monnaieDuGroupe;
+        this.utilisateurCreateurGroupe = utilisateurCreateurGroupe;
     }
 
     public String getNomGroupe() {

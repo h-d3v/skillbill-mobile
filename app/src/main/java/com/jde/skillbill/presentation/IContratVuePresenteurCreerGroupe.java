@@ -6,13 +6,14 @@ import java.util.List;
 
 public interface IContratVuePresenteurCreerGroupe {
     interface VueCreerGroupe{
+        void setPresenteurCreerGroupe(PresenteurCreerGroupe presenteurCreerGroupe);
+
         String getNomGroupe();
-        List<Utilisateur> getUtilisateursAjoutesAuGroupe();
 
     }
 
     interface PresenteurCreerGroupe {
        void creerGroupe();
-       List<Utilisateur> getUtilisateursAmis();
+
     }
 }
