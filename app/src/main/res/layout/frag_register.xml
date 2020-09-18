@@ -6,50 +6,44 @@
     android:layout_height="match_parent">
 
 
-    <!--Input pour le Nom-->
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/bgImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:srcCompat="@drawable/register_bg" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="0dp"
+        android:layout_width="323dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
-        android:layout_marginBottom="63dp"
         android:fontFamily="monospace"
         android:gravity="center"
-        android:text="S'inscrire"
+        android:text="Inscription"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textSize="40sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="44dp"
+        tools:layout_editor_absoluteY="66dp" />
 
+    <!--Input pour le Nom-->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="0dp"
+        android:id="@+id/tilNom"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="21dp"
+        app:boxCornerRadiusBottomEnd="30dp"
+        app:boxCornerRadiusBottomStart="30dp"
+        app:boxCornerRadiusTopEnd="30dp"
+        app:boxCornerRadiusTopStart="30dp"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:startIconDrawable="@drawable/round_account_box_white_18dp"
-        app:startIconTint="@color/colorAccent">
-
+        app:startIconTint="@color/colorAccent"
+        tools:layout_editor_absoluteY="200dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfNom"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_width="400dp"
+            android:layout_gravity="center"
+            android:layout_height="75dp"
             android:hint="Votre Nom"
             android:inputType="textPersonName"
             android:shadowColor="@color/colorPrimary"
@@ -59,22 +53,23 @@
 
     <!--Input pour le pass-->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
-        android:layout_width="0dp"
+        android:id="@+id/tilEmail"
+        android:layout_gravity="center"
+        app:boxCornerRadiusBottomEnd="30dp"
+        app:boxCornerRadiusBottomStart="30dp"
+        app:boxCornerRadiusTopEnd="30dp"
+        app:boxCornerRadiusTopStart="30dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
         app:startIconDrawable="@drawable/round_alternate_email_white_18dp"
-        app:startIconTint="@color/colorAccent">
-
+        app:startIconTint="@color/colorAccent"
+        tools:layout_editor_absoluteY="300dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfEmail"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_width="400dp"
+            android:layout_gravity="center"
+            android:layout_height="75dp"
             android:hint="votre@email.ca"
             android:inputType="textEmailAddress"
             android:shadowColor="@color/colorPrimary" />
@@ -83,21 +78,23 @@
     <!--Input pour retapper le pass-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout3"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_gravity="center"
+        app:boxCornerRadiusBottomEnd="30dp"
+        app:boxCornerRadiusBottomStart="30dp"
+        app:boxCornerRadiusTopEnd="30dp"
+        app:boxCornerRadiusTopStart="30dp"
         app:endIconMode="password_toggle"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
         app:startIconDrawable="@drawable/round_vpn_key_white_18dp"
-        app:startIconTint="@color/colorAccent">
+        app:startIconTint="@color/colorAccent"
+        tools:layout_editor_absoluteY="400dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfPass"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_width="400dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
             android:hint="mot_de_passe"
             android:inputType="textPassword"
             android:shadowColor="@color/colorPrimary" />
@@ -107,51 +104,48 @@
     <!--Input pour l'email-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout4"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_gravity="center"
+        app:boxCornerRadiusBottomEnd="30dp"
+        app:boxCornerRadiusBottomStart="30dp"
+        app:boxCornerRadiusTopEnd="30dp"
+        app:boxCornerRadiusTopStart="30dp"
         app:endIconMode="password_toggle"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
         app:startIconDrawable="@drawable/round_vpn_key_white_18dp"
-        app:startIconTint="@color/colorAccent">
+        app:startIconTint="@color/colorAccent"
+        tools:layout_editor_absoluteY="500dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfMdpVerif"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_width="400dp"
+            android:layout_height="75dp"
+            android:layout_gravity="center"
             android:hint="Retapper votre mot de passe"
             android:inputType="textPassword"
             android:shadowColor="@color/colorPrimary"
             app:textInputLayoutFocusedRectEnabled="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!--Bouttons inscription et retour-->
     <Button
         android:id="@+id/btnRetour"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="121dp"
         android:text="Retour à la connexion"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
+        tools:layout_editor_absoluteX="93dp"
+        tools:layout_editor_absoluteY="703dp" />
 
     <Button
         android:id="@+id/btnRegister"
         style="@style/Widget.MaterialComponents.Button.Icon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="21dp"
+        android:layout_width="190dp"
+        android:layout_height="85dp"
         android:text="S'inscrire"
         app:icon="@drawable/round_person_add_white_18dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnRetour"
-        app:layout_constraintEnd_toEndOf="@+id/btnRetour"
-        app:layout_constraintStart_toStartOf="@+id/btnRetour"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
+        tools:layout_editor_absoluteX="110dp"
+        tools:layout_editor_absoluteY="601dp" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
