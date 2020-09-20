@@ -3,6 +3,7 @@ package com.jde.skillbill.domaine.entites;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Groupe {
 
@@ -76,7 +77,29 @@ public class Groupe {
         this.utilisateurCreateurGroupe = utilisateurCreateurGroupe;
     }
 
+    @Override
+    public String toString() {
+        return "Groupe{" +
+                "nomGroupe='" + nomGroupe + '\'' +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Groupe groupe = (Groupe) o;
+        return Objects.equals(nomGroupe, groupe.nomGroupe) &&
+                Objects.equals(dateCreation, groupe.dateCreation) &&
+                Objects.equals(utilisateurs, groupe.utilisateurs) &&
+                Objects.equals(factures, groupe.factures) &&
+                Objects.equals(soldeParUtilisateur, groupe.soldeParUtilisateur) &&
+                monnaieDuGroupe == groupe.monnaieDuGroupe &&
+                Objects.equals(utilisateurCreateurGroupe, groupe.utilisateurCreateurGroupe);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(nomGroupe, dateCreation, utilisateurs, factures, soldeParUtilisateur, monnaieDuGroupe, utilisateurCreateurGroupe);
+    }
 }

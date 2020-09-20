@@ -1,6 +1,8 @@
 package com.jde.skillbill.domaine.entites;
 
 
+import java.util.Objects;
+
 public class Utilisateur {
 
     private String prenom;
@@ -74,4 +76,16 @@ public class Utilisateur {
         this.monnaieUsuelle = monnaieUsuelle;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Utilisateur that = (Utilisateur) o;
+        return courriel.equals(that.courriel);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(courriel);
+    }
 }

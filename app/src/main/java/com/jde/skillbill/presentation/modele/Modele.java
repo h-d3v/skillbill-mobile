@@ -1,37 +1,38 @@
 package com.jde.skillbill.presentation.modele;
 
-import android.app.Activity;
 import android.util.Log;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class Modele {
-    Utilisateur utilisateurConnecte= new Utilisateur("","test",null, null);
-    List<Groupe> groupeAbonnes = new ArrayList<>();
 
-    public Modele(Activity Activity) {
+    private DAO<Utilisateur> utilisateurDAO;
+    private List<DAO<Groupe>> groupeAbonnes;
+    private DAOFactory<Utilisateur,Groupe> utilisateurGroupeDAOFactory;
+
+    public Modele(DAOFactory<Utilisateur,Groupe> utilisateurGroupeDAOFactory) {
+        groupeAbonnes= utilisateurGroupeDAOFactory.lirePar(utilisateurDAO);
+        this.utilisateurGroupeDAOFactory=utilisateurGroupeDAOFactory;
     }
 
     public Utilisateur getUtilisateurConnecte() {
-        return utilisateurConnecte;
+        return utilisateurDAO.lire();
+    }
+    public  void setUtilisateurConnecte(DAO<Utilisateur> daoUtilistateur){
+        this.utilisateurDAO= daoUtilistateur;
+
     }
 
-    public void setUtilisateurConnecte(Utilisateur utilisateurConnecte) {
-        this.utilisateurConnecte = utilisateurConnecte;
-    }
 
-    public List<Groupe> getGroupeAbonnes() {
-        return groupeAbonnes;
-    }
 
 
 
     public void ajouterGroupe(Groupe groupeCree) {
-        groupeAbonnes.add(groupeCree);
+        utilisateurGroupeDAOFactory.creerPar(utilisateurDAO, groupeCree);
+        Log.d("ajouterGroupe(Groupe groupeCree)",utilisateurGroupeDAOFactory.lirePar(utilisateurDAO).get(0).lire().toString());
     }
 
 }
