@@ -19,7 +19,6 @@ public class Utilisateur {
         this.courriel = courriel;
     }
 
-
     public String getPrenom() {
         return prenom;
     }
