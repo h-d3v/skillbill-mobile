@@ -4,6 +4,8 @@ import android.util.Log;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -33,6 +35,15 @@ public class Modele {
     public void ajouterGroupe(Groupe groupeCree) {
         utilisateurGroupeDAOFactory.creerPar(utilisateurDAO, groupeCree);
         Log.d("ajouterGroupe(Groupe groupeCree)",utilisateurGroupeDAOFactory.lirePar(utilisateurDAO).get(0).lire().toString());
+
     }
 
+    public List<Groupe> getListGroupeAbonneUtilisateurConnecte() {
+        Iterator<DAO<Groupe>> iterator = utilisateurGroupeDAOFactory.lirePar(utilisateurDAO).iterator();
+        List<Groupe> groupes= new ArrayList<>();
+        while (iterator.hasNext()){
+            groupes.add(iterator.next().lire());
+        }
+        return groupes;
+    }
 }
