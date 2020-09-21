@@ -33,7 +33,6 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
                 presenteurCreerGroupe.creerGroupe();
             }
         });
-
         return racine;
     }
 

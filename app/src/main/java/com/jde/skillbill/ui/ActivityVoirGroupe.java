@@ -1,6 +1,7 @@
 package com.jde.skillbill.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import com.jde.skillbill.R;
@@ -14,6 +15,13 @@ public class ActivityVoirGroupe extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         setContentView(R.layout.activite_voir_groupes);
         VueVoirGroupes vueVoirGroupes= new VueVoirGroupes();
         Modele modele= new Modele(new DAOFactoryUtilisateurGroupeMock());
@@ -22,6 +30,5 @@ public class ActivityVoirGroupe extends AppCompatActivity {
         FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.layout_voir_groupe, vueVoirGroupes);
         fragmentTransaction.commit();
-
     }
 }

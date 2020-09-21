@@ -20,7 +20,9 @@ public class DAOFactoryUtilisateurGroupeMock implements DAOFactory<Utilisateur, 
     public DAOFactoryUtilisateurGroupeMock() {
         if(utilisateurGroupeHashMap.isEmpty()) {
             utilisateurGroupeHashMap.put(utilisateurDAO, new ArrayList<DAO<Groupe>>());
-            utilisateurGroupeHashMap.get(utilisateurDAO).add(new DAOGroupeMock(0, new Groupe("test", utilisateurFake, null)));
+            utilisateurGroupeHashMap.get(utilisateurDAO).add(new DAOGroupeMock(0, new Groupe("test groupe 1", utilisateurFake, null)));
+            utilisateurGroupeHashMap.get(utilisateurDAO).add(new DAOGroupeMock(1, new Groupe("test groupe 2", utilisateurFake, null)));
+
         }
     }
 
