@@ -16,7 +16,7 @@ public class ActivityCreerGroupe extends AppCompatActivity {
         setContentView(R.layout.activite_creer_groupe);
         VueCreerGroupe vueCreerGroupe = new VueCreerGroupe();
         Modele modele= new Modele(new DAOFactoryUtilisateurGroupeMock());
-        PresenteurCreerGroupe presenteurCreerGroupe = new PresenteurCreerGroupe(modele, vueCreerGroupe);
+        PresenteurCreerGroupe presenteurCreerGroupe = new PresenteurCreerGroupe(modele, vueCreerGroupe, this);
         vueCreerGroupe.setPresenteurCreerGroupe(presenteurCreerGroupe);
         FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.layout_creer_groupe, vueCreerGroupe);

@@ -19,6 +19,7 @@ public interface IContratVuePresenteurVoirGroupes {
 
         void commencerVoirGroupeActivite(int position);
 
+
         String getNomGroupe(int position);
     }
 }

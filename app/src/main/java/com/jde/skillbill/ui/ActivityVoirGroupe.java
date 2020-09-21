@@ -1,7 +1,6 @@
 package com.jde.skillbill.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import com.jde.skillbill.R;
@@ -15,7 +14,6 @@ public class ActivityVoirGroupe extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 

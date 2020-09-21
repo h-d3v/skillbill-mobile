@@ -19,6 +19,7 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
     private IContratVuePresenteurCreerGroupe.PresenteurCreerGroupe presenteurCreerGroupe;
     private TextView texteEntre;
     private Button boutonEnregistrer;
+    private Button boutonAnnuler;
 
     @Override
     public View onCreateView (LayoutInflater inflater,
@@ -31,6 +32,13 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
             @Override
             public void onClick(View view) {
                 presenteurCreerGroupe.creerGroupe();
+            }
+        });
+        boutonAnnuler = racine.findViewById(R.id.btnAnuller);
+        boutonAnnuler.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenteurCreerGroupe.retournerEnArriere();
             }
         });
         return racine;

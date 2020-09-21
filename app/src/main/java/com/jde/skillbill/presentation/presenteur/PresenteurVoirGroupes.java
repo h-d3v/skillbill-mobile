@@ -8,6 +8,7 @@ import com.jde.skillbill.presentation.IContratVuePresenteurVoirGroupes;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirGroupes;
 import com.jde.skillbill.ui.ActivityCreerGroupe;
+import com.jde.skillbill.ui.ActivityVoirUnGroupe;
 
 import java.util.List;
 
@@ -32,8 +33,11 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
 
     @Override
     public void commencerVoirGroupeActivite(int position) {
-
+        Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
+        activity.startActivity(intent);
     }
+
+
 
     @Override
     public String getNomGroupe(int position) {

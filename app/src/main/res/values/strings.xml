@@ -6,4 +6,5 @@
     <string name="action_enregistrer">Enregistrer</string>
     <string name="titre_nom_Groupe">Nom du nouveau groupe</string>
     <string name="textview_nom_groupe_a_creer">Entrez le nom du groupe</string>
+    <string name="action_annuler">Retour</string>
 </resources>

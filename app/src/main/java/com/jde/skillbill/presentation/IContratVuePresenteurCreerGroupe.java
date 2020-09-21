@@ -15,5 +15,6 @@ public interface IContratVuePresenteurCreerGroupe {
     interface PresenteurCreerGroupe {
        void creerGroupe();
 
+        void retournerEnArriere();
     }
 }

@@ -17,6 +17,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/action_enregistrer"/>
+        <Button
+                android:id="@+id/btnAnuller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_annuler"/>
 
     </androidx.appcompat.widget.Toolbar>
     <TextView
