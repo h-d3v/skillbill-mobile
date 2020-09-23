@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import com.jde.skillbill.R;
-import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.presentation.IContratVuePresenteurCreerGroupe;
 
 import java.util.List;

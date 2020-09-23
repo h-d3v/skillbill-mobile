@@ -4,28 +4,34 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent" android:orientation="vertical">
-    <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:theme="?attr/actionBarTheme"
-            android:minHeight="?attr/actionBarSize" android:id="@+id/toolbarCreerGroupe"
 
-            app:title="@string/titre_toolbar_creer_groupe">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarCreerGroupe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+
+        app:title="Creer un groupe">
+
         <Button
-                android:id="@+id/btnEnregistrer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/action_enregistrer"/>
+            android:id="@+id/btnEnregistrer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enregistrer" />
 
     </androidx.appcompat.widget.Toolbar>
     <TextView
-            android:text="@string/titre_nom_Groupe"
+            android:text="Entrer le nom du groupe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/textViewNomGroupeTitre" />
+
     <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/textViewNomGroupeEntree"
-            android:inputType="text" tools:text="@string/textview_nom_groupe_a_creer"
-            android:autofillHints="@string/textview_nom_groupe_a_creer"/>
+        android:id="@+id/textViewNomGroupeEntree"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="nom du groupe"
+        android:inputType="text"
+        tools:text="nom_groupe_a_creer" />
 </LinearLayout>

@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:backgroundTint="#882D2D"
+    android:backgroundTintMode="add"
+    tools:context=".ui.activité.ActivityCreerCompte">
 
 
     <ImageView
@@ -21,16 +24,21 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="64dp"
         android:layout_marginEnd="44dp"
-        android:layout_marginBottom="81dp"
+        android:defaultFocusHighlightEnabled="false"
         android:fontFamily="monospace"
         android:gravity="center"
+        android:shadowColor="@color/colorPrimaryDark"
+        android:shadowDx="50"
+        android:shadowDy="60"
+        android:shadowRadius="50"
         android:text="Inscription"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="#000000"
+        android:textColorHighlight="#3D5AFE"
         android:textSize="40sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tilNom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,16 +49,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="25dp"
+        android:layout_marginTop="199dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
         app:boxCornerRadiusTopStart="30dp"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@+id/tilEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
         app:startIconDrawable="@drawable/round_account_box_white_18dp"
         app:startIconTint="@color/colorAccent">
 
@@ -72,13 +79,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="25dp"
+        android:layout_marginTop="26dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
         app:boxCornerRadiusTopStart="30dp"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilNom"
@@ -101,13 +107,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="25dp"
+        android:layout_marginTop="27dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
         app:boxCornerRadiusTopStart="30dp"
         app:endIconMode="password_toggle"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilEmail"
@@ -131,13 +136,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="26dp"
+        android:layout_marginTop="25dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
         app:boxCornerRadiusTopStart="30dp"
         app:endIconMode="password_toggle"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
@@ -156,30 +160,33 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <!--Bouttons inscription et retour-->
+
+
     <Button
         android:id="@+id/btnRetour"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="95dp"
+        android:layout_marginBottom="83dp"
         android:text="Retour à la connexion"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnRegister"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="190dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="17dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="22dp"
+        android:backgroundTint="@color/colorAccent"
         android:text="S'inscrire"
         app:icon="@drawable/round_person_add_white_18dp"
         app:layout_constraintBottom_toTopOf="@+id/btnRetour"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
+        app:rippleColor="#232222" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

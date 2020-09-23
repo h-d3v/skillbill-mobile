@@ -7,11 +7,10 @@ public interface IGestionUtilisateur {
     /**
      *
      * @param nom
-     * @param prenom
      * @param courriel
      * @return Utilisateur l'utilisateur cree
      */
-    Utilisateur creerUtilisateur(String nom, String prenom, String courriel, String motPasse);
+    Utilisateur creerUtilisateur(String nom, String courriel, String motPasse);
 
     /**
      *

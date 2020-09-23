@@ -13,9 +13,9 @@ public class DAOFactoryUtilisateurGroupeMock implements DAOFactory<Utilisateur, 
 
     public DAOFactoryUtilisateurGroupeMock() {
         utilisateurGroupeHashMap=new HashMap<DAO<Utilisateur>, List<DAO<Groupe>>>();
-        Utilisateur utilisateurFake = new GestionUtilisateur().creerUtilisateur("Fake", "", "allo@allo.com","");
-        DAO<Utilisateur> utilisateurDAO= new DAOUtilisateurMock(utilisateurGroupeHashMap.size(), utilisateurFake);
-        utilisateurGroupeHashMap.put(utilisateurDAO, new ArrayList<DAO<Groupe>>());
+       // Utilisateur utilisateurFake = new GestionUtilisateur().creerUtilisateur("Fake", "allo@allo.com","");
+       // DAO<Utilisateur> utilisateurDAO= new DAOUtilisateurMock(utilisateurGroupeHashMap.size(), utilisateurFake);
+       // utilisateurGroupeHashMap.put(utilisateurDAO, new ArrayList<DAO<Groupe>>());
     }
 
     @Override

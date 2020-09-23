@@ -13,22 +13,25 @@ public class Modele {
     private List<DAO<Groupe>> groupeAbonnes;
     private DAOFactory<Utilisateur,Groupe> utilisateurGroupeDAOFactory;
 
+    //A enlever
     public Modele(DAOFactory<Utilisateur,Groupe> utilisateurGroupeDAOFactory) {
         groupeAbonnes= utilisateurGroupeDAOFactory.lirePar(utilisateurDAO);
         this.utilisateurGroupeDAOFactory=utilisateurGroupeDAOFactory;
     }
 
+    public Modele() {
+
+    }
+
+    public boolean utilisateurExistant(String email){return true;}
+
     public Utilisateur getUtilisateurConnecte() {
         return utilisateurDAO.lire();
     }
+
     public  void setUtilisateurConnecte(DAO<Utilisateur> daoUtilistateur){
         this.utilisateurDAO= daoUtilistateur;
-
     }
-
-
-
-
 
     public void ajouterGroupe(Groupe groupeCree) {
         utilisateurGroupeDAOFactory.creerPar(utilisateurDAO, groupeCree);

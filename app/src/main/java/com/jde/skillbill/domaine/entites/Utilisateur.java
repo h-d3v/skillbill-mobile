@@ -13,10 +13,18 @@ public class Utilisateur {
     private int numeroTelephone;
     private Monnaie monnaieUsuelle;
 
+    //On va utiliser le constructeur avec seulement l'attribut nom qui inclure aussi le prenom
+    // pour des raisons de logistiques et paresse
     public Utilisateur(String prenom, String nom, String courriel, String motPasse) {
         this.prenom = prenom;
         this.nom = nom;
         this.courriel = courriel;
+    }
+
+    public Utilisateur(String nom, String courriel, String motPasse) {
+        this.nom = nom;
+        this.courriel = courriel;
+        this.motPasse=motPasse;
     }
 
     public String getPrenom() {

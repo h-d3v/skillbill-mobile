@@ -1,4 +1,4 @@
-package com.jde.skillbill.ui;
+package com.jde.skillbill.ui.activité;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +22,5 @@ public class ActivityCreerGroupe extends AppCompatActivity {
         FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.layout_creer_groupe, vueCreerGroupe);
         fragmentTransaction.commit();
-
     }
 }

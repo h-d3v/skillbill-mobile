@@ -11,10 +11,8 @@ public class DAOUtilisateurMock implements DAO<Utilisateur> {
     Utilisateur utilisateur;
 
     public DAOUtilisateurMock(int id, Utilisateur utilisateur){
-        this.id=id;
-        this.utilisateur=utilisateur;
+        this.id=id;        this.utilisateur=utilisateur;
     }
-
 
     @Override
     public Utilisateur lire() {
