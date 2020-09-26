@@ -46,7 +46,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
         else{
             Utilisateur utilisateurCreer= gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(),
                     _vueCreerCompte.getEmail(),_vueCreerCompte.getPass());
-            //Affichage pour tester
+            //Affichage pour tester la creation du compte
             _vueCreerCompte.afficherCompteCreer(utilisateurCreer.getNom(), utilisateurCreer.getCourriel());
         }
 

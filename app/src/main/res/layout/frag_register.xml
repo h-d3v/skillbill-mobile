@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#882D2D"
     android:backgroundTintMode="add"
     tools:context=".ui.activité.ActivityCreerCompte">
 
@@ -45,7 +44,7 @@
 
     <!--Input pour le Nom-->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilNom"
+        android:id="@+id/tlNom"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -87,7 +86,7 @@
         app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilNom"
+        app:layout_constraintTop_toBottomOf="@+id/tlNom"
         app:startIconDrawable="@drawable/round_alternate_email_white_18dp"
         app:startIconTint="@color/colorAccent">
 

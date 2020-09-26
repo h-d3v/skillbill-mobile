@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.jde.skillbill.R;
 import com.jde.skillbill.presentation.IContratVPCreerCompte;
 import com.jde.skillbill.presentation.presenteur.PresenteurCreerCompte;
@@ -22,10 +23,18 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     private PresenteurCreerCompte _presenteur;
     private MaterialButton btnRegister;
     private MaterialButton btnRetour;
+
     private TextInputEditText tfMdp;
+    private TextInputLayout tlMdp;
+
     private TextInputEditText tfMdpVerif;
+    private TextInputLayout tlMdpVerif;
+
     private TextInputEditText tfEmail;
+    private TextInputEditText tlEmail;
+
     private TextInputEditText tfNom;
+    private TextInputLayout tlNom;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +42,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
         btnRegister=vue.findViewById(R.id.btnRegister);
         btnRetour=vue.findViewById(R.id.btnRetour);
         tfNom=vue.findViewById(R.id.tfNom);
+        tlNom=vue.findViewById(R.id.tlNom);
         tfEmail=vue.findViewById(R.id.tfEmail);
         tfMdp=vue.findViewById(R.id.tfPass);
 
@@ -41,6 +51,17 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             public void onClick(View v) {
                 //TODO: Verifier le mot de passe, le nom et l'email. Voir Ticket dans git
                 _presenteur.creerCompte();
+            }
+        });
+
+        tfNom.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!tfNom.getText().toString().matches("[A-Za-z]+")){
+                    tfNom.setError("Le nom doit contenir uniquement des lettres");
+
+                }
             }
         });
         return vue;

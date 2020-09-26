@@ -13,9 +13,6 @@ public class DataSourceUsersMock implements DataSourceUsers {
     //Tous les utilisateurs inscris
     private List<Utilisateur> _utilisateurs;
 
-
-
-
     @Override
     public Utilisateur lire(String email) {
         _utilisateurs= new LinkedList<>();

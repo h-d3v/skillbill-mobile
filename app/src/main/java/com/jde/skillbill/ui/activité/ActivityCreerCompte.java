@@ -15,8 +15,6 @@ import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.presenteur.PresenteurCreerCompte;
 import com.jde.skillbill.presentation.vue.VueCreerCompte;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class ActivityCreerCompte extends AppCompatActivity {
 
