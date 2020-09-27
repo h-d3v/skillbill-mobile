@@ -18,6 +18,5 @@ public interface IContratVPCreerCompte {
     interface PresenteurCreerCompte{
        void creerCompte();
        void retourLogin();
-
     }
 }

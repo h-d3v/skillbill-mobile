@@ -29,16 +29,12 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="315dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="57dp"
-            android:layout_marginTop="125dp"
-            android:layout_marginBottom="91dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="304dp"
+            android:layout_height="150dp"
             app:srcCompat="@drawable/skill_b_logo"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="57dp"
+            tools:layout_editor_absoluteY="75dp" />
 
         <TextView
             android:id="@+id/textView"
@@ -46,17 +42,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
-            android:layout_marginBottom="415dp"
             android:fontFamily="monospace"
             android:padding="5dp"
             android:text="Connexion"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            tools:layout_editor_absoluteX="120dp"
+            tools:layout_editor_absoluteY="269dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -71,14 +64,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/txtUtilisateur"
+            android:id="@+id/etEmailCnx"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:autofillHints=""
             android:backgroundTint="@android:color/transparent"
-            android:hint="nom d'utilisateur"
+            android:hint="@string/prompt_email"
             android:inputType="textEmailAddress"
             android:padding="15dp"
             android:textColor="#FFFFFF"
@@ -93,7 +86,7 @@
             android:background="#999999" />
 
         <EditText
-            android:id="@+id/txtMotDePasse"
+            android:id="@+id/etMdpCnx"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
@@ -120,7 +113,7 @@
             android:layout_marginTop="10dp">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnConnexion"
+                android:id="@+id/btnCnx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -128,7 +121,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/colorPrimaryDark"
+                android:backgroundTint="@color/colorPrimary"
                 android:elevation="0dp"
                 android:src="@drawable/round_arrow"
                 android:tint="@android:color/white"
@@ -139,18 +132,20 @@
         </RelativeLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button"
+            android:id="@+id/btnInscriptionCnx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="S'inscricre" />
+            android:text="S'inscricre"
+            app:backgroundTint="@color/colorAccent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button2"
+            android:id="@+id/btnMdpOublie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Mot de passe oublié?" />
+            android:text="Mot de passe oublié?"
+            app:backgroundTint="@color/colorAccent" />
 
         <RelativeLayout
             android:layout_width="match_parent"
