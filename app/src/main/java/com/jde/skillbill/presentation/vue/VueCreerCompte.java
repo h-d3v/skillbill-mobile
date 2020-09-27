@@ -57,7 +57,13 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
 
         btnRegister.setEnabled(false);
 
-        //TODO le onclick du boutton qui redirige vers le connexion.
+        btnRetour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _presenteur.retourLogin();
+            }
+        });
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,13 +118,16 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             }
         });
 
-        //verif fu mdp
+        //verif du mdp
         tfMdp.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
                 if(!getPass().matches("[.\\S]+") || getPass().length()<8){
                     btnRegister.setEnabled(false);
                     tfMdp.setError("Le mot de passe ne doit pas contenir d'espace et plus de 8 caractères.");
@@ -129,9 +138,6 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
                         btnRegister.setEnabled(true);
                     }
                 }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
             }
         });
 
@@ -166,7 +172,6 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     public void setPresenteur(PresenteurCreerCompte presenteurCreerCompte) {
         _presenteur=presenteurCreerCompte;
     }
-
 
     @Override
     public String getNom() {
@@ -206,6 +211,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
         alertBuilder.setMessage("Courriel: "+email+"Nom: "+nom);
         alertBuilder.show();
     }
+
 
     // les trois methodes suivantes sont la pour la verification dans le presenteur,
     //pour l'instant pas besoin

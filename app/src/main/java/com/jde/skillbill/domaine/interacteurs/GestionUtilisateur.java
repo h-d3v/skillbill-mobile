@@ -22,10 +22,14 @@ public class GestionUtilisateur implements IGestionUtilisateur {
         _dataSource = dataSource;
     }
 
+    //Pour verifier si l'email est pris
     public boolean utilisateurExiste(String email){
-        Log.i("String email", email);
         utilisateur=_dataSource.lire(email);
         return utilisateur != null;
+    }
+
+    public Utilisateur tenterConnexion(String email, String mdp){
+        return _dataSource.tenterConnexion(email, mdp);
     }
 
 

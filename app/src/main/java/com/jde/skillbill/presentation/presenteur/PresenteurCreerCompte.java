@@ -57,7 +57,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
 
     @Override
     public void retourLogin() {
-
+        _activite.finish();
     }
 
 

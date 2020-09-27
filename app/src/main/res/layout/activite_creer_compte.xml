@@ -4,6 +4,6 @@
     android:id="@+id/layout_creer_compte"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activité.ActivityCreerCompte">
+    tools:context=".ui.activity.ActivityCreerCompte">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

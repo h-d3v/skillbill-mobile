@@ -1,11 +1,9 @@
-package com.jde.skillbill.ui.activité;
+package com.jde.skillbill.ui.activity;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
+
 import com.jde.skillbill.R;
-import com.jde.skillbill.presentation.modele.Modele;
-import com.jde.skillbill.presentation.presenteur.PresenteurCreerGroupe;
 import com.jde.skillbill.presentation.vue.VueCreerGroupe;
 
 public class ActivityCreerGroupe extends AppCompatActivity {

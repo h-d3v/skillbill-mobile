@@ -9,13 +9,13 @@ import java.util.List;
 
 public class Modele {
 
-    private DAO<Utilisateur> utilisateurDAO;
+    private Utilisateur utilisateurConnecte;
     private List<DAO<Groupe>> groupeAbonnes;
     private DAOFactory<Utilisateur,Groupe> utilisateurGroupeDAOFactory;
 
     //A enlever
     public Modele(DAOFactory<Utilisateur,Groupe> utilisateurGroupeDAOFactory) {
-        groupeAbonnes= utilisateurGroupeDAOFactory.lirePar(utilisateurDAO);
+        //groupeAbonnes= utilisateurGroupeDAOFactory.lirePar(utilisateurDAO);
         this.utilisateurGroupeDAOFactory=utilisateurGroupeDAOFactory;
     }
 
@@ -26,16 +26,16 @@ public class Modele {
     public boolean utilisateurExistant(String email){return true;}
 
     public Utilisateur getUtilisateurConnecte() {
-        return utilisateurDAO.lire();
+        return utilisateurConnecte;
     }
 
-    public  void setUtilisateurConnecte(DAO<Utilisateur> daoUtilistateur){
-        this.utilisateurDAO= daoUtilistateur;
+    public  void setUtilisateurConnecte(Utilisateur utilisateur){
+        this.utilisateurConnecte = utilisateur;
     }
 
-    public void ajouterGroupe(Groupe groupeCree) {
+    /*public void ajouterGroupe(Groupe groupeCree) {
         utilisateurGroupeDAOFactory.creerPar(utilisateurDAO, groupeCree);
         Log.d("ajouterGroupe(Groupe groupeCree)",utilisateurGroupeDAOFactory.lirePar(utilisateurDAO).get(0).lire().toString());
-    }
+    }*/
 
 }

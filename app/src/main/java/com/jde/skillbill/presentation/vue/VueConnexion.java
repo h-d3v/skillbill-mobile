@@ -1,6 +1,8 @@
 package com.jde.skillbill.presentation.vue;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +11,13 @@ import android.widget.EditText;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jde.skillbill.R;
 import com.jde.skillbill.presentation.IContratVPConnexion;
 import com.jde.skillbill.presentation.presenteur.PresenteurConnexion;
+
+import java.util.Objects;
 
 public class VueConnexion extends Fragment implements IContratVPConnexion.IVueConnexion {
 
@@ -35,6 +40,14 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
         btnInscription=vue.findViewById(R.id.btnInscriptionCnx);
         btnMdpOublie=vue.findViewById(R.id.btnMdpOublie);
 
+        btnInscription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _presenteur.allerInscription();
+            }
+        });
+
+        btnCnx.setEnabled(false);
         btnCnx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,8 +55,62 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
             }
         });
 
+
+        etEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!getEmail().matches("[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,4}")){
+                    btnCnx.setEnabled(false);
+                    etEmail.setError("Veuillez entrer un email valide.");
+                }
+                else{
+                    emailValide=true;
+                    if (tousLesChampsValides()) {
+                        btnCnx.setEnabled(true);
+                    }
+                }
+            }
+        });
+
+        etMdp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!getMdp().matches("[.\\S]+") || getMdp().length()<8){
+                    btnCnx.setEnabled(false);
+                    etMdp.setError("Le mot de passe ne doit pas contenir d'espace et plus de 8 caractères.");
+                }
+                else {
+                    mdpValide = true;
+                    if (tousLesChampsValides()) {
+                        btnCnx.setEnabled(true);
+                    }
+                }
+            }
+        });
+
         return vue;
     }
+
 
     @Override
     public String getMdp() {
@@ -56,8 +123,8 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
     }
 
     @Override
-    public boolean verifierLesChamps() {
-        return false;
+    public boolean tousLesChampsValides() {
+        return emailValide && mdpValide;
     }
 
     @Override
@@ -65,4 +132,19 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
         _presenteur=presenteur;
     }
 
+    //Affiche une erreur avec
+    public void afficherMsgErreur() {
+        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+        alertBuilder.setTitle("Connexion impossible!");
+        alertBuilder.setMessage("L'email et le mot de passe ne correspondent pas.");
+        alertBuilder.show();
+    }
+
+    //Pour test seulement, sera enlever au merge
+    public void afficherMsgConnecter(String email, String nom) {
+        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+        alertBuilder.setTitle("Connexion réussie!");
+        alertBuilder.setMessage("Courriel: "+email+"  Nom: "+nom);
+        alertBuilder.show();
+    }
 }

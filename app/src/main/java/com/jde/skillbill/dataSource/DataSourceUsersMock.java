@@ -16,6 +16,7 @@ public class DataSourceUsersMock implements DataSourceUsers {
     @Override
     public Utilisateur lire(String email) {
         _utilisateurs= new LinkedList<>();
+        //En att l'api rest seulement ces utilisateurs peuvent se connecter.
         _utilisateurs.add(new Utilisateur("Julien J","jj@jde.com","julien123"));
         _utilisateurs.add(new Utilisateur("Hedi","hedi@jde.com","hedi123"));
         _utilisateurs.add(new Utilisateur("Patrick","patrick@jde.com","jaimeUncleBob123"));
@@ -42,4 +43,22 @@ public class DataSourceUsersMock implements DataSourceUsers {
         }
         return utilisateurACreer;
     }
+
+    @Override
+    public Utilisateur tenterConnexion(String email, String mdp){
+        _utilisateurs= new LinkedList<>();
+        //En att l'api rest seulement ces utilisateurs peuvent se connecter.
+        _utilisateurs.add(new Utilisateur("Julien J","jj@jde.com","julien123"));
+        _utilisateurs.add(new Utilisateur("Hedi","hedi@jde.com","hedi1234"));
+        _utilisateurs.add(new Utilisateur("Patrick","patrick@jde.com","jaimeUncleBob123"));
+        Utilisateur utilisateurAConnecter=null;
+        for (Utilisateur utilisateur:_utilisateurs) {
+            int resultEmail=utilisateur.getCourriel().compareTo(email);
+            int resultMdp=utilisateur.getMotPasse().compareTo(mdp);
+            if (resultEmail==0 && resultMdp==0) utilisateurAConnecter=utilisateur;
+        }
+        return utilisateurAConnecter;
+    }
+
+
 }
