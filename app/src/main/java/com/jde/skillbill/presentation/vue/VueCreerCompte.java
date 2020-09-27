@@ -53,7 +53,11 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
         tfEmail=vue.findViewById(R.id.tfEmail);
         tfMdp=vue.findViewById(R.id.tfPass);
         tfMdpVerif=vue.findViewById(R.id.tfMdpVerif);
+
+
         btnRegister.setEnabled(false);
+
+        //TODO le onclick du boutton qui redirige vers le connexion.
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
