@@ -2,6 +2,8 @@ package com.jde.skillbill.presentation.vue;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,34 +38,123 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     private TextInputEditText tfNom;
     private TextInputLayout tlNom;
 
+    private boolean mdpValide=false;
+    private boolean nomValide=false;
+    private boolean emailValide=false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vue=inflater.inflate(R.layout.frag_register, container,false);
+
         btnRegister=vue.findViewById(R.id.btnRegister);
         btnRetour=vue.findViewById(R.id.btnRetour);
         tfNom=vue.findViewById(R.id.tfNom);
         tlNom=vue.findViewById(R.id.tlNom);
         tfEmail=vue.findViewById(R.id.tfEmail);
         tfMdp=vue.findViewById(R.id.tfPass);
-
+        tfMdpVerif=vue.findViewById(R.id.tfMdpVerif);
+        btnRegister.setEnabled(false);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Verifier le mot de passe, le nom et l'email. Voir Ticket dans git
                 _presenteur.creerCompte();
             }
         });
 
-        tfNom.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+        //verification du nom
+        tfNom.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!tfNom.getText().toString().matches("[A-Za-z]+")){
-                    tfNom.setError("Le nom doit contenir uniquement des lettres");
-
+            public void afterTextChanged(Editable s) {
+                if(!getNom().matches("[A-z\\s]+")) {
+                    btnRegister.setEnabled(false);
+                    tfNom.setError("Le nom doit contenir uniquement des lettres.");
+                }
+                else{
+                   nomValide=true;
+                   if(tousLesChampsValides()){
+                       btnRegister.setEnabled(true);
+                   }
                 }
             }
         });
+
+        //verif du email
+        tfEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!getEmail().matches("[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,4}")){
+                    btnRegister.setEnabled(false);
+                    tfEmail.setError("Veuillez entrer un email valide.");
+                }
+                else{
+                    emailValide=true;
+                    if (tousLesChampsValides()) {
+                        btnRegister.setEnabled(true);
+                    }
+                }
+            }
+        });
+
+        //verif fu mdp
+        tfMdp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!getPass().matches("[.\\S]+") || getPass().length()<8){
+                    btnRegister.setEnabled(false);
+                    tfMdp.setError("Le mot de passe ne doit pas contenir d'espace et plus de 8 caractères.");
+                }
+                else {
+                    mdpValide = true;
+                    if (tousLesChampsValides()) {
+                        btnRegister.setEnabled(true);
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        //verif si le second champ du mot de passe correspond au premier
+        tfMdpVerif.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!getPass().equals(getPassVerif())){
+                    btnRegister.setEnabled(false);
+                    tfMdpVerif.setError("Le mot de passe ne correspond pas");
+                    mdpValide=false;
+                }
+                else{
+                    mdpValide=true;
+                    if (tousLesChampsValides()) {
+                        btnRegister.setEnabled(true);
+                    }
+                }
+            }
+        });
+
         return vue;
     }
 
@@ -88,6 +179,32 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
         return Objects.requireNonNull(tfMdp.getText()).toString();
     }
 
+    public String getPassVerif() {
+        return Objects.requireNonNull(tfMdpVerif.getText()).toString();
+    }
+
+    public boolean tousLesChampsValides(){
+        return emailValide && nomValide && mdpValide;
+    }
+
+
+    public void afficherEmailDejaPrit(){
+        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+                alertBuilder.setTitle("Adresse e-mail deja utilisée");
+                alertBuilder.setMessage("Veuillez choisir un autre courriel ou connectez-vous à votre compte");
+                alertBuilder.show();
+    }
+
+    //Pour test seulement, devra etre enlever
+    public void afficherCompteCreer(String nom, String email){
+        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+        alertBuilder.setTitle("Compte bien creer");
+        alertBuilder.setMessage("Courriel: "+email+"Nom: "+nom);
+        alertBuilder.show();
+    }
+
+    // les trois methodes suivantes sont la pour la verification dans le presenteur,
+    //pour l'instant pas besoin
     @Override
     public boolean verifierMDP() {
         return false;
@@ -103,17 +220,4 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
         return false;
     }
 
-    public void afficherEmailDejaPrit(){
-        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
-                alertBuilder.setTitle("Adresse e-mail deja utilisée");
-                alertBuilder.setMessage("Veuillez choisir un autre courriel ou connectez-vous à votre compte");
-                alertBuilder.show();
-    }
-
-    public void afficherCompteCreer(String nom, String email){
-        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
-        alertBuilder.setTitle("Compte bien creer");
-        alertBuilder.setMessage("Courriel: "+email+"Nom: "+nom);
-        alertBuilder.show();
-    }
 }
