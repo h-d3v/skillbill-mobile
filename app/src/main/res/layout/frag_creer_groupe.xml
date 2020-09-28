@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarCreerGroupe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+
+        app:title="Creer un groupe">
+
+        <Button
+            android:id="@+id/btnEnregistrer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enregistrer" />
+
+    </androidx.appcompat.widget.Toolbar>
+    <TextView
+            android:text="Entrer le nom du groupe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/textViewNomGroupeTitre" />
+
+    <EditText
+        android:id="@+id/textViewNomGroupeEntree"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="nom du groupe"
+        android:inputType="text"
+        tools:text="nom_groupe_a_creer" />
+</LinearLayout>
