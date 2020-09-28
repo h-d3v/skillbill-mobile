@@ -7,6 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 public class GestionGroupes implements IGestionGroupes {
+
+
+    ISourceDonnee sourceDonnee;
+    public GestionGroupes(ISourceDonnee iSourceDonnee){
+        this.sourceDonnee=iSourceDonnee;
+    }
+
     /**
      * @param nom
      * @param utilisateurCreateur
@@ -15,8 +22,11 @@ public class GestionGroupes implements IGestionGroupes {
      */
     @Override
     public Groupe creerGroupe(String nom, Utilisateur utilisateurCreateur, Monnaie monnaieAUtiliserDansLeGroupe) {
+        Groupe groupe= new Groupe(nom, utilisateurCreateur, monnaieAUtiliserDansLeGroupe);
 
-        return new Groupe(nom, utilisateurCreateur, monnaieAUtiliserDansLeGroupe);
+        if(sourceDonnee.creerGroupeParUtilisateur(utilisateurCreateur,groupe)){
+            return new Groupe(nom, utilisateurCreateur, monnaieAUtiliserDansLeGroupe);
+        }else return null;
     }
 
     /**
@@ -27,9 +37,7 @@ public class GestionGroupes implements IGestionGroupes {
     @Override
     public Utilisateur ajouterMembre(Groupe groupe, Utilisateur utilisateur) {
 
-        if(groupe.getUtilisateurs().contains(utilisateur)){
-            return null;
-        }else return groupe.getUtilisateurs().get(-1);
+      return null;
     }
 
     /**
@@ -40,7 +48,7 @@ public class GestionGroupes implements IGestionGroupes {
     @Override
     public boolean supprimerMembre(Groupe groupe, Utilisateur utilisateur) {
 
-        return groupe.getUtilisateurs().remove(utilisateur);
+        return false;
     }
 
     /**
@@ -50,8 +58,7 @@ public class GestionGroupes implements IGestionGroupes {
      */
     @Override
     public Facture ajouterFacture(Groupe groupe, Facture facture) {
-        groupe.getFactures().add(facture);
-        return groupe.getFactures().get(-1);
+        return null;
     }
 
     /**
@@ -70,11 +77,7 @@ public class GestionGroupes implements IGestionGroupes {
      */
     @Override
     public Facture trouverUneFacture(Groupe groupe, Facture facture) {
-        int index =-1;
-        if(index>-1) {
-            return groupe.getFactures().get(index);
-        }
-        else return null;
+       return null;
     }
 
     /**
@@ -83,7 +86,7 @@ public class GestionGroupes implements IGestionGroupes {
      */
     @Override
     public List<Utilisateur> trouverTousLesUtilisateurs(Groupe groupe) {
-        return groupe.getUtilisateurs();
+        return null;
     }
 
     /**
@@ -93,7 +96,7 @@ public class GestionGroupes implements IGestionGroupes {
      */
     @Override
     public Double soldeUtilisateur(Groupe groupe, Utilisateur utilisateur) {
-        return groupe.getSoldeParUtilisateur().get(utilisateur);
+        return null;
     }
 
     /**
@@ -103,8 +106,8 @@ public class GestionGroupes implements IGestionGroupes {
      */
     @Override
     public Groupe modifierNomGroupe(Groupe groupe, String unNom) {
-        groupe.setNomGroupe(unNom);
-        return groupe;
+
+        return null;
     }
 
     /**
@@ -113,7 +116,7 @@ public class GestionGroupes implements IGestionGroupes {
      */
     @Override
     public void payerUnUtilisateurDansSonGroupe(Groupe groupe, Paiement paiement) {
-        Map<Utilisateur, Double> utilisateurMap = groupe.getSoldeParUtilisateur();
+       /** Map<Utilisateur, Double> utilisateurMap = groupe.getSoldeParUtilisateur();
         Utilisateur utilisateurPayeur = paiement.getUtilisateurPayeur();
         Utilisateur utilisateurPaye = paiement.getUtilisateurPaye();
         if(utilisateurMap.containsKey(utilisateurPayeur)
@@ -123,7 +126,7 @@ public class GestionGroupes implements IGestionGroupes {
             double soldePaye=utilisateurMap.get(paiement.getUtilisateurPaye());
             utilisateurMap.put(utilisateurPayeur,soldePayeur+paiement.getMontant());
             utilisateurMap.put(utilisateurPaye, soldePaye- paiement.getMontant());
-        }
+        }**/
 
 
 

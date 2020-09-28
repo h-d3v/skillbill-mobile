@@ -3,15 +3,25 @@ package com.jde.skillbill.domaine.interacteurs;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
+import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
+
+import java.util.List;
 
 public class GestionUtilisateur implements IGestionUtilisateur {
-
+    /**
+     * TODO unifier les interfaces
+     */
     DataSourceUsers _dataSource;
     Utilisateur utilisateur=null;
+    ISourceDonnee sourceDonnee;
 
     public GestionUtilisateur(DataSourceUsers dataSource) {
+    }
+    public GestionUtilisateur(ISourceDonnee iSourceDonnee){
+        sourceDonnee=iSourceDonnee;
     }
 
     /**
@@ -56,5 +66,10 @@ public class GestionUtilisateur implements IGestionUtilisateur {
     @Override
     public boolean modifierNumeroTelephone(Utilisateur utilisateur, int numeroTelephone) {
         return false;
+    }
+
+    @Override
+    public List<Groupe> trouverGroupesAbonne(Utilisateur utilisateur) {
+        return sourceDonnee.lireTousLesGroupesAbonnes(utilisateur) ;
     }
 }

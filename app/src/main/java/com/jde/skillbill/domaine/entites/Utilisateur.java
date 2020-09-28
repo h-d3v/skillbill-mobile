@@ -1,6 +1,5 @@
 package com.jde.skillbill.domaine.entites;
 
-
 import java.util.Objects;
 
 public class Utilisateur {

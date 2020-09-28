@@ -1,7 +1,10 @@
 package com.jde.skillbill.domaine.interacteurs.interfaces;
 
 import android.graphics.Bitmap;
+import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
+
+import java.util.List;
 
 public interface IGestionUtilisateur {
     /**
@@ -22,4 +25,6 @@ public interface IGestionUtilisateur {
     boolean ajouterPhotoProfil(Utilisateur utilisateur,Bitmap bitmap);
     boolean modifierPhotoProfil(Utilisateur utilisateur, Bitmap bitmap);
     boolean modifierNumeroTelephone(Utilisateur utilisateur, int numeroTelephone);
+
+    List<Groupe> trouverGroupesAbonne(Utilisateur utilisateur);
 }
