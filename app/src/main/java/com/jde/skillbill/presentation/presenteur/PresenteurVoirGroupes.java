@@ -2,10 +2,10 @@ package com.jde.skillbill.presentation.presenteur;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
+
 import com.jde.skillbill.BuildConfig;
-import com.jde.skillbill.dataSource.DataSourceUsersMock;
 import com.jde.skillbill.domaine.entites.Groupe;
+import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirGroupes;
@@ -16,8 +16,6 @@ import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
 
-import static com.jde.skillbill.donnees.mockDAO.SourceDonneesMock.utilisateurFake;
-
 public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.IPresenteurVoirGroupe {
     private Modele modele;
     private VueVoirGroupes vueVoirGroupes;
@@ -27,13 +25,13 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         this.modele = modele;
         this.vueVoirGroupes = vueVoirGroupes;
         this.activity=activity;
-        modele.setUtilisateurConnecte(utilisateurFake);//TODO OR NOT TODO
+        modele.setUtilisateurConnecte(new Utilisateur("Julien J","jj@jde.com","julien123"));//TODO mettre l'utilisateur qui sera connecter
     }
 
     @Override
     public List<Groupe> getGroupeAbonnes() {
-
-        modele.setGroupesAbonnesUtilisateurConnecte( new GestionUtilisateur(new SourceDonneesMock()).trouverGroupesAbonne(utilisateurFake));
+        //TODO avec le vrai utilisateur connecter.
+        modele.setGroupesAbonnesUtilisateurConnecte( new GestionUtilisateur(new SourceDonneesMock()).trouverGroupesAbonne(new Utilisateur("Julien J","jj@jde.com","julien123")));
         return modele.getListGroupeAbonneUtilisateurConnecte();
     }
 

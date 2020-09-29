@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.jde.skillbill.R;
-import com.jde.skillbill.dataSource.DataSourceUsersMock;
 
+import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.presenteur.PresenteurCreerCompte;
 import com.jde.skillbill.presentation.vue.VueCreerCompte;
@@ -24,7 +24,7 @@ public class ActivityCreerCompte extends AppCompatActivity {
 
         VueCreerCompte vue=new VueCreerCompte();
         _presenteur=new PresenteurCreerCompte(this,modele, vue);
-        _presenteur.setDataSource(new DataSourceUsersMock());
+        _presenteur.setDataSource(new SourceDonneesMock());
         vue.setPresenteur(_presenteur);
         FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
         ft.add(R.id.layout_creer_compte, vue);

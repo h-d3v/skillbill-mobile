@@ -34,8 +34,6 @@
         <activity android:name=".ui.activity.ActivityVoirUnGroupe">
 
         </activity>
-
-
     </application>
 
 </manifest>
