@@ -1,7 +1,5 @@
 package com.jde.skillbill.presentation.vue.recyclerview_adapters;
 
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +25,21 @@ public class RVVoirGroupesAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        (holder.itemView.findViewById(R.id.rv_groupe_item_button)).setOnClickListener(new View.OnClickListener(){
+        (holder.itemView.findViewById(R.id.rv_groupe_item_button_voir_le_groupe)).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View bouton){
                 presenteurVoirGroupes.commencerVoirGroupeActivite(position);
             }
         });
-        ((Button)holder.itemView.findViewById(R.id.rv_groupe_item_button)).setText(presenteurVoirGroupes.getNomGroupe(position));
+
+        ((Button)holder.itemView.findViewById(R.id.rv_groupe_item_button_voir_le_groupe)).setText(presenteurVoirGroupes.getNomGroupe(position));
+
+        (holder.itemView.findViewById(R.id.btn_ajouter_facture_groupe)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenteurVoirGroupes.commencerAjouterFactureActivite(position);
+            }
+        });
     }
 
 

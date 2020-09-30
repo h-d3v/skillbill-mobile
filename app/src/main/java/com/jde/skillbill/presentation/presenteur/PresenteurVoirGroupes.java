@@ -11,6 +11,7 @@ import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirGroupes;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirGroupes;
+import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
 import com.jde.skillbill.ui.activity.ActivityCreerGroupe;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
@@ -50,6 +51,12 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
             throw new AssertionError("Assertion failed");
         }
         return modele.getListGroupeAbonneUtilisateurConnecte().get(position).getNomGroupe();
+    }
+
+    @Override
+    public void commencerAjouterFactureActivite(int position) {
+        Intent intent = new Intent(activity, ActivityAjouterFacture.class);
+        activity.startActivity(intent);
     }
 
     @Override

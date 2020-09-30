@@ -13,6 +13,7 @@ public class ActivityVoirGroupe extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        onStart();
 
     }
 
@@ -28,4 +29,5 @@ public class ActivityVoirGroupe extends AppCompatActivity {
         fragmentTransaction.add(R.id.layout_voir_groupe, vueVoirGroupes);
         fragmentTransaction.commit();
     }
+
 }
