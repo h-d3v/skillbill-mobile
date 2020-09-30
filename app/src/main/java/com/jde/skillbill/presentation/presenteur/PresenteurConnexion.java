@@ -45,6 +45,8 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         Intent intent = new Intent(_activite, ActivityVoirGroupe.class);
         intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte().getCourriel());
         _activite.startActivity(intent);
+        //Pour eviter de retourner au login
+        _activite.finish();
         }
 
     else {

@@ -15,7 +15,7 @@ public class ActivityConnexion extends AppCompatActivity {
     private PresenteurConnexion _presenteur;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    final protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_connexion);
         Modele modele = new Modele();
