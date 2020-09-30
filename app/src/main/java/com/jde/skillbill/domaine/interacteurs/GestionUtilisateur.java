@@ -1,7 +1,6 @@
 package com.jde.skillbill.domaine.interacteurs;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
@@ -14,27 +13,25 @@ public class GestionUtilisateur implements IGestionUtilisateur {
     /**
      * TODO unifier les interfaces
      */
-    DataSourceUsers _dataSource;
+    SourceDonneesMock _dataSource;
     Utilisateur utilisateur=null;
-    ISourceDonnee sourceDonnee;
 
-    public GestionUtilisateur(DataSourceUsers dataSource) {
+    public GestionUtilisateur(SourceDonneesMock sourceDonnee) {
+        _dataSource=sourceDonnee;
     }
-    public GestionUtilisateur(ISourceDonnee iSourceDonnee){
-        sourceDonnee=iSourceDonnee;
-    }
+
 
     /**
      * Accesseur de l'instance d'un Singleton
      */
-    public void setSource(DataSourceUsers dataSource){
+    public void setSource(SourceDonneesMock dataSource){
         assert dataSource!=null;
-        _dataSource = dataSource;
+        _dataSource= dataSource;
     }
 
     //Pour verifier si l'email est pris
     public boolean utilisateurExiste(String email){
-        utilisateur=_dataSource.lire(email);
+        utilisateur=_dataSource.lireUtilisateur(email);
         return utilisateur != null;
     }
 
@@ -70,6 +67,6 @@ public class GestionUtilisateur implements IGestionUtilisateur {
 
     @Override
     public List<Groupe> trouverGroupesAbonne(Utilisateur utilisateur) {
-        return sourceDonnee.lireTousLesGroupesAbonnes(utilisateur) ;
+        return _dataSource.lireTousLesGroupesAbonnes(utilisateur) ;
     }
 }

@@ -3,8 +3,8 @@ package com.jde.skillbill.presentation.presenteur;
 import android.app.Activity;
 
 import com.jde.skillbill.domaine.entites.Utilisateur;
-import com.jde.skillbill.domaine.interacteurs.DataSourceUsers;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
+import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVPCreerCompte;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueCreerCompte;
@@ -13,7 +13,7 @@ import com.jde.skillbill.presentation.vue.VueCreerCompte;
 public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCreerCompte {
     private VueCreerCompte _vueCreerCompte;
     private Modele _modele;
-    private DataSourceUsers _dataSource;
+    private SourceDonneesMock _dataSource;
     private Activity _activite;
 
 
@@ -23,7 +23,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
         _vueCreerCompte=vueCreerCompte;
     }
 
-    public void setDataSource(DataSourceUsers dataSource) {
+    public void setDataSource(SourceDonneesMock dataSource) {
         _dataSource = dataSource;
     }
 
