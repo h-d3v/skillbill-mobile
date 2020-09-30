@@ -39,9 +39,10 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
 
     if (utilisateurConnecter!=null){
         //TODO rediriger vers le menu principal a partir de ses informations
-        //Pour l'instant on dis qu'il a ete connecter avec succes.
+        //Pour l'instant on dis qu'il a ete connecter avec succes
         _modele.setUtilisateurConnecte(utilisateurConnecter);
         _vueConnexion.afficherMsgConnecter(_modele.getUtilisateurConnecte().getCourriel(), _modele.getUtilisateurConnecte().getNom());
+        //redirection vers ses groupes
         Intent intent = new Intent(_activite, ActivityVoirGroupe.class);
         intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte().getCourriel());
         _activite.startActivity(intent);
