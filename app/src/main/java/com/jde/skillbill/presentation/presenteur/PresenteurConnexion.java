@@ -3,6 +3,7 @@ package com.jde.skillbill.presentation.presenteur;
 import android.app.Activity;
 import android.content.Intent;
 
+import android.util.Log;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
@@ -10,6 +11,7 @@ import com.jde.skillbill.presentation.IContratVPConnexion;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueConnexion;
 import com.jde.skillbill.ui.activity.ActivityCreerCompte;
+import com.jde.skillbill.ui.activity.ActivityVoirGroupe;
 
 public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConnexion {
 
@@ -17,6 +19,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
     private Modele _modele;
     private SourceDonneesMock _dataSource;
     private Activity _activite;
+    private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
 
     public PresenteurConnexion(Activity activite,Modele modele, VueConnexion vueConnexion) {
         _activite=activite;
@@ -39,6 +42,9 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         //Pour l'instant on dis qu'il a ete connecter avec succes.
         _modele.setUtilisateurConnecte(utilisateurConnecter);
         _vueConnexion.afficherMsgConnecter(_modele.getUtilisateurConnecte().getCourriel(), _modele.getUtilisateurConnecte().getNom());
+        Intent intent = new Intent(_activite, ActivityVoirGroupe.class);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte().getCourriel());
+        _activite.startActivity(intent);
         }
 
     else {
@@ -53,4 +59,6 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         Intent intentInscription = new Intent(_activite, ActivityCreerCompte.class);
         _activite.startActivity(intentInscription);
     }
+
+
 }

@@ -20,18 +20,19 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     private Modele modele;
     private VueVoirGroupes vueVoirGroupes;
     private Activity activity;
+    private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
 
     public PresenteurVoirGroupes(Modele modele, VueVoirGroupes vueVoirGroupes, Activity activity) {
         this.modele = modele;
         this.vueVoirGroupes = vueVoirGroupes;
         this.activity=activity;
-        modele.setUtilisateurConnecte(new Utilisateur("Julien J","jj@jde.com","julien123"));//TODO mettre l'utilisateur qui sera connecter
+        modele.setUtilisateurConnecte(new Utilisateur("Julien J", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null));
+
     }
 
     @Override
     public List<Groupe> getGroupeAbonnes() {
-        //TODO avec le vrai utilisateur connecter.
-        modele.setGroupesAbonnesUtilisateurConnecte( new GestionUtilisateur(new SourceDonneesMock()).trouverGroupesAbonne(new Utilisateur("Julien J","jj@jde.com","julien123")));
+        modele.setGroupesAbonnesUtilisateurConnecte( new GestionUtilisateur(new SourceDonneesMock()).trouverGroupesAbonne(modele.getUtilisateurConnecte()));
         return modele.getListGroupeAbonneUtilisateurConnecte();
     }
 
@@ -54,6 +55,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     @Override
     public void commencerCreerGroupeActivite() {
         Intent intent = new Intent(activity, ActivityCreerGroupe.class);
+        intent.putExtra(EXTRA_ID_UTILISATEUR,modele.getUtilisateurConnecte().getCourriel());
         activity.startActivity(intent);
     }
 }

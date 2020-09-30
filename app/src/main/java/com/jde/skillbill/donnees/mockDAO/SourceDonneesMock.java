@@ -19,7 +19,7 @@ public class SourceDonneesMock implements ISourceDonnee{
         //En att l'api rest seulement ces utilisateurs peuvent se connecter.
 
         _utilisateurs.add(new Utilisateur("Julien J","jj@jde.com","julien123"));
-        _utilisateurs.add(new Utilisateur("Hedi","hedi@jde.com","hedi123"));
+        _utilisateurs.add(new Utilisateur("Hedi","hedi@jde.com","hedi1234"));
         _utilisateurs.add(new Utilisateur("Patrick","patrick@jde.com","jaimeUncleBob123"));
         if(utilisateurGroupeHashMap.isEmpty()) {
             //L'utilisateur 0 est julien.
@@ -31,13 +31,15 @@ public class SourceDonneesMock implements ISourceDonnee{
 
     @Override
     public  boolean creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) {
+        if(utilisateurGroupeHashMap.get(utilisateur)==null && !utilisateurGroupeHashMap.containsKey(utilisateur)) {
+            utilisateurGroupeHashMap.put(utilisateur,new ArrayList<Groupe>());
+        }
         utilisateurGroupeHashMap.get(utilisateur).add(groupe);
         return true ; // Pas pertinent pour le mock
     }
 
     @Override
     public List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur){
-        Log.d("_p voir groupe", Integer.toString(utilisateurGroupeHashMap.get(_utilisateurs.get(0)).size()));
         return utilisateurGroupeHashMap.get(utilisateur);
     }
 

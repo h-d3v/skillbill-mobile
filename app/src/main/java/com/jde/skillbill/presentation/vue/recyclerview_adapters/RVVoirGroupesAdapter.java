@@ -40,6 +40,7 @@ public class RVVoirGroupesAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         if (presenteurVoirGroupes==null) return 0;
+        else if (presenteurVoirGroupes.getGroupeAbonnes()==null) return 0;
         return presenteurVoirGroupes.getGroupeAbonnes().size();
     }
 }
