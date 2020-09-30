@@ -30,6 +30,19 @@
 
     </androidx.appcompat.widget.Toolbar>
     <TextView
+            android:text="@string/titre_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/textView4"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/editTextDate"/>
+    <CalendarView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/calendarView"/>
+    <TextView
             android:text="@string/titre_montant"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/txt_titre_montant" android:inputType="none"/>

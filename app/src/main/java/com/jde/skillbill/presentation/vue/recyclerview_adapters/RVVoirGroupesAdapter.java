@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.jde.skillbill.R;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirGroupes;
@@ -18,6 +19,7 @@ public class RVVoirGroupesAdapter extends RecyclerView.Adapter {
     }
 
     @Override
+    @NonNull
     public RecyclerView.ViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
         LinearLayout linearLayout= (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.vue_rv_groupes_item, parent, false);
         return new  RecyclerView.ViewHolder(linearLayout){};
