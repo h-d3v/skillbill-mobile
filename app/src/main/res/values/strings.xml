@@ -37,6 +37,8 @@
     <string name="text_montant_paye_utilisateurs_facture">Le montant de $1 a ete paye (Pour exemple)</string>
     <string name="titre_date">Date : </string>
     <string name="titre_facture">Nom de l\'activité</string>
+    <string name="txt_message_erreur">Le montant ou la date est invalide</string>
+    <string name="titre_erreur_generique">Erreur</string>
 
 
 </resources>

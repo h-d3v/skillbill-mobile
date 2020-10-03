@@ -130,10 +130,10 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     }
     @Override
     public String getTitreInput(){
-        Log.e("alll", editTextTitre.getText().toString()+"j");//TODO bub
-        Log.e("alll", editTextTitre.getText().toString().trim()+"j");
-        if(editTextTitre.getText().toString().trim()==""){
-            Log.e("If ", editTextTitre.getText().toString());
+        Log.e("vueAjouterGroupeBug", editTextTitre.getText().toString()+"j");
+        Log.e("vueAjouterGroupeBug", editTextTitre.getText().toString().trim()+"j");
+        if(editTextTitre.getText().toString()==null || editTextTitre.getText().toString().trim().equals("")){
+
             return null;
         }
         return editTextTitre.getText().toString();

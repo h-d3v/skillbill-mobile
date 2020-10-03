@@ -106,8 +106,9 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 Intent intent = new Intent(activityAjouterFacture, ActivityVoirUnGroupe.class);
                 activityAjouterFacture.startActivity(intent);
             };
-        }catch (NumberFormatException | NullPointerException  | DateTimeParseException  e){
-            vueAjouterFacture.afficherMessageErreurAlertDialog(e.toString(), e.getMessage());//TODO Placer les messages dans le string.xml
+        }catch (NumberFormatException  | DateTimeParseException  e){
+            vueAjouterFacture.afficherMessageErreurAlertDialog(activityAjouterFacture.getResources().getString(R.string.txt_message_erreur)
+            ,activityAjouterFacture.getResources().getString(R.string.titre_erreur_generique) );//TODO Placer les messages dans le string.xml
         }
 
     }
