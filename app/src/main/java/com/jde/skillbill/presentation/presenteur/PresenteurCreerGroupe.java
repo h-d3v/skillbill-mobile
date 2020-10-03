@@ -20,11 +20,14 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
     private Activity activity;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
 
+
     public PresenteurCreerGroupe(Modele modele, VueCreerGroupe vueCreerGroupe, Activity activity) {
         this.modele = modele;
         this.vueCreerGroupe = vueCreerGroupe;
         this.activity=activity;
+
         modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null));
+
     }
 
     @Override

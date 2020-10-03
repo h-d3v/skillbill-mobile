@@ -30,9 +30,18 @@
 
     </androidx.appcompat.widget.Toolbar>
     <TextView
+            android:text="@string/titre_facture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/titreFacture"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/edit_t_nom_activie" android:inputType="text"/>
+    <TextView
             android:text="@string/titre_date"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/textView4"/>
+            android:layout_height="wrap_content" android:id="@+id/textView5"/>
     <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

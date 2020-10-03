@@ -15,6 +15,7 @@ public class RVVoirGroupesAdapter extends RecyclerView.Adapter {
     PresenteurVoirGroupes presenteurVoirGroupes;
 
     public RVVoirGroupesAdapter(PresenteurVoirGroupes presenteurVoirGroupes) {
+        super();
         this.presenteurVoirGroupes = presenteurVoirGroupes;
     }
 
@@ -51,4 +52,5 @@ public class RVVoirGroupesAdapter extends RecyclerView.Adapter {
         else if (presenteurVoirGroupes.getGroupeAbonnes()==null) return 0;
         return presenteurVoirGroupes.getGroupeAbonnes().size();
     }
+
 }

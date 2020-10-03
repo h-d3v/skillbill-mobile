@@ -36,6 +36,7 @@
     </string-array>
     <string name="text_montant_paye_utilisateurs_facture">Le montant de $1 a ete paye (Pour exemple)</string>
     <string name="titre_date">Date : </string>
+    <string name="titre_facture">Nom de l\'activité</string>
 
 
 </resources>

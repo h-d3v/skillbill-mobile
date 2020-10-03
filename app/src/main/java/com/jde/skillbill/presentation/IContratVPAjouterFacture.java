@@ -1,25 +1,28 @@
 package com.jde.skillbill.presentation;
 
-import android.widget.SpinnerAdapter;
-import com.jde.skillbill.domaine.entites.Utilisateur;
-import com.jde.skillbill.presentation.presenteur.PresenteurAjouterFacture;
-
-import java.util.HashMap;
-import java.util.Set;
+import java.time.DateTimeException;
+import java.time.LocalDate;
 
 public interface IContratVPAjouterFacture {
 
     interface IPresenteurAjouterFacture{
 
         void montrerListeUtilisateurMontant();
+
+        void ajouterFacture();
     }
 
     interface IVueAjouterFacture{
 
         void setPresenteur(IPresenteurAjouterFacture presenteurAjouterFacture);
+
+        LocalDate getDateFactureInput() throws NullPointerException, DateTimeException;
+
         double getMontantFactureInput();
 
 
+        void afficherMessageErreurAlertDialog(String message, String titre);
 
+        String getTitreInput();
     }
 }

@@ -22,6 +22,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     private VueVoirGroupes vueVoirGroupes;
     private Activity activity;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
+    private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
 
     public PresenteurVoirGroupes(Modele modele, VueVoirGroupes vueVoirGroupes, Activity activity) {
         this.modele = modele;
@@ -56,6 +57,8 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     @Override
     public void commencerAjouterFactureActivite(int position) {
         Intent intent = new Intent(activity, ActivityAjouterFacture.class);
+        intent.putExtra(EXTRA_GROUPE_POSITION, position);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
         activity.startActivity(intent);
     }
 
