@@ -39,6 +39,7 @@
     <string name="titre_facture">Nom de l\'activité</string>
     <string name="txt_message_erreur">Le montant ou la date est invalide</string>
     <string name="titre_erreur_generique">Erreur</string>
+    <string name="txt_facture_par_defaut">Facture du </string>
 
 
 </resources>

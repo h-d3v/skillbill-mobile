@@ -99,7 +99,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             LocalDate date = vueAjouterFacture.getDateFactureInput();
             String titre = vueAjouterFacture.getTitreInput();
             if(titre==null){
-                titre="Facture du "+date.toString(); //TODO string.xml
+                titre=activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut)+" "+date.toString();
             }
             IGestionFacture iGestionFacture= new GestionFacture(iSourceDonnee);
             if(iGestionFacture.creerFacture(montant,utilisateurConnecte,date, groupe,  titre)){
@@ -108,7 +108,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             };
         }catch (NumberFormatException  | DateTimeParseException  e){
             vueAjouterFacture.afficherMessageErreurAlertDialog(activityAjouterFacture.getResources().getString(R.string.txt_message_erreur)
-            ,activityAjouterFacture.getResources().getString(R.string.titre_erreur_generique) );//TODO Placer les messages dans le string.xml
+            ,activityAjouterFacture.getResources().getString(R.string.titre_erreur_generique) );
         }
 
     }
