@@ -19,6 +19,8 @@ public interface IContratVuePresenteurVoirGroupes {
         void commencerVoirGroupeActivite(int position);
 
 
+        String getSoldeGroupe(int position);
+
         String getNomGroupe(int position);
 
         void commencerAjouterFactureActivite(int position);

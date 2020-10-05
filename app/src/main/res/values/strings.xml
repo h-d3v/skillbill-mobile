@@ -8,6 +8,12 @@
     <string name="textview_nom_groupe_a_creer">Entrez le nom du groupe</string>
     <string name="action_annuler">Retour</string>
 
+    <!-- Strings pour le solde de l'utilisateur dans un groupe -->
+    <string name="solde_utilisateur_nul">Bravo ! Tous les comptes sont réglés</string>
+    <string name="solde_utilisateur_crediteur">On vous doit </string>
+    <string name="solde_utilisateur_debiteur">Vous devez  </string>
+    <string name="pas_de_facture_dans_le_groupe">Pas de factures, appuyer sur + pour en ajouter</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

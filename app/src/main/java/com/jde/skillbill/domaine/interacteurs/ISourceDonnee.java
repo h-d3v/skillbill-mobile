@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface ISourceDonnee {
 
+    List<Facture> lireFacturesParGroupe(Groupe groupe);
+
     boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre);
 
     Utilisateur lireUtilisateur(String email);

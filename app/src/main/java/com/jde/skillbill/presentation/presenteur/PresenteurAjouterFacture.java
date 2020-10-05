@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
@@ -22,11 +20,8 @@ import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.time.LocalDate;
-import java.time.chrono.IsoChronology;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPresenteurAjouterFacture {
     ActivityAjouterFacture activityAjouterFacture;
@@ -54,42 +49,16 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
 
 
     @Override
-    public void montrerListeUtilisateurMontant() {
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(activityAjouterFacture);
-        builderSingle.setTitle("Coisir un payeur"); //TODO
+    public ArrayAdapter<Utilisateur> presenterListeUtilsateur() {
 
-        final ArrayAdapter<Utilisateur> arrayAdapter = new ArrayAdapter<Utilisateur>(activityAjouterFacture, android.R.layout.select_dialog_multichoice);
+
+        final ArrayAdapter<Utilisateur> arrayAdapter = new ArrayAdapter<>(activityAjouterFacture, android.R.layout.select_dialog_multichoice);
         IGestionGroupes gestionGroupes= new GestionGroupes(iSourceDonnee);
         List<Utilisateur> utilisateursGroupe= gestionGroupes.trouverTousLesUtilisateurs(groupe);
         for (Utilisateur utilisateur : utilisateursGroupe){
             arrayAdapter.add(utilisateur);
         }
-
-
-        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String strName = arrayAdapter.getItem(which).getNom();
-                AlertDialog.Builder builderInner = new AlertDialog.Builder(activityAjouterFacture);
-                builderInner.setMessage(strName);
-                builderInner.setTitle("Your Selected Item is");
-                builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog,int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builderInner.show();
-            }
-        });
-        builderSingle.show();
+        return arrayAdapter;
     }
 
     @Override
@@ -107,8 +76,10 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 activityAjouterFacture.startActivity(intent);
             };
         }catch (NumberFormatException  | DateTimeParseException  e){
-            vueAjouterFacture.afficherMessageErreurAlertDialog(activityAjouterFacture.getResources().getString(R.string.txt_message_erreur)
-            ,activityAjouterFacture.getResources().getString(R.string.titre_erreur_generique) );
+             vueAjouterFacture.afficherMessageErreurAlertDialog(
+                     activityAjouterFacture.getResources().getString(R.string.txt_message_erreur)
+                    ,activityAjouterFacture.getResources().getString(R.string.titre_erreur_generique)
+             );
         }
 
     }

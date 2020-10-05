@@ -61,6 +61,11 @@ public class SourceDonneesMock implements ISourceDonnee{
     }
 
     @Override
+    public List<Facture> lireFacturesParGroupe(Groupe groupe) {
+        return groupeFactureHashMap.get(groupe);
+    }
+
+    @Override
     public boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) {
         if(groupeFactureHashMap.get(groupe)==null){
             groupeFactureHashMap.putIfAbsent(groupe, new ArrayList<>());
@@ -72,11 +77,10 @@ public class SourceDonneesMock implements ISourceDonnee{
         facture.setMontantPayeParParUtilisateur(hashMap);
         facture.setLibelle(titre);;
         boolean estReussi = groupeFactureHashMap.get(groupe).add(facture);
-        Set<Utilisateur> set = new HashSet<>();
-        set.add(utilisateurPayeur);
+        facture.setMontantPayeParParUtilisateur(hashMap);
         Log.e("Source Donnees Mock", groupeFactureHashMap.get(groupe).get(groupeFactureHashMap.get(groupe).size()-1).getLibelle()+" "+
                 groupeFactureHashMap.get(groupe).get(groupeFactureHashMap.get(groupe).size()-1).getDateFacture().toString()+" "+
-                groupeFactureHashMap.get(groupe).get(groupeFactureHashMap.get(groupe).size()-1).getMontantPayeParParUtilisateur(set).get(utilisateurPayeur)+" ");
+                groupeFactureHashMap.get(groupe).get(groupeFactureHashMap.get(groupe).size()-1).getMontantPayeParParUtilisateur().get(utilisateurPayeur)+" ");
         return estReussi;
     }
 

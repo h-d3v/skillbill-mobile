@@ -1,7 +1,6 @@
 package com.jde.skillbill.presentation.vue;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
     RecyclerView rvMesGroupes;
     RVVoirGroupesAdapter rvVoirGroupesAdapter;
     Button buttonCommencerActivityAjouterFacture;
+    Button buttonSoldeGroupe;
 
     @Override
     public View onCreateView (LayoutInflater inflater,
@@ -31,6 +31,7 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         View racine = inflater.inflate(R.layout.frag_voir_groupes, container, false);
         buttonCommencerActiviteCreerGroupe=racine.findViewById(R.id.floatingActionButtonAjouterGroupe);
         buttonCommencerActivityAjouterFacture=racine.findViewById(R.id.btn_ajouter_facture_groupe);
+        buttonSoldeGroupe=racine.findViewById(R.id.btn_detail_solde);
         rvMesGroupes=racine.findViewById(R.id.rvMesGroupes);
         rvVoirGroupesAdapter=new RVVoirGroupesAdapter(presenteurVoirGroupes);
         rvMesGroupes.setAdapter(rvVoirGroupesAdapter);
@@ -43,5 +44,7 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
     public void setPresenteur(PresenteurVoirGroupes presenteurVoirGroupes){
         this.presenteurVoirGroupes=presenteurVoirGroupes;
     }
+
+
 
 }

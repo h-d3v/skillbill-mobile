@@ -28,7 +28,7 @@ public class Facture {
         this.uriImageFacture = uriImageFacture;
     }
 
-    public Map<Utilisateur, Double> getMontantPayeParParUtilisateur(Set<Utilisateur> utilisateurs) {
+    public Map<Utilisateur, Double> getMontantPayeParParUtilisateur() {
         return montantPayeParParUtilisateur;
     }
 

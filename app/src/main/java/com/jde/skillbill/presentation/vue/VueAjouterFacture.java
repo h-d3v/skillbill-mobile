@@ -1,8 +1,10 @@
 package com.jde.skillbill.presentation.vue;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +14,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jde.skillbill.R;
 import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class VueAjouterFacture extends Fragment implements IContratVPAjouterFacture.IVueAjouterFacture {
@@ -74,7 +77,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
                  editTextMontant.clearFocus();
                  if(i==1){
 
-                     presenteurAjouterFacture.montrerListeUtilisateurMontant();
+                     presenteurAjouterFacture.presenterListeUtilsateur();
                  }
              }
 
@@ -89,7 +92,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
              @Override
              public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                  if(i==1){
-                     presenteurAjouterFacture.montrerListeUtilisateurMontant();
+                     afficherAlertDialog(presenteurAjouterFacture.presenterListeUtilsateur());
                  }
              }
 
@@ -117,7 +120,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     @Override
     public double getMontantFactureInput() throws NullPointerException, NumberFormatException {
         if(Double.parseDouble( editTextMontant.getText().toString())<=0){
-            throw new NumberFormatException("Le montant doit etre strictement superieur a zero");// TODO string.xml
+            throw new NumberFormatException();
         }
         return Double.parseDouble( editTextMontant.getText().toString());
     }
@@ -137,4 +140,127 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     }
 
 
-}
+    private void afficherAlertDialog(ArrayAdapter arrayAdapter){
+        Context context= this.getContext();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        // String array for alert dialog multi choice items
+        String[] colors = new String[]{
+                "Red",
+                "Green",
+                "Blue",
+                "Purple",
+                "Olive"
+        };
+
+        // Boolean array for initial selected items
+        final boolean[] checkedColors = new boolean[]{
+                false, // Red
+                true, // Green
+                false, // Blue
+                true, // Purple
+                false // Olive
+
+        };
+
+        // Convert the color array to list
+        final List<String> colorsList = Arrays.asList(colors);
+
+        // Set multiple choice items for alert dialog
+                /*
+                    AlertDialog.Builder setMultiChoiceItems(CharSequence[] items, boolean[]
+                    checkedItems, DialogInterface.OnMultiChoiceClickListener listener)
+                        Set a list of items to be displayed in the dialog as the content,
+                        you will be notified of the selected item via the supplied listener.
+                 */
+                /*
+                    DialogInterface.OnMultiChoiceClickListener
+                    public abstract void onClick (DialogInterface dialog, int which, boolean isChecked)
+
+                        This method will be invoked when an item in the dialog is clicked.
+
+                        Parameters
+                        dialog The dialog where the selection was made.
+                        which The position of the item in the list that was clicked.
+                        isChecked True if the click checked the item, else false.
+                 */
+        builder.setMultiChoiceItems(colors, checkedColors, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+
+                // Update the current focused item's checked status
+                checkedColors[which] = isChecked;
+
+                // Get the current focused item
+                String currentItem = colorsList.get(which);
+
+                // Notify the current action
+                Toast.makeText(context,
+                        currentItem + " " + isChecked, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Specify the dialog is not cancelable
+        builder.setCancelable(false);
+
+        // Set a title for alert dialog
+        builder.setTitle("Choisir les payeurs");
+
+        // Set the positive/yes button click listener
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do something when click positive button
+
+            }
+        });
+
+        // Set the negative/no button click listener
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do something when click the negative button
+            }
+        });
+
+        // Set the neutral/cancel button click listener
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Do something when click the neutral button
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        // Display the alert dialog on interface
+        dialog.show();
+    }
+
+
+        /**AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Choisir un payeur"); //TODO
+
+        builder.setAdapter(arrayAdapter, new  DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Utilisateur utilisateur = (Utilisateur) arrayAdapter.getItem(which);
+                    Log.e("which ", Integer.toString(which));
+
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog,int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                }
+        });
+
+        builder.show();
+         */
+
+    }
+
+
+
