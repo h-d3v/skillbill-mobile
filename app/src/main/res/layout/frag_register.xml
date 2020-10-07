@@ -19,13 +19,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/register_bg" />
 
+    <!--Input pour le Nom-->
     <TextView
         android:id="@+id/textView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:defaultFocusHighlightEnabled="false"
         android:fontFamily="monospace"
         android:gravity="center"
@@ -43,13 +44,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--Input pour le Nom-->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tlNom"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="149dp"
+        android:layout_marginTop="31dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
@@ -57,14 +57,14 @@
         app:endIconMode="clear_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
         app:startIconDrawable="@drawable/round_account_box_white_18dp"
         app:startIconTint="@color/colorAccent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfNom"
             android:layout_width="400dp"
-            android:layout_height="75dp"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:hint="Votre Nom"
             android:inputType="textPersonName"
@@ -79,7 +79,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
@@ -94,7 +94,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfEmail"
             android:layout_width="400dp"
-            android:layout_height="75dp"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:hint="votre@email.ca"
             android:inputType="textEmailAddress"
@@ -107,7 +107,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
@@ -122,7 +122,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfPass"
             android:layout_width="400dp"
-            android:layout_height="75dp"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:hint="mot_de_passe"
             android:inputType="textPassword"
@@ -136,7 +136,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="10dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
@@ -151,7 +151,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfMdpVerif"
             android:layout_width="400dp"
-            android:layout_height="75dp"
+            android:layout_height="70dp"
             android:layout_gravity="center"
             android:hint="Retapper votre mot de passe"
             android:inputType="textPassword"
@@ -159,15 +159,39 @@
             app:textInputLayoutFocusedRectEnabled="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--Bouttons inscription et retour-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:boxCornerRadiusBottomEnd="30dp"
+        app:boxCornerRadiusBottomStart="30dp"
+        app:boxCornerRadiusTopEnd="30dp"
+        app:boxCornerRadiusTopStart="30dp"
+        android:hint="@string/choississez_votre_devise"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+        >
 
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/monnaies_dropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <!--Bouttons inscription et retour-->
 
     <Button
         android:id="@+id/btnRetour"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="44dp"
         android:text="Retour à la connexion"
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -179,7 +203,7 @@
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="190dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="32dp"
         android:backgroundTint="@color/colorAccent"
         android:text="S'inscrire"
         app:icon="@drawable/round_person_add_white_18dp"

@@ -1,6 +1,7 @@
 package com.jde.skillbill.presentation;
 
 
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.presenteur.PresenteurCreerCompte;
 
 public interface IContratVPCreerCompte {
@@ -10,9 +11,15 @@ public interface IContratVPCreerCompte {
         String getNom();
         String getEmail();
         String getPass();
+        String getPassVerif();
+
+        Monnaie getMonnaieChoisie();
+        boolean tousLesChampsValides();
         boolean verifierMDP();
         boolean verifierNom();
         boolean verifierEmail();
+        void afficherCompteCreer(String nom, String email, Monnaie monnaie);
+        void afficherEmailDejaPrit();
     }
 
     interface PresenteurCreerCompte{

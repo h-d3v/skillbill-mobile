@@ -20,12 +20,12 @@ public class Utilisateur {
         this.courriel = courriel;
     }
 
-    public Utilisateur(String nom, String courriel, String motPasse) {
+    public Utilisateur(String nom, String courriel, String motPasse, Monnaie monnaie) {
         this.nom = nom;
         this.courriel = courriel;
         this.motPasse=motPasse;
+        this.monnaieUsuelle=monnaie;
     }
-
 
     public String getNom() {
         return nom;

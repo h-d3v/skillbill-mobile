@@ -1,25 +1,31 @@
 package com.jde.skillbill.presentation.vue;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
 import com.jde.skillbill.R;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVPCreerCompte;
 import com.jde.skillbill.presentation.presenteur.PresenteurCreerCompte;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+
 
 public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.VueCreerCompte {
     private PresenteurCreerCompte _presenteur;
@@ -41,7 +47,16 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     private boolean mdpValide=false;
     private boolean nomValide=false;
     private boolean emailValide=false;
+    private AutoCompleteTextView editTextFilledExposedDropdown;
 
+
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return la vue telle que crée
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vue=inflater.inflate(R.layout.frag_register, container,false);
@@ -53,6 +68,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
         tfEmail=vue.findViewById(R.id.tfEmail);
         tfMdp=vue.findViewById(R.id.tfPass);
         tfMdpVerif=vue.findViewById(R.id.tfMdpVerif);
+        editTextFilledExposedDropdown = vue.findViewById(R.id.monnaies_dropdown);
 
 
         btnRegister.setEnabled(false);
@@ -141,6 +157,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             }
         });
 
+
         //verif si le second champ du mot de passe correspond au premier
         tfMdpVerif.addTextChangedListener(new TextWatcher() {
             @Override
@@ -165,6 +182,19 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             }
         });
 
+        //Peupler la liste de monnaies, on va chercher toutes les valeurs de l'enum
+        List<String> monnaiesString = Stream.of(Monnaie.values()).map(Enum::name).collect(Collectors.toList());
+
+        ArrayAdapter<String> adapterMonnaies = new ArrayAdapter<>(
+                Objects.requireNonNull(getContext()),
+                        R.layout.dropdown_menu_item,
+                        monnaiesString);
+
+        editTextFilledExposedDropdown.setAdapter(adapterMonnaies);
+
+        //on initialise la devise à CAD
+        editTextFilledExposedDropdown.setText(Monnaie.CAD.name(),false);
+
         return vue;
     }
 
@@ -188,15 +218,22 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
         return Objects.requireNonNull(tfMdp.getText()).toString();
     }
 
+    @Override
     public String getPassVerif() {
         return Objects.requireNonNull(tfMdpVerif.getText()).toString();
     }
 
+    @Override
     public boolean tousLesChampsValides(){
         return emailValide && nomValide && mdpValide;
     }
 
+    @Override
+    public Monnaie getMonnaieChoisie(){
+        return Monnaie.valueOf(editTextFilledExposedDropdown.getText().toString());
+    }
 
+    @Override
     public void afficherEmailDejaPrit(){
         MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
                 alertBuilder.setTitle("Adresse e-mail deja utilisée");
@@ -205,16 +242,17 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     }
 
     //Pour test seulement, devra etre enlever
-    public void afficherCompteCreer(String nom, String email){
+    @Override
+    public void afficherCompteCreer(String nom, String email, Monnaie monnaie){
         MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
         alertBuilder.setTitle("Compte bien creer");
-        alertBuilder.setMessage("Courriel: "+email+"Nom: "+nom);
+        alertBuilder.setMessage("Courriel: "+email+"Nom: "+nom+" Monnaie choisie: "+monnaie.name());
         alertBuilder.show();
     }
 
 
-    // les trois methodes suivantes sont la pour la verification dans le presenteur,
-    //pour l'instant pas besoin
+    // les trois methodes suivantes sont la pour la verification dans le presenteur si on veut instaurer
+    // une verifcation dans le presenteur. Pout l'instant inutile.
     @Override
     public boolean verifierMDP() {
         return false;

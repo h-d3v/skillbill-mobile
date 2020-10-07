@@ -44,13 +44,12 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
         boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
         if(emailDejaPris) _vueCreerCompte.afficherEmailDejaPrit();
         else{
-            Utilisateur utilisateurCreer= gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(),
-                    _vueCreerCompte.getEmail(),_vueCreerCompte.getPass());
+            Utilisateur utilisateurCreer= gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(),_vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
             //Affichage pour tester la creation du compte
-            _vueCreerCompte.afficherCompteCreer(utilisateurCreer.getNom(), utilisateurCreer.getCourriel());
+            _vueCreerCompte.afficherCompteCreer(utilisateurCreer.getNom(), utilisateurCreer.getCourriel(), utilisateurCreer.getMonnaieUsuelle());
         }
 
-        //TODO la creation du compte si l'email n'est pas pris
+        //TODO la creation du compte si l'email n'est pas pris (persistance)
     }
 
 

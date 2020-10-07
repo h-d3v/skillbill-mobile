@@ -3,6 +3,7 @@ package com.jde.skillbill.domaine.interacteurs;
 import android.graphics.Bitmap;
 
 import com.jde.skillbill.domaine.entites.Groupe;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
@@ -41,8 +42,8 @@ public class GestionUtilisateur implements IGestionUtilisateur {
 
 
     @Override
-    public Utilisateur creerUtilisateur(String nom, String courriel, String motPasse) {
-        return _dataSource.creerUtilisateur(new Utilisateur(nom, courriel, motPasse));
+    public Utilisateur creerUtilisateur(String nom, String courriel, String motPasse, Monnaie monnaie) {
+        return _dataSource.creerUtilisateur(new Utilisateur(nom, courriel, motPasse, monnaie));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.jde.skillbill.donnees.mockDAO;
 
 import android.util.Log;
 import com.jde.skillbill.domaine.entites.Groupe;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 
@@ -18,9 +19,9 @@ public class SourceDonneesMock implements ISourceDonnee{
         _utilisateurs= new LinkedList<>();
         //En att l'api rest seulement ces utilisateurs peuvent se connecter.
 
-        _utilisateurs.add(new Utilisateur("Julien J","jj@jde.com","julien123"));
-        _utilisateurs.add(new Utilisateur("Hedi","hedi@jde.com","hedi1234"));
-        _utilisateurs.add(new Utilisateur("Patrick","patrick@jde.com","jaimeUncleBob123"));
+        _utilisateurs.add(new Utilisateur("Julien J","jj@jde.com","julien123", Monnaie.EUR));
+        _utilisateurs.add(new Utilisateur("Hedi","hedi@jde.com","hedi1234", Monnaie.CAD));
+        _utilisateurs.add(new Utilisateur("Patrick","patrick@jde.com","jaimeUncleBob123", Monnaie.USD));
         if(utilisateurGroupeHashMap.isEmpty()) {
             //L'utilisateur 0 est julien.
             utilisateurGroupeHashMap.put(_utilisateurs.get(0), new ArrayList<Groupe>());

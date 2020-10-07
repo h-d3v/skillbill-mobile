@@ -18,6 +18,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="app_logo">app_logo</string>
+    <string name="choississez_votre_devise">Choississez votre devise</string>
 
 
 </resources>

@@ -2,6 +2,7 @@ package com.jde.skillbill.domaine.interacteurs.interfaces;
 
 import android.graphics.Bitmap;
 import com.jde.skillbill.domaine.entites.Groupe;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface IGestionUtilisateur {
      * @param courriel
      * @return Utilisateur l'utilisateur cree
      */
-    Utilisateur creerUtilisateur(String nom, String courriel, String motPasse);
+    Utilisateur creerUtilisateur(String nom, String courriel, String motPasse, Monnaie monnaie);
 
     /**
      *

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.jde.skillbill.domaine.entites.Groupe;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
@@ -24,7 +25,8 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
         this.modele = modele;
         this.vueCreerGroupe = vueCreerGroupe;
         this.activity=activity;
-        modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null));
+        //TODO ajuster la monnaie pour quelle ne sois pas coder en dur
+        modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD));
     }
 
     @Override

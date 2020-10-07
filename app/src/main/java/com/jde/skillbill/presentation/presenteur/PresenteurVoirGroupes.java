@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.domaine.entites.Groupe;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
@@ -26,7 +27,8 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         this.modele = modele;
         this.vueVoirGroupes = vueVoirGroupes;
         this.activity=activity;
-        modele.setUtilisateurConnecte(new Utilisateur("Julien J", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null));
+        //Todo faire en sorte que la monnaie ne soit pas coder en dur
+        modele.setUtilisateurConnecte(new Utilisateur("Julien J", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.EUR));
 
     }
 
