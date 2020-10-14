@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
               android:layout_height="wrap_content" android:id="@+id/rv_groupe_item" android:orientation="vertical">
 
-    <Button
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="98dp" android:id="@+id/rv_groupe_item_button"
-    />
+            android:layout_height="match_parent">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="98dp" android:id="@+id/rv_groupe_item_button_voir_le_groupe"
+        />
+        <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent" android:id="@+id/btn_detail_solde" android:layout_weight="1"
+        />
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_input_add"
+                    android:id="@+id/btn_ajouter_facture_groupe" android:layout_weight="1"
+                    android:contentDescription="TODO"/>
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_camera"
+                    android:id="@+id/btn_ajouter_facture_groupe_avec_photo" android:layout_weight="1"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

@@ -20,6 +20,9 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
 
     FloatingActionButton buttonCommencerActiviteCreerGroupe;
     RecyclerView rvMesGroupes;
+    RVVoirGroupesAdapter rvVoirGroupesAdapter;
+    Button buttonCommencerActivityAjouterFacture;
+    Button buttonSoldeGroupe;
 
     @Override
     public View onCreateView (LayoutInflater inflater,
@@ -27,18 +30,13 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
                               Bundle savedInstanceState) {
         View racine = inflater.inflate(R.layout.frag_voir_groupes, container, false);
         buttonCommencerActiviteCreerGroupe=racine.findViewById(R.id.floatingActionButtonAjouterGroupe);
+        buttonCommencerActivityAjouterFacture=racine.findViewById(R.id.btn_ajouter_facture_groupe);
+        buttonSoldeGroupe=racine.findViewById(R.id.btn_detail_solde);
         rvMesGroupes=racine.findViewById(R.id.rvMesGroupes);
-        rvMesGroupes.setAdapter(new RVVoirGroupesAdapter(presenteurVoirGroupes));
+        rvVoirGroupesAdapter=new RVVoirGroupesAdapter(presenteurVoirGroupes);
+        rvMesGroupes.setAdapter(rvVoirGroupesAdapter);
         rvMesGroupes.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
-        buttonCommencerActiviteCreerGroupe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-               presenteurVoirGroupes.commencerCreerGroupeActivite();
-            }
-        });
-
+        buttonCommencerActiviteCreerGroupe.setOnClickListener(view -> presenteurVoirGroupes.commencerCreerGroupeActivite());
         return racine;
     }
 
@@ -47,8 +45,6 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         this.presenteurVoirGroupes=presenteurVoirGroupes;
     }
 
-    @Override
-    public int getPosition() {
-        return 0;
-    }
+
+
 }

@@ -8,6 +8,12 @@
     <string name="textview_nom_groupe_a_creer">Entrez le nom du groupe</string>
     <string name="action_annuler">Retour</string>
 
+    <!-- Strings pour le solde de l'utilisateur dans un groupe -->
+    <string name="solde_utilisateur_nul">Bravo ! Tous les comptes sont réglés</string>
+    <string name="solde_utilisateur_crediteur">On vous doit </string>
+    <string name="solde_utilisateur_debiteur">Vous devez  </string>
+    <string name="pas_de_facture_dans_le_groupe">Pas de factures, appuyer sur + pour en ajouter</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -19,6 +25,28 @@
     <string name="login_failed">"Login failed"</string>
     <string name="app_logo">app_logo</string>
     <string name="choississez_votre_devise">Choississez votre devise</string>
+    <string name="action_ajouter">Ajouter</string>
+
+    <!-- Strings pour AjouterFactureActivity -->
+    <string name="titre_montant">Montant : </string>
+    <string name="titre_payeur">Qui a payé la facture </string>
+    <string name="titre_toolbar_ajouter_facture">Ajouter une facture au groupe </string>
+
+    <string-array name="spinner_ajouter_facture_choix">
+        <item>Moi uniquement</item>
+        <item>Ajouter ou modifier les payeurs</item>
+    </string-array>
+
+    <string-array name="spinner_ajouter_facture_choix_utilisateur_pour_remboursement">
+        <item>Partager avec tous les membres équitablement</item>
+        <item>Choisir manuellement les montants à rembourser</item>
+    </string-array>
+    <string name="text_montant_paye_utilisateurs_facture">Le montant de $1 a ete paye (Pour exemple)</string>
+    <string name="titre_date">Date : </string>
+    <string name="titre_facture">Nom de l\'activité</string>
+    <string name="txt_message_erreur">Le montant ou la date est invalide</string>
+    <string name="titre_erreur_generique">Erreur</string>
+    <string name="txt_facture_par_defaut">Facture du </string>
 
 
 </resources>

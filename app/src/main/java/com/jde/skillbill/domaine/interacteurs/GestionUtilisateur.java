@@ -8,16 +8,17 @@ import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 
+import java.time.chrono.IsoChronology;
 import java.util.List;
 
 public class GestionUtilisateur implements IGestionUtilisateur {
     /**
      * TODO unifier les interfaces
      */
-    SourceDonneesMock _dataSource;
+    ISourceDonnee _dataSource;
     Utilisateur utilisateur=null;
 
-    public GestionUtilisateur(SourceDonneesMock sourceDonnee) {
+    public GestionUtilisateur(ISourceDonnee sourceDonnee) {
         _dataSource=sourceDonnee;
     }
 

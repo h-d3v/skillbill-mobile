@@ -1,6 +1,7 @@
 package com.jde.skillbill.donnees.mockDAO;
 
 import android.util.Log;
+import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
@@ -10,9 +11,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 public class SourceDonneesMock implements ISourceDonnee{
     public static HashMap<Utilisateur, List<Groupe>> utilisateurGroupeHashMap =new HashMap<>();
+    public static  HashMap<Groupe, List<Utilisateur>> groupeUtilisateursHashmap = new HashMap<>();
+    public static HashMap<Groupe, List<Facture>> groupeFactureHashMap= new HashMap<>();
     private List<Utilisateur> _utilisateurs;
 
     public SourceDonneesMock(){
@@ -24,9 +29,20 @@ public class SourceDonneesMock implements ISourceDonnee{
         _utilisateurs.add(new Utilisateur("Patrick","patrick@jde.com","jaimeUncleBob123", Monnaie.USD));
         if(utilisateurGroupeHashMap.isEmpty()) {
             //L'utilisateur 0 est julien.
-            utilisateurGroupeHashMap.put(_utilisateurs.get(0), new ArrayList<Groupe>());
+            for(Utilisateur u : _utilisateurs){
+                utilisateurGroupeHashMap.putIfAbsent(u, new ArrayList<>());
+            }
             utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 1", _utilisateurs.get(0), null));
             utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 2",_utilisateurs.get(0), null));
+            utilisateurGroupeHashMap.get(_utilisateurs.get(1)).add( new Groupe("test groupe 2",_utilisateurs.get(0), null));
+        }
+        if (groupeUtilisateursHashmap.isEmpty()) {
+            for (Utilisateur utilisateur : utilisateurGroupeHashMap.keySet()){
+                for (Groupe groupe : utilisateurGroupeHashMap.get(utilisateur)){
+                    groupeUtilisateursHashmap.putIfAbsent(groupe, new ArrayList<>());
+                    groupeUtilisateursHashmap.get(groupe).add(utilisateur);
+                }
+            }
         }
     }
 
@@ -43,6 +59,37 @@ public class SourceDonneesMock implements ISourceDonnee{
     public List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur){
         return utilisateurGroupeHashMap.get(utilisateur);
     }
+
+    @Override
+    public List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe) {
+        return groupeUtilisateursHashmap.get(groupe);
+    }
+
+    @Override
+    public List<Facture> lireFacturesParGroupe(Groupe groupe) {
+        return groupeFactureHashMap.get(groupe);
+    }
+
+    @Override
+    public boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) {
+        if(groupeFactureHashMap.get(groupe)==null){
+            groupeFactureHashMap.putIfAbsent(groupe, new ArrayList<>());
+        }
+        Facture facture=new Facture();
+        facture.setDateFacture(localDate);
+        HashMap<Utilisateur,Double> hashMap= new HashMap<>();
+        hashMap.put(utilisateurPayeur, montantTotal);
+        facture.setMontantPayeParParUtilisateur(hashMap);
+        facture.setLibelle(titre);;
+        boolean estReussi = groupeFactureHashMap.get(groupe).add(facture);
+        facture.setMontantPayeParParUtilisateur(hashMap);
+        Log.e("Source Donnees Mock", groupeFactureHashMap.get(groupe).get(groupeFactureHashMap.get(groupe).size()-1).getLibelle()+" "+
+                groupeFactureHashMap.get(groupe).get(groupeFactureHashMap.get(groupe).size()-1).getDateFacture().toString()+" "+
+                groupeFactureHashMap.get(groupe).get(groupeFactureHashMap.get(groupe).size()-1).getMontantPayeParParUtilisateur().get(utilisateurPayeur)+" ");
+        return estReussi;
+    }
+
+
 
 
     @Override

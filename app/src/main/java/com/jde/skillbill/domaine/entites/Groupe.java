@@ -89,17 +89,11 @@ public class Groupe {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Groupe groupe = (Groupe) o;
-        return Objects.equals(nomGroupe, groupe.nomGroupe) &&
-                Objects.equals(dateCreation, groupe.dateCreation) &&
-                Objects.equals(utilisateurs, groupe.utilisateurs) &&
-                Objects.equals(factures, groupe.factures) &&
-                Objects.equals(soldeParUtilisateur, groupe.soldeParUtilisateur) &&
-                monnaieDuGroupe == groupe.monnaieDuGroupe &&
-                Objects.equals(utilisateurCreateurGroupe, groupe.utilisateurCreateurGroupe);
+        return Objects.equals(nomGroupe, groupe.nomGroupe);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nomGroupe, dateCreation, utilisateurs, factures, soldeParUtilisateur, monnaieDuGroupe, utilisateurCreateurGroupe);
+        return Objects.hash(nomGroupe);
     }
 }

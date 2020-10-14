@@ -86,7 +86,7 @@ public class GestionGroupes implements IGestionGroupes {
      */
     @Override
     public List<Utilisateur> trouverTousLesUtilisateurs(Groupe groupe) {
-        return null;
+        return sourceDonnee.lireUTilisateurParGroupe(groupe);
     }
 
     /**

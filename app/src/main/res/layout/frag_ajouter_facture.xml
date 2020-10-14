@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/linearLayout" android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+            android:layout_width="411dp"
+            android:layout_height="45dp"
+            android:background="?attr/colorPrimary"
+            android:theme="?attr/actionBarTheme"
+            android:minHeight="?attr/actionBarSize" android:id="@+id/toolbarAjouterFacture"
+
+            app:title="@string/titre_toolbar_ajouter_facture"
+    >
+        <Button
+                android:id="@+id/btnAnuller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_annuler"
+        />
+        <Button
+                android:id="@+id/btnAjouter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_ajouter"
+        />
+
+    </androidx.appcompat.widget.Toolbar>
+    <TextView
+            android:text="@string/titre_facture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/titreFacture"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:id="@+id/edit_t_nom_activie" android:inputType="text"/>
+    <TextView
+            android:text="@string/titre_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/textView5"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/editTextDate"/>
+    <CalendarView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/calendarView"/>
+    <TextView
+            android:text="@string/titre_montant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/txt_titre_montant" android:inputType="none"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/txt_input_montant"
+            android:inputType="numberDecimal" android:importantForAutofill="no"
+            android:labelFor="@id/txt_titre_montant"/>
+    <TextView
+            android:text="@string/titre_payeur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/titre_payeur_facture"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/spinner_choix_payeur"
+            android:entries="@array/spinner_ajouter_facture_choix"/>
+    <TextView
+            android:text="@string/text_montant_paye_utilisateurs_facture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/textView3"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/spinner_choix_remboursement"
+            android:entries="@array/spinner_ajouter_facture_choix_utilisateur_pour_remboursement"/>
+
+</LinearLayout>
