@@ -50,6 +50,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
         activity.startActivity(intent);
     }
+
     @Override
     public String  getSoldeGroupe(int position) {
         if (BuildConfig.DEBUG && position < 0) {
@@ -60,16 +61,23 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         if (factures == null || factures.size() == 0) {
             return activity.getResources().getString(R.string.pas_de_facture_dans_le_groupe);
         }
-        Double solde=0.0;
+        double montantPayeUtilisateurConnecte=0;
+        double total=0;
+        double solde=0;
 
+        int nbrUtilisateurSurLaFacture = 0;
         for (Facture facture : factures){
+
+            nbrUtilisateurSurLaFacture=0;
             for(Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()){
+                total += facture.getMontantPayeParParUtilisateur().get(utilisateur);
+                nbrUtilisateurSurLaFacture++;
                 if(utilisateur.equals(modele.getUtilisateurConnecte())){
-                    solde+=facture.getMontantPayeParParUtilisateur().get(utilisateur);
-                }else{
-                    solde-=facture.getMontantPayeParParUtilisateur().get(utilisateur);
+                    montantPayeUtilisateurConnecte+=facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 }
             }
+            double montantDuParUtilisateur = total/nbrUtilisateurSurLaFacture;
+            solde=(montantPayeUtilisateurConnecte - montantDuParUtilisateur);
 
 
 
@@ -77,7 +85,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         if(solde==0){
             return activity.getResources().getString(R.string.solde_utilisateur_nul) ;
         }else if(solde<0){
-            return activity.getResources().getString(R.string.solde_utilisateur_debiteur)+" "+ Math.abs(solde);
+            return activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde);
         }else{
             return activity.getResources().getString(R.string.solde_utilisateur_crediteur)+" "+ solde;
         }

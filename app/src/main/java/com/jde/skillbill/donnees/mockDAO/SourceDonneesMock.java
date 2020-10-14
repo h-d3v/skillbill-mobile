@@ -24,17 +24,20 @@ public class SourceDonneesMock implements ISourceDonnee{
         _utilisateurs= new LinkedList<>();
         //En att l'api rest seulement ces utilisateurs peuvent se connecter.
 
-        _utilisateurs.add(new Utilisateur("Julien J","jj@jde.com","julien123", Monnaie.EUR));
+        _utilisateurs.add(new Utilisateur("Julien J","jj@jde.com","julien123", Monnaie.CAD));
         _utilisateurs.add(new Utilisateur("Hedi","hedi@jde.com","hedi1234", Monnaie.CAD));
-        _utilisateurs.add(new Utilisateur("Patrick","patrick@jde.com","jaimeUncleBob123", Monnaie.USD));
+        _utilisateurs.add(new Utilisateur("Patrick","patrick@jde.com","jaimeUncleBob123", Monnaie.CAD));
         if(utilisateurGroupeHashMap.isEmpty()) {
             //L'utilisateur 0 est julien.
             for(Utilisateur u : _utilisateurs){
                 utilisateurGroupeHashMap.putIfAbsent(u, new ArrayList<>());
             }
-            utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 1", _utilisateurs.get(0), null));
-            utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 2",_utilisateurs.get(0), null));
-            utilisateurGroupeHashMap.get(_utilisateurs.get(1)).add( new Groupe("test groupe 2",_utilisateurs.get(0), null));
+            utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 1", _utilisateurs.get(0), Monnaie.CAD));
+            utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 2",_utilisateurs.get(0), Monnaie.CAD));
+            utilisateurGroupeHashMap.get(_utilisateurs.get(1)).add( new Groupe("test groupe 2",_utilisateurs.get(0), Monnaie.CAD));
+            utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 3",_utilisateurs.get(0), Monnaie.CAD));
+            utilisateurGroupeHashMap.get(_utilisateurs.get(1)).add( new Groupe("test groupe 3",_utilisateurs.get(0), Monnaie.CAD));
+            utilisateurGroupeHashMap.get(_utilisateurs.get(2)).add( new Groupe("test groupe 3",_utilisateurs.get(0), Monnaie.CAD));
         }
         if (groupeUtilisateursHashmap.isEmpty()) {
             for (Utilisateur utilisateur : utilisateurGroupeHashMap.keySet()){
@@ -45,6 +48,8 @@ public class SourceDonneesMock implements ISourceDonnee{
             }
         }
     }
+
+
 
     @Override
     public  boolean creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) {
@@ -70,6 +75,7 @@ public class SourceDonneesMock implements ISourceDonnee{
         return groupeFactureHashMap.get(groupe);
     }
 
+
     @Override
     public boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) {
         if(groupeFactureHashMap.get(groupe)==null){
@@ -79,6 +85,10 @@ public class SourceDonneesMock implements ISourceDonnee{
         facture.setDateFacture(localDate);
         HashMap<Utilisateur,Double> hashMap= new HashMap<>();
         hashMap.put(utilisateurPayeur, montantTotal);
+        for(Utilisateur utilisateur : groupeUtilisateursHashmap.get(groupe)){
+            hashMap.putIfAbsent(utilisateur,0.0);
+        }
+
         facture.setMontantPayeParParUtilisateur(hashMap);
         facture.setLibelle(titre);;
         boolean estReussi = groupeFactureHashMap.get(groupe).add(facture);
@@ -88,6 +98,7 @@ public class SourceDonneesMock implements ISourceDonnee{
                 groupeFactureHashMap.get(groupe).get(groupeFactureHashMap.get(groupe).size()-1).getMontantPayeParParUtilisateur().get(utilisateurPayeur)+" ");
         return estReussi;
     }
+
 
 
 
