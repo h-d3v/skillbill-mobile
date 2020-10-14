@@ -3,7 +3,6 @@ package com.jde.skillbill.presentation.presenteur;
 import android.app.Activity;
 import android.content.Intent;
 
-import android.util.Log;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
@@ -11,7 +10,7 @@ import com.jde.skillbill.presentation.IContratVPConnexion;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueConnexion;
 import com.jde.skillbill.ui.activity.ActivityCreerCompte;
-import com.jde.skillbill.ui.activity.ActivityVoirGroupe;
+import com.jde.skillbill.ui.activity.ActivityVoirGroupes;
 
 public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConnexion {
 
@@ -43,7 +42,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         _modele.setUtilisateurConnecte(utilisateurConnecter);
         _vueConnexion.afficherMsgConnecter(_modele.getUtilisateurConnecte().getCourriel(), _modele.getUtilisateurConnecte().getNom());
         //redirection vers ses groupes
-        Intent intent = new Intent(_activite, ActivityVoirGroupe.class);
+        Intent intent = new Intent(_activite, ActivityVoirGroupes.class);
         intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte().getCourriel());
         _activite.startActivity(intent);
         //Pour eviter de retourner au login

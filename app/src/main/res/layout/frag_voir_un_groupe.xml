@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent" android:orientation="vertical" android:id="@+id/frag_voir_un_groupe">
+    <androidx.appcompat.widget.Toolbar android:layout_width="match_parent" android:layout_height="wrap_content">
+        <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvNomGroupe"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:textAlignment="center"
+                android:textSize="50sp"
+                tools:text="test" />
+    </androidx.appcompat.widget.Toolbar>
+    <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/tabLayoutFactureMembres">
+        <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Factures"/>
+        <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Membres"
+        />
+    </com.google.android.material.tabs.TabLayout>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/detailMembres"/>
+    <Button
+            android:text="@string/action_ajouter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/btnAjouter"/>
 
 </LinearLayout>
