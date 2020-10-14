@@ -18,8 +18,6 @@ public class RVVoirGroupesAdapter extends RecyclerView.Adapter {
     public RVVoirGroupesAdapter(PresenteurVoirGroupes presenteurVoirGroupes) {
         super();
         this.presenteurVoirGroupes = presenteurVoirGroupes;
-
-
     }
 
     @Override

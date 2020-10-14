@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.widget.ArrayAdapter;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
@@ -39,7 +40,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         this.activityAjouterFacture = activityAjouterFacture;
         this.vueAjouterFacture = vueAjouterFacture;
         this.modele = modele;
-        utilisateurConnecte=new Utilisateur("", activityAjouterFacture.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null);
+        utilisateurConnecte=new Utilisateur("", activityAjouterFacture.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD);
         modele.setUtilisateurConnecte(utilisateurConnecte);
         position=activityAjouterFacture.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1);
         iSourceDonnee=iSourceDonnee1;
