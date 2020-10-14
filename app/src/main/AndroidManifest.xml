@@ -30,7 +30,7 @@
                 android:name=".ui.activity.ActivityCreerGroupe">
 
         </activity>
-        <activity android:name=".ui.activity.ActivityVoirGroupe">
+        <activity android:name=".ui.activity.ActivityVoirGroupes">
 
         </activity>
 

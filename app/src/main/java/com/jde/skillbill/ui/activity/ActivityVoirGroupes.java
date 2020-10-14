@@ -9,7 +9,7 @@ import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirGroupes;
 import com.jde.skillbill.presentation.vue.VueVoirGroupes;
 
-public class ActivityVoirGroupe extends AppCompatActivity {
+public class ActivityVoirGroupes extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

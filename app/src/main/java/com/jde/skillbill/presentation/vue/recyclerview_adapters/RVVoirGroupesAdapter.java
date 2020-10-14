@@ -32,7 +32,7 @@ public class RVVoirGroupesAdapter extends RecyclerView.Adapter {
         (holder.itemView.findViewById(R.id.rv_groupe_item_button_voir_le_groupe)).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View bouton){
-                presenteurVoirGroupes.commencerVoirGroupeActivite(position);
+                presenteurVoirGroupes.commencerVoirUnGroupeActivite(position);
             }
         });
 

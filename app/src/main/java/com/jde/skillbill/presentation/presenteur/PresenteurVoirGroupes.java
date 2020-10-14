@@ -36,7 +36,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         this.activity=activity;
         modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD));
         this.iSourceDonnee=iSourceDonnee;
-
     }
 
     @Override
@@ -46,10 +45,13 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     }
 
     @Override
-    public void commencerVoirGroupeActivite(int position) {
+    public void commencerVoirUnGroupeActivite(int position) {
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
+        intent.putExtra(EXTRA_GROUPE_POSITION, position);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
         activity.startActivity(intent);
     }
+
     @Override
     public String  getSoldeGroupe(int position) {
         if (BuildConfig.DEBUG && position < 0) {
@@ -70,9 +72,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
                     solde-=facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 }
             }
-
-
-
         }
         if(solde==0){
             return activity.getResources().getString(R.string.solde_utilisateur_nul) ;
