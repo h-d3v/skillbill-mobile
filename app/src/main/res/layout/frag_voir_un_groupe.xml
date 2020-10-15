@@ -4,15 +4,38 @@
     android:layout_width="match_parent"
               android:layout_height="match_parent" android:orientation="vertical" android:id="@+id/frag_voir_un_groupe">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvNomGroupe"
-        style="@style/Widget.MaterialComponents.TextView"
-        android:layout_width="match_parent"
-        android:layout_height="79dp"
-        android:textAlignment="center"
-        android:textSize="50sp"
-        tools:text="test" />
+    <androidx.appcompat.widget.Toolbar android:layout_width="match_parent" android:layout_height="wrap_content">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNomGroupe"
+            style="@style/Widget.MaterialComponents.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="79dp"
+            android:textAlignment="center"
+            android:textSize="50sp"
+            tools:text="test" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_factures"
+            android:id="@+id/tabFactures"
+            />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_membres"
+            android:id="@+id/tabMembres"
+            />
+
+    </com.google.android.material.tabs.TabLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFactures"
         android:layout_width="match_parent"

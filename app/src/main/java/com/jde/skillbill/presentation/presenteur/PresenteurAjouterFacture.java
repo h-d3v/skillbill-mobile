@@ -51,8 +51,6 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
 
     @Override
     public ArrayAdapter<Utilisateur> presenterListeUtilsateur() {
-
-
         final ArrayAdapter<Utilisateur> arrayAdapter = new ArrayAdapter<>(activityAjouterFacture, android.R.layout.select_dialog_multichoice);
         IGestionGroupes gestionGroupes= new GestionGroupes(iSourceDonnee);
         List<Utilisateur> utilisateursGroupe= gestionGroupes.trouverTousLesUtilisateurs(groupe);

@@ -7,6 +7,7 @@ import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -35,7 +36,19 @@ public class SourceDonneesMock implements ISourceDonnee{
             utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 1", _utilisateurs.get(0), null));
             utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 2",_utilisateurs.get(0), null));
             utilisateurGroupeHashMap.get(_utilisateurs.get(1)).add( new Groupe("test groupe 2",_utilisateurs.get(0), null));
+
+            //fake facture
+            Facture factureMock=new Facture();
+            factureMock.setLibelle("Test1");
+            HashMap<Utilisateur,Double> hashMap= new HashMap<>();
+            hashMap.put(_utilisateurs.get(0), 100.98);
+            factureMock.setMontantPayeParParUtilisateur(hashMap);
+            factureMock.setDateFacture(LocalDate.now());
+
+            groupeFactureHashMap.put(new Groupe("test groupe 1", _utilisateurs.get(0), null), new LinkedList<>());
+            groupeFactureHashMap.get(new Groupe("test groupe 1", _utilisateurs.get(0), null)).add(factureMock);
         }
+        
         if (groupeUtilisateursHashmap.isEmpty()) {
             for (Utilisateur utilisateur : utilisateurGroupeHashMap.keySet()){
                 for (Groupe groupe : utilisateurGroupeHashMap.get(utilisateur)){

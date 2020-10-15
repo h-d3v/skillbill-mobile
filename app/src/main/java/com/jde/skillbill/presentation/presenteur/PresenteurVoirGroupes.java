@@ -2,6 +2,7 @@ package com.jde.skillbill.presentation.presenteur;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.R;
@@ -35,6 +36,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         this.vueVoirGroupes = vueVoirGroupes;
         this.activity=activity;
         modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD));
+        Log.i("Id de l'utilisateur dans le presenteur des groupes", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR));
         this.iSourceDonnee=iSourceDonnee;
     }
 
@@ -58,7 +60,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
             throw new AssertionError("Assertion failed");
         }
 
-        List<Facture> factures= iSourceDonnee.lireFacturesParGroupe( modele.getListGroupeAbonneUtilisateurConnecte().get(position));
+        List<Facture> factures= iSourceDonnee.lireFacturesParGroupe(modele.getListGroupeAbonneUtilisateurConnecte().get(position));
         if (factures == null || factures.size() == 0) {
             return activity.getResources().getString(R.string.pas_de_facture_dans_le_groupe);
         }

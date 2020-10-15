@@ -1,5 +1,6 @@
 package com.jde.skillbill.presentation.vue;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,6 +31,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     CalendarView calendarView;
     EditText date;
 
+    @SuppressLint("WrongConstant")
     @Override
     public View onCreateView (LayoutInflater inflater,
                               ViewGroup container,
