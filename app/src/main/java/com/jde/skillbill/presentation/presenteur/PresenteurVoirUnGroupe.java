@@ -18,7 +18,6 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     IGestionGroupes gestionGroupes;
     IGestionFacture gestionFacture;
     Groupe groupeEncours;
-    Utilisateur utilisateurConnecte;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
 
@@ -39,12 +38,12 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         if(groupeEncours.getUtilisateurs()==null || groupeEncours.getUtilisateurs().size()<1) return null;
         String noms="";
         for(Utilisateur utilisateur : groupeEncours.getUtilisateurs() ){
-            if(!utilisateur.equals(utilisateurConnecte)){
+            if(!utilisateur.equals(modele.getUtilisateurConnecte())){
                 noms+=utilisateur.getNom();
                 noms+=", ";
             }
         }
-        noms=noms.substring(0, noms.length()-1)+".";
+        noms=noms.substring(0, noms.length()-2)+".";
         return noms;
     }
 
