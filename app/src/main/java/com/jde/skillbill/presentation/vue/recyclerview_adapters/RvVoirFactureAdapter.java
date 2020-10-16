@@ -1,8 +1,8 @@
 package com.jde.skillbill.presentation.vue.recyclerview_adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jde.skillbill.R;
 import com.jde.skillbill.presentation.IContratVPVoirUnGroupe;
-import com.jde.skillbill.presentation.presenteur.PresenteurVoirGroupes;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirUnGroupe;
 
 public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContratVPVoirUnGroupe.IAdapterVoirUneFacture {
     PresenteurVoirUnGroupe _presenteur;
-    TextView nomActivite;
-    TextView montant;
+    TextView tvNomActivite;
+    TextView tvMontant;
 
     public RvVoirFactureAdapter(PresenteurVoirUnGroupe presenteur){
         super();
@@ -32,9 +31,14 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
         return new  RecyclerView.ViewHolder(constraintLayout){};
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        tvNomActivite =holder.itemView.findViewById(R.id.nomActivite);
+        tvMontant =holder.itemView.findViewById(R.id.tvMontant);
 
+        tvNomActivite.setText(_presenteur.getFacturesGroupe().get(position).getLibelle());
+        tvMontant.setText(((Double) _presenteur.getMontantFacturePayerParUser(position)).toString());
     }
 
     @Override
@@ -44,10 +48,8 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
         return _presenteur.getFacturesGroupe().size();
     }
 
-
     @Override
     public void setNomFacture(String nomActivite) {
-
     }
 
     @Override

@@ -4,8 +4,7 @@ import com.jde.skillbill.presentation.presenteur.PresenteurVoirUnGroupe;
 
 public interface IContratVPVoirUnGroupe {
     interface IPresenteurVoirUnGroupe{
-        public int getMontantFacture();
-        public String getNomFacture();
+        public double getMontantFacturePayerParUser(int posFacture);
     }
 
     //interface pour la vue du groupe

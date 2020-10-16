@@ -71,7 +71,10 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             }
             IGestionFacture iGestionFacture= new GestionFacture(iSourceDonnee);
             if(iGestionFacture.creerFacture(montant,utilisateurConnecte,date, groupe,  titre)){
+                //si la facture est ajoutee au groupe, on redirige vers l'affichage des factures de ce groupe
                 Intent intent = new Intent(activityAjouterFacture, ActivityVoirUnGroupe.class);
+                intent.putExtra("com.jde.skillbill.utlisateur_identifiant", modele.getUtilisateurConnecte().getCourriel());
+                intent.putExtra("com.jde.skillbill.groupe_identifiant", activityAjouterFacture.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, -1));
                 activityAjouterFacture.startActivity(intent);
             };
         }catch (NumberFormatException  | DateTimeParseException  e){

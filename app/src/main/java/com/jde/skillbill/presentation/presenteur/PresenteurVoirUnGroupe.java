@@ -30,7 +30,7 @@ public class PresenteurVoirUnGroupe implements IContratVPVoirUnGroupe.IPresenteu
     }
 
 
-    //TODO corriger un bugg
+
     public List<Facture> getFacturesGroupe(){
         _modele.setGroupesAbonnesUtilisateurConnecte( new GestionUtilisateur(new SourceDonneesMock()).trouverGroupesAbonne(_modele.getUtilisateurConnecte()));
         Log.i("courriel user connecte",_activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR));
@@ -38,15 +38,11 @@ public class PresenteurVoirUnGroupe implements IContratVPVoirUnGroupe.IPresenteu
                 _modele.getListGroupeAbonneUtilisateurConnecte().get(_activity.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, 0)));
     }
 
-    //TODO
+    //TODO faire en sorte que ce montant reflete ce que l'utilisateur dois payer et non ce qu'il a deja payer
     @Override
-    public int getMontantFacture() {
-        return 0;
+    public double getMontantFacturePayerParUser(int posFacture) {
+        return this.getFacturesGroupe().get(posFacture).getMontantPayeParParUtilisateur().get(_modele.getUtilisateurConnecte());
     }
 
-    //TODO
-    @Override
-    public String getNomFacture() {
-        return null;
-    }
+
 }
