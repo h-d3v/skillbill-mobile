@@ -8,6 +8,9 @@ import com.jde.skillbill.domaine.entites.Utilisateur;
 import java.util.List;
 
 public interface IGestionUtilisateur {
+    //Pour verifier si l'email est pris
+    boolean utilisateurExiste(String email);
+
     /**
      *
      * @param nom

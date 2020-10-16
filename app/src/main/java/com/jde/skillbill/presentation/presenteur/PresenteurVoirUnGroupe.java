@@ -12,23 +12,28 @@ import com.jde.skillbill.presentation.vue.VueVoirUnGroupe;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe {
+    public static final int ERREUR_ACCES =0;
+    public static final int AJOUT_OK=1;
+    public static final int EMAIL_INCONNU=2;
     Modele modele;
     VueVoirUnGroupe vueVoirUnGroupe;
     ActivityVoirUnGroupe activityVoirUnGroupe;
     IGestionGroupes gestionGroupes;
     IGestionFacture gestionFacture;
+    IGestionUtilisateur gestionUtilisateur;
     Groupe groupeEncours;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
 
-    public PresenteurVoirUnGroupe(Modele modele, VueVoirUnGroupe vueVoirUnGroupe, ActivityVoirUnGroupe activityVoirUnGroupe, IGestionGroupes gestionGroupes, IGestionFacture gestionFacture, IGestionUtilisateur iGestionUtilisateur) {
+    public PresenteurVoirUnGroupe(Modele modele, VueVoirUnGroupe vueVoirUnGroupe, ActivityVoirUnGroupe activityVoirUnGroupe, IGestionGroupes gestionGroupes, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur) {
         this.modele = modele;
         this.vueVoirUnGroupe = vueVoirUnGroupe;
         this.activityVoirUnGroupe = activityVoirUnGroupe;
         this.gestionGroupes = gestionGroupes;
         this.gestionFacture = gestionFacture;
+        this.gestionUtilisateur = gestionUtilisateur;
         modele.setUtilisateurConnecte(new Utilisateur("", activityVoirUnGroupe.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD));
-        modele.setGroupesAbonnesUtilisateurConnecte(iGestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte()));
+        modele.setGroupesAbonnesUtilisateurConnecte(gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte()));
         groupeEncours= modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1));
         groupeEncours.setUtilisateurs(gestionGroupes.trouverTousLesUtilisateurs(groupeEncours));
     }
@@ -51,17 +56,20 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
 
         if( gestionGroupes.trouverTousLesUtilisateurs(groupeEncours)==null) return false;
         return  gestionGroupes.trouverTousLesUtilisateurs(groupeEncours).size()<=1;
-
     }
 
 
     @Override
-    public boolean ajouterUtilisateurAuGroupe(Utilisateur utilisateur) {
-        return false;
+    public int ajouterUtilisateurAuGroupe(String courriel) {
+        if(gestionUtilisateur.utilisateurExiste(courriel)){
+            if(gestionGroupes.ajouterMembre(groupeEncours, new Utilisateur("","",courriel, ""))) {
+                return AJOUT_OK;
+            } else return ERREUR_ACCES;
+        } else return EMAIL_INCONNU ;
+
     }
 
     @Override
-    public void commencerAjouterUnMembreAuGroupe() {
+    public int envoyerCourriel(String courriel) {return 0;} //TODO
 
-    }
 }

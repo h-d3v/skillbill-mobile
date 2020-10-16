@@ -32,6 +32,7 @@ public class GestionUtilisateur implements IGestionUtilisateur {
     }
 
     //Pour verifier si l'email est pris
+    @Override
     public boolean utilisateurExiste(String email){
         utilisateur=_dataSource.lireUtilisateur(email);
         return utilisateur != null;

@@ -56,8 +56,8 @@ public class SourceDonneesMock implements ISourceDonnee{
         if(utilisateurGroupeHashMap.get(utilisateur)==null && !utilisateurGroupeHashMap.containsKey(utilisateur)) {
             utilisateurGroupeHashMap.put(utilisateur,new ArrayList<Groupe>());
         }
-        utilisateurGroupeHashMap.get(utilisateur).add(groupe);
-        return true ; // Pas pertinent pour le mock
+
+        return utilisateurGroupeHashMap.get(utilisateur).add(groupe);
     }
 
     @Override
@@ -68,6 +68,18 @@ public class SourceDonneesMock implements ISourceDonnee{
     @Override
     public List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe) {
         return groupeUtilisateursHashmap.get(groupe);
+    }
+
+    @Override
+    public boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur) {
+        for(Utilisateur utilisateur1: groupeUtilisateursHashmap.get(groupe)){
+            if(utilisateur.equals(utilisateur1)) {return false;}
+        }
+        for(Utilisateur utilisateur1: utilisateurGroupeHashMap.keySet()){
+            if(utilisateur.equals(utilisateur1)) {return groupeUtilisateursHashmap.get(groupe).add(utilisateur1);}
+        }
+
+        return false ;
     }
 
     @Override

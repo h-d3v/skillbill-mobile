@@ -20,4 +20,5 @@ public interface ISourceDonnee {
     List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur);
     List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe);
 
+    boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur);
 }

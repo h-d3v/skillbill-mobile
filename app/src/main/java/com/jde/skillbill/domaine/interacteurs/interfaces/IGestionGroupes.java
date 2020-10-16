@@ -20,7 +20,7 @@ public interface IGestionGroupes {
      * @param utilisateur
      * @return le membre ajouté
      */
-    Utilisateur ajouterMembre(Groupe groupe, Utilisateur utilisateur);
+    boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur);
 
     /**
      *

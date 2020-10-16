@@ -10,11 +10,11 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="98dp" android:id="@+id/rv_groupe_item_button_voir_le_groupe"
-        />
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
         <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent" android:id="@+id/btn_detail_solde" android:layout_weight="1"
-        />
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
@@ -23,11 +23,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_input_add"
                     android:id="@+id/btn_ajouter_facture_groupe" android:layout_weight="1"
-                    android:contentDescription="TODO"/>
+                    android:contentDescription="TODO" style="@android:style/Widget.Holo.ImageButton"/>
             <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_camera"
-                    android:id="@+id/btn_ajouter_facture_groupe_avec_photo" android:layout_weight="1"/>
+                    android:id="@+id/btn_ajouter_facture_groupe_avec_photo" android:layout_weight="1"
+                    style="@android:style/Widget.Holo.ImageButton"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

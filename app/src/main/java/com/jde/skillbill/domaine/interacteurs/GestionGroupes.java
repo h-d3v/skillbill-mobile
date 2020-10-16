@@ -36,9 +36,9 @@ public class GestionGroupes implements IGestionGroupes {
      * @return le membre ajouté, null si deja dans le groupe
      */
     @Override
-    public Utilisateur ajouterMembre(Groupe groupe, Utilisateur utilisateur) {
+    public boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur) {
 
-      return null;
+      return sourceDonnee.ajouterMembre(groupe, utilisateur);
     }
 
     /**
