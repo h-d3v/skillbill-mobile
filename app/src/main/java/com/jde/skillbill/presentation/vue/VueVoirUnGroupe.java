@@ -20,13 +20,13 @@ import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirUnGroupe;
 
 public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVoirUnGroupe.IVueVoirUnGroupe {
-    private IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe iPresenteurVoirUnGroupe;
 
-    PresenteurVoirUnGroupe _presenteur;
-    TextView tvNomGroupe;
-    TabLayout tabLayout;
-    TextView detailMembres;
-    Button ajouterMembre;
+
+   private PresenteurVoirUnGroupe _presenteur;
+   private TextView tvNomGroupe;
+   private TabLayout tabLayout;
+   private TextView detailMembres;
+   private Button ajouterMembre;
 
     @Nullable
     @Override
