@@ -1,7 +1,5 @@
 package com.jde.skillbill.presentation.presenteur;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.widget.ArrayAdapter;
 import com.jde.skillbill.R;
@@ -14,6 +12,7 @@ import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.interfaces.GestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
+import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueAjouterFacture;
@@ -31,35 +30,42 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
     private final int position;
-    private final ISourceDonnee iSourceDonnee;
+
     private final Utilisateur utilisateurConnecte;
     private final Groupe groupe;
+    private final IGestionFacture iGestionFacture;
+    private final IGestionUtilisateur iGestionUtilisateur;
+    private final IGestionGroupes iGestionGroupes;
 
 
-    public PresenteurAjouterFacture(ActivityAjouterFacture activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, ISourceDonnee iSourceDonnee1) {
+    public PresenteurAjouterFacture(ActivityAjouterFacture activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
         this.activityAjouterFacture = activityAjouterFacture;
         this.vueAjouterFacture = vueAjouterFacture;
         this.modele = modele;
         utilisateurConnecte=new Utilisateur("", activityAjouterFacture.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD);
         modele.setUtilisateurConnecte(utilisateurConnecte);
         position=activityAjouterFacture.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1);
-        iSourceDonnee=iSourceDonnee1;
-        modele.setGroupesAbonnesUtilisateurConnecte(new GestionUtilisateur(iSourceDonnee).trouverGroupesAbonne(utilisateurConnecte));
+        this.iGestionFacture= gestionFacture;
+        iGestionUtilisateur = gestionUtilisateur;
+        iGestionGroupes = gestionGroupes;
+        modele.setGroupesAbonnesUtilisateurConnecte(gestionUtilisateur.trouverGroupesAbonne(utilisateurConnecte));
         groupe = modele.getListGroupeAbonneUtilisateurConnecte().get(position);
     }
 
 
     @Override
-    public ArrayAdapter<Utilisateur> presenterListeUtilsateur() {
+    public String[] presenterListeUtilsateur() {
 
 
-        final ArrayAdapter<Utilisateur> arrayAdapter = new ArrayAdapter<>(activityAjouterFacture, android.R.layout.select_dialog_multichoice);
-        IGestionGroupes gestionGroupes= new GestionGroupes(iSourceDonnee);
-        List<Utilisateur> utilisateursGroupe= gestionGroupes.trouverTousLesUtilisateurs(groupe);
+
+        List<Utilisateur> utilisateursGroupe= iGestionGroupes.trouverTousLesUtilisateurs(groupe);
+        String[] membres=new String[utilisateursGroupe.size()];
+        int i=0;
         for (Utilisateur utilisateur : utilisateursGroupe){
-            arrayAdapter.add(utilisateur);
+            membres[i]=utilisateur.getNom();
+            i++;
         }
-        return arrayAdapter;
+        return membres;
     }
 
     @Override
@@ -71,9 +77,11 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             if(titre==null){
                 titre=activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut)+" "+date.toString();
             }
-            IGestionFacture iGestionFacture= new GestionFacture(iSourceDonnee);
+
             if(iGestionFacture.creerFacture(montant,utilisateurConnecte,date, groupe,  titre)){
                 Intent intent = new Intent(activityAjouterFacture, ActivityVoirUnGroupe.class);
+                intent.putExtra(EXTRA_GROUPE_POSITION, position);
+                intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
                 activityAjouterFacture.startActivity(intent);
             };
         }catch (NumberFormatException  | DateTimeParseException  e){

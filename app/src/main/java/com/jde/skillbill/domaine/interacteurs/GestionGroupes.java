@@ -1,5 +1,6 @@
 package com.jde.skillbill.domaine.interacteurs;
 
+import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.*;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 
@@ -130,5 +131,33 @@ public class GestionGroupes implements IGestionGroupes {
 
 
 
+    }
+
+    @Override
+    public double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConnecte, Groupe groupe) {
+
+        List<Facture> factures = sourceDonnee.lireFacturesParGroupe(groupe);
+        if (factures == null || factures.size() == 0) {
+            throw new NullPointerException("Pas de factures"); //TODO exception personalisée et NON nullPointer
+        }
+        double montantPayeUtilisateurConnecte = 0;
+        double total = 0;
+        double solde = 0;
+
+        int nbrUtilisateurSurLaFacture = 0;
+        for (Facture facture : factures) {
+
+            nbrUtilisateurSurLaFacture = 0;
+            for (Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()) {
+                total += facture.getMontantPayeParParUtilisateur().get(utilisateur);
+                nbrUtilisateurSurLaFacture++;
+                if (utilisateur.equals(utilisateur)) {
+                    montantPayeUtilisateurConnecte += facture.getMontantPayeParParUtilisateur().get(utilisateur);
+                }
+            }
+            double montantDuParUtilisateur = total / nbrUtilisateurSurLaFacture;
+            solde = (montantPayeUtilisateurConnecte - montantDuParUtilisateur);
+        }
+        return solde;
     }
 }

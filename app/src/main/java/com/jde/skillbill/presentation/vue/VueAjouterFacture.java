@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +93,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
              @Override
              public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                  if(i==1){
-                     afficherAlertDialog(presenteurAjouterFacture.presenterListeUtilsateur());
+                     afficherAlertDialog();
                  }
              }
 
@@ -139,72 +140,39 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         return editTextTitre.getText().toString();
     }
 
-
-    private void afficherAlertDialog(ArrayAdapter arrayAdapter){
+    private void afficherAlertDialog(){
         Context context= this.getContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        // String array for alert dialog multi choice items
-        String[] colors = new String[]{
-                "Red",
-                "Green",
-                "Blue",
-                "Purple",
-                "Olive"
-        };
+        String[] noms = presenteurAjouterFacture.presenterListeUtilsateur();
 
-        // Boolean array for initial selected items
-        final boolean[] checkedColors = new boolean[]{
-                false, // Red
-                true, // Green
-                false, // Blue
-                true, // Purple
-                false // Olive
+        final boolean[] nomsSelectionnes = new boolean[noms.length];
 
-        };
+        int i=0;
+        while(i<noms.length){
+            Log.e("vueAjouterFacture", noms[i]);
+            nomsSelectionnes[i] = false;
+            i++;
+        }
 
-        // Convert the color array to list
-        final List<String> colorsList = Arrays.asList(colors);
+        final List<String> listNoms = Arrays.asList(noms);
 
-        // Set multiple choice items for alert dialog
-                /*
-                    AlertDialog.Builder setMultiChoiceItems(CharSequence[] items, boolean[]
-                    checkedItems, DialogInterface.OnMultiChoiceClickListener listener)
-                        Set a list of items to be displayed in the dialog as the content,
-                        you will be notified of the selected item via the supplied listener.
-                 */
-                /*
-                    DialogInterface.OnMultiChoiceClickListener
-                    public abstract void onClick (DialogInterface dialog, int which, boolean isChecked)
-
-                        This method will be invoked when an item in the dialog is clicked.
-
-                        Parameters
-                        dialog The dialog where the selection was made.
-                        which The position of the item in the list that was clicked.
-                        isChecked True if the click checked the item, else false.
-                 */
-        builder.setMultiChoiceItems(colors, checkedColors, new DialogInterface.OnMultiChoiceClickListener() {
+        builder.setMultiChoiceItems(noms, nomsSelectionnes, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 
-                // Update the current focused item's checked status
-                checkedColors[which] = isChecked;
+                nomsSelectionnes[which] = isChecked;
 
-                // Get the current focused item
-                String currentItem = colorsList.get(which);
+                String currentItem = listNoms.get(which);
 
-                // Notify the current action
-                Toast.makeText(context,
-                        currentItem + " " + isChecked, Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Specify the dialog is not cancelable
+
         builder.setCancelable(false);
 
-        // Set a title for alert dialog
-        builder.setTitle("Choisir les payeurs");
+
+        builder.setTitle("Choisir les payeurs NON IMPLÉMETÉ !!!!! A VENIR");//TODO
 
         // Set the positive/yes button click listener
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -215,7 +183,6 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
             }
         });
 
-        // Set the negative/no button click listener
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -223,42 +190,20 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
             }
         });
 
-        // Set the neutral/cancel button click listener
+
         builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Do something when click the neutral button
+
             }
         });
 
         AlertDialog dialog = builder.create();
-        // Display the alert dialog on interface
+
         dialog.show();
     }
 
 
-        /**AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Choisir un payeur"); //TODO
-
-        builder.setAdapter(arrayAdapter, new  DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Utilisateur utilisateur = (Utilisateur) arrayAdapter.getItem(which);
-                    Log.e("which ", Integer.toString(which));
-
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog,int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                }
-        });
-
-        builder.show();
-         */
 
     }
 

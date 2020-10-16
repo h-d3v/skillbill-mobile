@@ -1,8 +1,5 @@
 package com.jde.skillbill.presentation;
 
-import android.widget.ArrayAdapter;
-import com.jde.skillbill.domaine.entites.Utilisateur;
-
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
@@ -10,7 +7,7 @@ public interface IContratVPAjouterFacture {
 
     interface IPresenteurAjouterFacture{
 
-        ArrayAdapter<Utilisateur> presenterListeUtilsateur();
+        String[] presenterListeUtilsateur();
 
         void ajouterFacture();
     }

@@ -9,6 +9,7 @@ import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
+import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
@@ -28,14 +29,16 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     private Activity activity;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
-    private ISourceDonnee iSourceDonnee;
+    private GestionGroupes gestionGroupe;
 
-    public PresenteurVoirGroupes(Modele modele, VueVoirGroupes vueVoirGroupes, Activity activity, ISourceDonnee iSourceDonnee) {
+
+
+    public PresenteurVoirGroupes(Modele modele, VueVoirGroupes vueVoirGroupes, Activity activity,  GestionGroupes gestionGroupes) {
         this.modele = modele;
         this.vueVoirGroupes = vueVoirGroupes;
         this.activity=activity;
         modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD));
-        this.iSourceDonnee=iSourceDonnee;
+        this.gestionGroupe = gestionGroupes;
 
     }
 
@@ -58,6 +61,9 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         if (BuildConfig.DEBUG && position < 0) {
             throw new AssertionError("Assertion failed");
         }
+        /*
+
+
 
         List<Facture> factures= iSourceDonnee.lireFacturesParGroupe( modele.getListGroupeAbonneUtilisateurConnecte().get(position));
         if (factures == null || factures.size() == 0) {
@@ -82,15 +88,23 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
             solde=(montantPayeUtilisateurConnecte - montantDuParUtilisateur);
 
 
+        }
 
+
+        */
+        try {
+            double solde = gestionGroupe.getSoldeParUtilisateurEtGroupe(modele.getUtilisateurConnecte(), modele.getListGroupeAbonneUtilisateurConnecte().get(position));
+            if(solde==0){
+                return activity.getResources().getString(R.string.solde_utilisateur_nul) ;
+            }else if(solde<0){
+                return activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde);
+            }else{
+                return activity.getResources().getString(R.string.solde_utilisateur_crediteur)+" "+ solde;
+            }
+        }catch (NullPointerException e ){
+            return activity.getResources().getString(R.string.pas_de_facture_dans_le_groupe);
         }
-        if(solde==0){
-            return activity.getResources().getString(R.string.solde_utilisateur_nul) ;
-        }else if(solde<0){
-            return activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde);
-        }else{
-            return activity.getResources().getString(R.string.solde_utilisateur_crediteur)+" "+ solde;
-        }
+
 
     }
 

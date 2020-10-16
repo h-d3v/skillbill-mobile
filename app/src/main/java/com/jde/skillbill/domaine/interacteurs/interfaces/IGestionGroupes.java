@@ -83,4 +83,5 @@ public interface IGestionGroupes {
      */
     void payerUnUtilisateurDansSonGroupe(Groupe groupe, Paiement paiement);
 
+    double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConnecte, Groupe groupe);
 }
