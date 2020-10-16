@@ -88,7 +88,6 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
                         }else if(_presenteur.ERREUR_ACCES==code){
                             Toast.makeText(racine.getContext(), "Vous avez dejà ajouté cet utilisateur ", Toast.LENGTH_LONG).show();
                         }
-
                     }
                 });
                 builder.setNeutralButton("Inviter", new DialogInterface.OnClickListener() {
