@@ -71,7 +71,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     }
 
     @Override
-    public int envoyerCourriel(String courriel) {
+    public void envoyerCourriel(String courriel) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/html");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{ courriel});
@@ -79,6 +79,6 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         intent.putExtra(Intent.EXTRA_TEXT, "Telecharge SkillBill, mais bon on n'est pas sur le PlayStore, un APK ?");
 
         activityVoirUnGroupe.startActivity(Intent.createChooser(intent, "Invitation SkillBill"));
-        return 0;} //TODO
+       }
 
 }

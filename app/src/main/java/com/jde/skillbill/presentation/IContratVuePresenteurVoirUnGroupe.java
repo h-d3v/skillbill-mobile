@@ -7,7 +7,7 @@ public interface IContratVuePresenteurVoirUnGroupe {
 
          int ajouterUtilisateurAuGroupe(String courriel);
 
-         int envoyerCourriel(String courriel);
+         void envoyerCourriel(String courriel);
 
 
      }
