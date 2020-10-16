@@ -95,7 +95,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
                     public void onClick(DialogInterface dialogInterface, int i) {
                         EditText champsCourriel = customLayout.findViewById(R.id.editTextTextEmailAddressAjouterMembre);
                         _presenteur.envoyerCourriel(champsCourriel.getText().toString());
-                        Toast.makeText(racine.getContext(), "NON IMPLÉMENTÉ DEMMARRERA UNE ACTIVITE AVEC COLLABORATION EMAIL ", Toast.LENGTH_LONG).show();
+
                     }
                 });
 

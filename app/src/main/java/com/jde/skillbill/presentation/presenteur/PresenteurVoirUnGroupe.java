@@ -1,5 +1,6 @@
 package com.jde.skillbill.presentation.presenteur;
 
+import android.content.Intent;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
@@ -70,6 +71,14 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     }
 
     @Override
-    public int envoyerCourriel(String courriel) {return 0;} //TODO
+    public int envoyerCourriel(String courriel) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/html");
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{ courriel});
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Invitation SkillBill");
+        intent.putExtra(Intent.EXTRA_TEXT, "Telecharge SkillBill, mais bon on n'est pas sur le PlayStore, un APK ?");
+
+        activityVoirUnGroupe.startActivity(Intent.createChooser(intent, "Invitation SkillBill"));
+        return 0;} //TODO
 
 }
