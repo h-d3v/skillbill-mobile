@@ -44,5 +44,11 @@ public class PresenteurVoirUnGroupe implements IContratVPVoirUnGroupe.IPresenteu
         return this.getFacturesGroupe().get(posFacture).getMontantPayeParParUtilisateur().get(_modele.getUtilisateurConnecte());
     }
 
+    //Todo, supression de la facture.
+    @Override
+    public void requeteSupprimerFacture(int position) {
+
+    }
+
 
 }
