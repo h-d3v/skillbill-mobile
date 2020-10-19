@@ -29,8 +29,6 @@ public class PresenteurVoirUnGroupe implements IContratVPVoirUnGroupe.IPresenteu
         this.iSourceDonnee=iSourceDonnee;
     }
 
-
-
     public List<Facture> getFacturesGroupe(){
         _modele.setGroupesAbonnesUtilisateurConnecte( new GestionUtilisateur(new SourceDonneesMock()).trouverGroupesAbonne(_modele.getUtilisateurConnecte()));
         Log.i("courriel user connecte",_activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR));
@@ -44,10 +42,14 @@ public class PresenteurVoirUnGroupe implements IContratVPVoirUnGroupe.IPresenteu
         return this.getFacturesGroupe().get(posFacture).getMontantPayeParParUtilisateur().get(_modele.getUtilisateurConnecte());
     }
 
-    //Todo, supression de la facture.
+
+    //Todo, possiblite d'annuler la supression
+    //Todo supprimer suelement par l'utilisateur qui l'a creer
+    //Todo supprimer dans la bd ou le service
     @Override
     public void requeteSupprimerFacture(int position) {
-
+        _vue.rafraichir();
+        this.getFacturesGroupe().remove(position);
     }
 
 

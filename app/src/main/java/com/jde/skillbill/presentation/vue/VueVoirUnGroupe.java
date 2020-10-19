@@ -59,6 +59,14 @@ public class VueVoirUnGroupe extends Fragment implements IContratVPVoirUnGroupe.
         _presenteur=presenteur;
     }
 
+    /**
+     * Rafraichit la vue
+     */
+
+    public void rafraichir() {
+        if(rvFacturesAdapter!=null)
+            rvFacturesAdapter.notifyDataSetChanged();
+    }
 
     /**
      * crée le swipe gauche pour le rv
@@ -86,6 +94,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVPVoirUnGroupe.
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int position = viewHolder.getAdapterPosition();
             _presenteur.requeteSupprimerFacture(position);
+
         }
 
         /**
