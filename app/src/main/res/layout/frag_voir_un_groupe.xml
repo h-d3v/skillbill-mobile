@@ -44,6 +44,7 @@
             android:text="@string/action_ajouter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/btnAjouter"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFactures"
         android:layout_width="match_parent"

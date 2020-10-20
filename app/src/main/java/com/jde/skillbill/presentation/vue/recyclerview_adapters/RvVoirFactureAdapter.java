@@ -1,6 +1,7 @@
 package com.jde.skillbill.presentation.vue.recyclerview_adapters;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -43,8 +44,7 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
 
     @Override
     public int getItemCount() {
-        if (_presenteur==null) return 0;
-        else if (_presenteur.getFacturesGroupe()==null) return 0;
+        if (_presenteur==null || _presenteur.getFacturesGroupe()==null) return 0;
         return _presenteur.getFacturesGroupe().size();
     }
 

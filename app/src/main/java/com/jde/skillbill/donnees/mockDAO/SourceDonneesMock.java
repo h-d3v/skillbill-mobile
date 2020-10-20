@@ -45,14 +45,9 @@ public class SourceDonneesMock implements ISourceDonnee{
             factureMock.setMontantPayeParParUtilisateur(hashMap);
             factureMock.setDateFacture(LocalDate.now());
 
-            groupeFactureHashMap.put(new Groupe("test groupe 1", _utilisateurs.get(0), null), new LinkedList<>());
-            groupeFactureHashMap.get(new Groupe("test groupe 1", _utilisateurs.get(0), null)).add(factureMock);
-            utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 1", _utilisateurs.get(0), Monnaie.CAD));
-            utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 2",_utilisateurs.get(0), Monnaie.CAD));
-            utilisateurGroupeHashMap.get(_utilisateurs.get(1)).add( new Groupe("test groupe 2",_utilisateurs.get(0), Monnaie.CAD));
-            utilisateurGroupeHashMap.get(_utilisateurs.get(0)).add( new Groupe("test groupe 3",_utilisateurs.get(0), Monnaie.CAD));
-            utilisateurGroupeHashMap.get(_utilisateurs.get(1)).add( new Groupe("test groupe 3",_utilisateurs.get(0), Monnaie.CAD));
-            utilisateurGroupeHashMap.get(_utilisateurs.get(2)).add( new Groupe("test groupe 3",_utilisateurs.get(0), Monnaie.CAD));
+            groupeFactureHashMap.put(new Groupe("test groupe 1", _utilisateurs.get(0), Monnaie.CAD), new LinkedList<>());
+            Objects.requireNonNull(groupeFactureHashMap.get(new Groupe("test groupe 1", _utilisateurs.get(0), Monnaie.CAD))).add(factureMock);
+
         }
         if (groupeUtilisateursHashmap.isEmpty()) {
             for (Utilisateur utilisateur : utilisateurGroupeHashMap.keySet()){

@@ -18,6 +18,7 @@ import com.jde.skillbill.presentation.vue.VueVoirUnGroupe;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe {
     public static final int ERREUR_ACCES =0;
@@ -44,6 +45,8 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         modele.setGroupesAbonnesUtilisateurConnecte(gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte()));
         groupeEncours= modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1));
         groupeEncours.setUtilisateurs(gestionGroupes.trouverTousLesUtilisateurs(groupeEncours));
+
+        Log.e("position groupe en cours",String.valueOf(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1)));
     }
 
     @Override
@@ -61,7 +64,6 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     }
 
     public boolean isGroupeSolo(){
-
         if( gestionGroupes.trouverTousLesUtilisateurs(groupeEncours)==null) return false;
         return  gestionGroupes.trouverTousLesUtilisateurs(groupeEncours).size()<=1;
     }
@@ -74,7 +76,6 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
                 return AJOUT_OK;
             } else return ERREUR_ACCES;
         } else return EMAIL_INCONNU ;
-
     }
 
     @Override
@@ -89,16 +90,14 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
        }
 
     public List<Facture> getFacturesGroupe(){
-        modele.setGroupesAbonnesUtilisateurConnecte( new GestionUtilisateur(new SourceDonneesMock()).trouverGroupesAbonne(modele.getUtilisateurConnecte()));
-        Log.i("courriel user connecte",activityVoirUnGroupe.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR));
-        return gestionGroupes.trouverToutesLesFactures(
-                modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, 0)));
+        Log.i("courriel user connecte", Objects.requireNonNull(activityVoirUnGroupe.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR)));
+        //return groupeEncours.getFactures();
+        return gestionGroupes.trouverToutesLesFactures(modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, -1)));
     }
 
     //TODO faire en sorte que ce montant reflete ce que l'utilisateur dois payer et non ce qu'il a deja payer
     //@Override
     public double getMontantFacturePayerParUser(int posFacture) {
-
         return this.getFacturesGroupe().get(posFacture).getMontantPayeParParUtilisateur().get(modele.getUtilisateurConnecte());
     }
 

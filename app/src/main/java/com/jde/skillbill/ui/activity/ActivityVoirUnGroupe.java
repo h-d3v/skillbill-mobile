@@ -26,6 +26,7 @@ public class ActivityVoirUnGroupe extends AppCompatActivity {
         VueVoirUnGroupe vueVoirUnGroupe= new VueVoirUnGroupe();
         Modele modele= new Modele();
         ISourceDonnee iSourceDonnee = new SourceDonneesMock();
+
         IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe presenteurVoirUnGroupe =new PresenteurVoirUnGroupe(modele, vueVoirUnGroupe,
                 this, new GestionGroupes(iSourceDonnee), new GestionFacture(iSourceDonnee), new GestionUtilisateur(iSourceDonnee));
 

@@ -65,7 +65,10 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if(tab.getPosition()==1){
+                if(tab.getPosition()==0){
+                    rvFactures.setVisibility(View.VISIBLE);
+                }
+                else if(tab.getPosition()==1){
                     detailMembres.setVisibility(View.VISIBLE);
                     ajouterMembre.setVisibility(View.VISIBLE);
                     if(_presenteur.isGroupeSolo()){
@@ -74,16 +77,17 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
                         detailMembres.setText("Vous partagez vos factures avec "+_presenteur.getMembresGroupe());
                     }
                 }
-
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                if(tab.getPosition()==1) {
+                if(tab.getPosition()==0) {
+                  rvFactures.setVisibility(View.INVISIBLE);
+                }
+                else if(tab.getPosition()==1){
                     detailMembres.setVisibility(View.INVISIBLE);
                     ajouterMembre.setVisibility(View.INVISIBLE);
                 }
-
             }
 
             @Override
@@ -143,6 +147,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
     public void setPresenteur(IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe presenteur) {
         _presenteur = (PresenteurVoirUnGroupe) presenteur;
     }
+
    // @Override
     public void setNomGroupe(String nom) {
         tvNomGroupe.setText(nom);
@@ -154,8 +159,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
      */
 
     public void rafraichir() {
-        if(rvFacturesAdapter!=null)
-            rvFacturesAdapter.notifyDataSetChanged();
+        if(rvFacturesAdapter!=null) rvFacturesAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -205,7 +209,6 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
                     .addActionIcon(R.drawable.ic_remove_circle_black_24dp)
                     .create()
                     .decorate();
-
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     };

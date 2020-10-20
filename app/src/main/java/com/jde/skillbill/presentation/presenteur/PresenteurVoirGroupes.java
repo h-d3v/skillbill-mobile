@@ -50,12 +50,13 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     }
 
     @Override
-    public void commencerVoirGroupeActivite(int position) {
+    public void commencerVoirUnGroupeActivite(int position) {
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
         intent.putExtra(EXTRA_GROUPE_POSITION, position);
         intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
         activity.startActivity(intent);
     }
+
     @Override
     public String  getSoldeGroupe(int position) {
         if (BuildConfig.DEBUG && position < 0) {
