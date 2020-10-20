@@ -2,6 +2,7 @@ package com.jde.skillbill.presentation.presenteur;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.R;
@@ -55,7 +56,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
         activity.startActivity(intent);
     }
-
     @Override
     public String  getSoldeGroupe(int position) {
         if (BuildConfig.DEBUG && position < 0) {
@@ -104,7 +104,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         }catch (NullPointerException e ){
             return activity.getResources().getString(R.string.pas_de_facture_dans_le_groupe);
         }
-
 
     }
 

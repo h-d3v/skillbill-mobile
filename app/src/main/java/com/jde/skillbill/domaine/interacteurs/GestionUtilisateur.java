@@ -22,7 +22,6 @@ public class GestionUtilisateur implements IGestionUtilisateur {
         _dataSource=sourceDonnee;
     }
 
-
     /**
      * Accesseur de l'instance d'un Singleton
      */
@@ -41,7 +40,6 @@ public class GestionUtilisateur implements IGestionUtilisateur {
     public Utilisateur tenterConnexion(String email, String mdp){
         return _dataSource.tenterConnexion(email, mdp);
     }
-
 
     @Override
     public Utilisateur creerUtilisateur(String nom, String courriel, String motPasse, Monnaie monnaie) {

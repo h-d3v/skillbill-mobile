@@ -43,11 +43,11 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         this.vueAjouterFacture = vueAjouterFacture;
         this.modele = modele;
         utilisateurConnecte=new Utilisateur("", activityAjouterFacture.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD);
+        this.iGestionFacture = gestionFacture;
+        this.iGestionUtilisateur = gestionUtilisateur;
+        this.iGestionGroupes = gestionGroupes;
         modele.setUtilisateurConnecte(utilisateurConnecte);
         position=activityAjouterFacture.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1);
-        this.iGestionFacture= gestionFacture;
-        iGestionUtilisateur = gestionUtilisateur;
-        iGestionGroupes = gestionGroupes;
         modele.setGroupesAbonnesUtilisateurConnecte(gestionUtilisateur.trouverGroupesAbonne(utilisateurConnecte));
         groupe = modele.getListGroupeAbonneUtilisateurConnecte().get(position);
     }
@@ -82,6 +82,8 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 Intent intent = new Intent(activityAjouterFacture, ActivityVoirUnGroupe.class);
                 intent.putExtra(EXTRA_GROUPE_POSITION, position);
                 intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
+                intent.putExtra("com.jde.skillbill.utlisateur_identifiant", modele.getUtilisateurConnecte().getCourriel());
+                intent.putExtra("com.jde.skillbill.groupe_identifiant", activityAjouterFacture.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, -1));
                 activityAjouterFacture.startActivity(intent);
             };
         }catch (NumberFormatException  | DateTimeParseException  e){

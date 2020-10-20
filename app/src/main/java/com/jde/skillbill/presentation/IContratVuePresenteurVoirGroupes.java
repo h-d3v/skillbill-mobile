@@ -16,7 +16,7 @@ public interface IContratVuePresenteurVoirGroupes {
         List<Groupe> getGroupeAbonnes();
         void commencerCreerGroupeActivite();
 
-        void commencerVoirGroupeActivite(int position);
+        void commencerVoirUnGroupeActivite(int position);
 
 
         String getSoldeGroupe(int position);

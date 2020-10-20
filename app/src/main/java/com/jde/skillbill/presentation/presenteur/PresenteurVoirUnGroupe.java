@@ -1,16 +1,23 @@
 package com.jde.skillbill.presentation.presenteur;
 
 import android.content.Intent;
+import android.util.Log;
+
+import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
+import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
+import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirUnGroupe;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
+
+import java.util.List;
 
 public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe {
     public static final int ERREUR_ACCES =0;
@@ -80,5 +87,29 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
 
         activityVoirUnGroupe.startActivity(Intent.createChooser(intent, "Invitation SkillBill"));
        }
+
+    public List<Facture> getFacturesGroupe(){
+        modele.setGroupesAbonnesUtilisateurConnecte( new GestionUtilisateur(new SourceDonneesMock()).trouverGroupesAbonne(modele.getUtilisateurConnecte()));
+        Log.i("courriel user connecte",activityVoirUnGroupe.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR));
+        return gestionGroupes.trouverToutesLesFactures(
+                modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, 0)));
+    }
+
+    //TODO faire en sorte que ce montant reflete ce que l'utilisateur dois payer et non ce qu'il a deja payer
+    //@Override
+    public double getMontantFacturePayerParUser(int posFacture) {
+
+        return this.getFacturesGroupe().get(posFacture).getMontantPayeParParUtilisateur().get(modele.getUtilisateurConnecte());
+    }
+
+    //Todo, possiblite d'annuler la supression
+    //Todo supprimer suelement par l'utilisateur qui l'a creer
+    //Todo supprimer dans la bd ou le service
+    //@Override
+    public void requeteSupprimerFacture(int position) {
+        vueVoirUnGroupe.rafraichir();
+        this.getFacturesGroupe().remove(position);
+    }
+
 
 }
