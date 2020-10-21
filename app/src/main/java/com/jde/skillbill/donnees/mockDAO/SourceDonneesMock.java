@@ -63,7 +63,11 @@ public class SourceDonneesMock implements ISourceDonnee{
     public  boolean creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) {
         if(utilisateurGroupeHashMap.get(utilisateur)==null && !utilisateurGroupeHashMap.containsKey(utilisateur)) {
             utilisateurGroupeHashMap.put(utilisateur,new ArrayList<Groupe>());
+
         }
+        ArrayList<Utilisateur> utilisateurs = new ArrayList<>();
+        utilisateurs.add(utilisateur);
+        groupeUtilisateursHashmap.put(groupe, utilisateurs );
 
         return utilisateurGroupeHashMap.get(utilisateur).add(groupe);
     }

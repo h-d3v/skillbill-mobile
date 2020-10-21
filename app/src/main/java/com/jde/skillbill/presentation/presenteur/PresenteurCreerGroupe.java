@@ -7,7 +7,9 @@ import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
+import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
+import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVuePresenteurCreerGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
@@ -20,6 +22,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
     private VueCreerGroupe vueCreerGroupe;
     private Activity activity;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
+    private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
 
     public PresenteurCreerGroupe(Modele modele, VueCreerGroupe vueCreerGroupe, Activity activity) {
         this.modele = modele;
@@ -32,9 +35,12 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
     @Override
     public void creerGroupe() {
         IGestionGroupes gestionGroupes = new GestionGroupes(new SourceDonneesMock());
+        IGestionUtilisateur gestionUtilisateur = new GestionUtilisateur(new SourceDonneesMock());
 
         gestionGroupes.creerGroupe(vueCreerGroupe.getNomGroupe(), modele.getUtilisateurConnecte(),null);
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
+        intent.putExtra(EXTRA_GROUPE_POSITION, gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte()).size()-1);
         activity.startActivity(intent);
     }
 
