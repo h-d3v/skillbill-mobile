@@ -41,6 +41,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         this.gestionGroupes = gestionGroupes;
         this.gestionFacture = gestionFacture;
         this.gestionUtilisateur = gestionUtilisateur;
+
         modele.setUtilisateurConnecte(new Utilisateur("", activityVoirUnGroupe.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD));
         modele.setGroupesAbonnesUtilisateurConnecte(gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte()));
         groupeEncours= modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1));
@@ -90,6 +91,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
        }
 
     public List<Facture> getFacturesGroupe(){
+        Log.i("nb factures gp courrant", String.valueOf(groupeEncours.getFactures().size())) ;
         Log.i("courriel user connecte", Objects.requireNonNull(activityVoirUnGroupe.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR)));
         //return groupeEncours.getFactures();
         return gestionGroupes.trouverToutesLesFactures(modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, -1)));
