@@ -91,10 +91,12 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
        }
 
     public List<Facture> getFacturesGroupe(){
-        Log.i("nb factures gp courrant", String.valueOf(groupeEncours.getFactures().size())) ;
-        Log.i("courriel user connecte", Objects.requireNonNull(activityVoirUnGroupe.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR)));
+        //Log.i("nb factures gp courrant", String.valueOf(groupeEncours.getFactures().size())) ;
+
         //return groupeEncours.getFactures();
+
         return gestionGroupes.trouverToutesLesFactures(modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, -1)));
+
     }
 
     //TODO faire en sorte que ce montant reflete ce que l'utilisateur dois payer et non ce qu'il a deja payer

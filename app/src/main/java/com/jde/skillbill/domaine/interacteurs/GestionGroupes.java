@@ -1,5 +1,7 @@
 package com.jde.skillbill.domaine.interacteurs;
 
+import android.util.Log;
+
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.*;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
@@ -68,7 +70,8 @@ public class GestionGroupes implements IGestionGroupes {
      */
     @Override
     public List<Facture> trouverToutesLesFactures(Groupe groupe) {
-        return groupe.getFactures();
+
+        return sourceDonnee.lireFacturesParGroupe(groupe);
     }
 
     /**

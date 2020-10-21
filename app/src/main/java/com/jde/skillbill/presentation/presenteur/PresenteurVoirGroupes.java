@@ -95,7 +95,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         */
         try {
             double solde = gestionGroupe.getSoldeParUtilisateurEtGroupe(modele.getUtilisateurConnecte(), modele.getListGroupeAbonneUtilisateurConnecte().get(position));
-            if(solde==0){
+            if(solde==0 /* && personne ne doit rien lui devoir aussi*/){
                 return activity.getResources().getString(R.string.solde_utilisateur_nul) ;
             }else if(solde<0){
                 return activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde);
