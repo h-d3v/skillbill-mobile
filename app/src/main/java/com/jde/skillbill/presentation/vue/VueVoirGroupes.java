@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -37,6 +38,8 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         rvMesGroupes.setAdapter(rvVoirGroupesAdapter);
         rvMesGroupes.setLayoutManager(new LinearLayoutManager(getContext()));
         buttonCommencerActiviteCreerGroupe.setOnClickListener(view -> presenteurVoirGroupes.commencerCreerGroupeActivite());
+
+        rvMesGroupes.addItemDecoration(new DividerItemDecoration(rvMesGroupes.getContext(), DividerItemDecoration.VERTICAL));
         return racine;
     }
 

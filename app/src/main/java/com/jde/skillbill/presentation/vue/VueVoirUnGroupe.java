@@ -1,9 +1,12 @@
 package com.jde.skillbill.presentation.vue;
 
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.jde.skillbill.R;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
@@ -186,9 +191,16 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
          */
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int position = viewHolder.getAdapterPosition();
-            _presenteur.requeteSupprimerFacture(position);
 
+            int position = viewHolder.getAdapterPosition();
+            Snackbar.make(rvFactures, _presenteur.getFacturesGroupe().get(position).getLibelle(), Snackbar.LENGTH_LONG)
+                    .setAction("Supprimer la facture", new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v) {
+                            _presenteur.requeteSupprimerFacture(position);
+                        }
+                    }).setActionTextColor(Color.RED).setBackgroundTint(Color.LTGRAY).show();
+                    rvFacturesAdapter.notifyDataSetChanged();
         }
 
         /**
