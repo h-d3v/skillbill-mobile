@@ -9,7 +9,7 @@ public class Utilisateur {
     private String motPasse;
     private String uriPhoto;
     private String courriel;
-    private int numeroTelephone;
+    private String numeroTelephone;
     private Monnaie monnaieUsuelle;
 
     //On va utiliser le constructeur avec seulement l'attribut nom qui inclure aussi le prenom
@@ -59,11 +59,11 @@ public class Utilisateur {
         this.courriel = courriel;
     }
 
-    public int getNumeroTelephone() {
+    public String getNumeroTelephone() {
         return numeroTelephone;
     }
 
-    public void setNumeroTelephone(int numeroTelephone) {
+    public void setNumeroTelephone(String numeroTelephone) {
         this.numeroTelephone = numeroTelephone;
     }
 
