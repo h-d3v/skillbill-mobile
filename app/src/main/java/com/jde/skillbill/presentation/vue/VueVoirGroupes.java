@@ -47,7 +47,4 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
     public void setPresenteur(PresenteurVoirGroupes presenteurVoirGroupes){
         this.presenteurVoirGroupes=presenteurVoirGroupes;
     }
-
-
-
 }

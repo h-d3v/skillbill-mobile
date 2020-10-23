@@ -10,6 +10,14 @@ public class Facture {
     private  Map<Utilisateur, Double> montantPayeParParUtilisateur;
     private String libelle;
 
+    //Constructeur de test
+    public Facture(LocalDate dateFacture, Map<Utilisateur, Double> utilisateurDoubleMap, String nom){
+        this.dateFacture=dateFacture;
+        this.montantPayeParParUtilisateur=utilisateurDoubleMap;
+        this.libelle=nom;
+    }
+
+    public Facture(){};
 
     public LocalDate getDateFacture() {
         return dateFacture;
