@@ -46,25 +46,6 @@ public class GestionUtilisateur implements IGestionUtilisateur {
         return _dataSource.creerUtilisateur(new Utilisateur(nom, courriel, motPasse, monnaie));
     }
 
-    @Override
-    public boolean modifierMotPasse(Utilisateur utilisateur, String motPasse) {
-        return false;
-    }
-
-    @Override
-    public boolean ajouterPhotoProfil(Utilisateur utilisateur, Bitmap bitmap) {
-        return false;
-    }
-
-    @Override
-    public boolean modifierPhotoProfil(Utilisateur utilisateur, Bitmap bitmap) {
-        return false;
-    }
-
-    @Override
-    public boolean modifierNumeroTelephone(Utilisateur utilisateur, int numeroTelephone) {
-        return false;
-    }
 
     @Override
     public List<Groupe> trouverGroupesAbonne(Utilisateur utilisateur) {
