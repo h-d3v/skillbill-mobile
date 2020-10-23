@@ -1,13 +1,9 @@
 package com.jde.skillbill.domaine.interacteurs;
 
-import android.util.Log;
-
-import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.*;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 
 import java.util.List;
-import java.util.Map;
 
 public class GestionGroupes implements IGestionGroupes {
 
@@ -137,13 +133,13 @@ public class GestionGroupes implements IGestionGroupes {
     }
 
     @Override
-    public double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConnecte, Groupe groupe) {
+    public double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConcerne, Groupe groupe) {
 
         List<Facture> factures = sourceDonnee.lireFacturesParGroupe(groupe);
         if (factures == null || factures.size() == 0) {
             throw new NullPointerException("Pas de factures"); //TODO exception personalisée et NON nullPointer
         }
-        double montantPayeUtilisateurConnecte = 0;
+        double montantPayeUtilisateurConcerne = 0;
         double total = 0;
         double solde = 0;
 
@@ -154,12 +150,12 @@ public class GestionGroupes implements IGestionGroupes {
             for (Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()) {
                 total += facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 nbrUtilisateurSurLaFacture++;
-                if (utilisateur.equals(utilisateur)) {
-                    montantPayeUtilisateurConnecte += facture.getMontantPayeParParUtilisateur().get(utilisateur);
+                if (utilisateur.equals(utilisateurConcerne)) {
+                    montantPayeUtilisateurConcerne += facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 }
             }
             double montantDuParUtilisateur = total / nbrUtilisateurSurLaFacture;
-            solde = (montantPayeUtilisateurConnecte - montantDuParUtilisateur);
+            solde = (montantPayeUtilisateurConcerne - montantDuParUtilisateur);
         }
         return solde;
     }

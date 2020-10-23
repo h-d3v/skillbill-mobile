@@ -3,25 +3,24 @@ package com.jde.skillbill.domaine.interacteurs;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
-import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-
+import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-import static org.mockito.Mockito.*;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class GestionUtilisateurTest {
 
-    ISourceDonnee sourceDonnee = mock(ISourceDonnee.class);
-    GestionUtilisateur gestionUtilisateur;
-    Utilisateur utilisateurCobaye = new Utilisateur("Mi","Ma", "emailExiste","motDePasseAuTop" );
+  private ISourceDonnee sourceDonnee = mock(ISourceDonnee.class);
+  private GestionUtilisateur gestionUtilisateur;
+  private Utilisateur utilisateurCobaye = new Utilisateur("Mi","Ma", "emailExiste","motDePasseAuTop" );
 
 
 
