@@ -22,13 +22,7 @@ public interface IGestionGroupes {
      */
     boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur);
 
-    /**
-     *
-     * @param groupe
-     * @param utilisateur
-     * @return le membre supprimé
-     */
-    boolean supprimerMembre(Groupe groupe,Utilisateur utilisateur);
+
 
     /**
      *
@@ -45,13 +39,7 @@ public interface IGestionGroupes {
      */
     List<Facture> trouverToutesLesFactures(Groupe groupe);
 
-    /**
-     *
-     * @param groupe
-     * @param facture
-     * @return la facture touvée, null sinon
-     */
-    Facture trouverUneFacture(Groupe groupe, Facture facture);
+
 
     /**
      *
@@ -60,28 +48,10 @@ public interface IGestionGroupes {
      */
     List<Utilisateur> trouverTousLesUtilisateurs(Groupe groupe);
 
-    /**
-     *
-     * @param groupe
-     * @param utilisateur
-     * @return le solde d'un utilisateur au sein du groupe
-     */
-    Double soldeUtilisateur(Groupe groupe,Utilisateur utilisateur);
 
-    /**
-     *
-     * @param groupe
-     * @param unNom
-     * @return le groupe modifié
-     */
-    Groupe modifierNomGroupe(Groupe groupe,String unNom);
 
-    /**
-     *
-     * @param groupe
-     * @param paiement
-     */
-    void payerUnUtilisateurDansSonGroupe(Groupe groupe, Paiement paiement);
+
+
 
     double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConnecte, Groupe groupe);
 }

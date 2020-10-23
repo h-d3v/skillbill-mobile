@@ -39,16 +39,6 @@ public class GestionGroupes implements IGestionGroupes {
       return sourceDonnee.ajouterMembre(groupe, utilisateur);
     }
 
-    /**
-     * @param groupe
-     * @param utilisateur
-     * @return boolean true si supprime, false sinon
-     */
-    @Override
-    public boolean supprimerMembre(Groupe groupe, Utilisateur utilisateur) {
-
-        return false;
-    }
 
     /**
      * @param groupe
@@ -70,15 +60,7 @@ public class GestionGroupes implements IGestionGroupes {
         return sourceDonnee.lireFacturesParGroupe(groupe);
     }
 
-    /**
-     * @param groupe
-     * @param facture
-     * @return la facture touvée, null sinon
-     */
-    @Override
-    public Facture trouverUneFacture(Groupe groupe, Facture facture) {
-       return null;
-    }
+
 
     /**
      * @param groupe
@@ -89,48 +71,13 @@ public class GestionGroupes implements IGestionGroupes {
         return sourceDonnee.lireUTilisateurParGroupe(groupe);
     }
 
-    /**
-     * @param groupe
-     * @param utilisateur
-     * @return le solde d'un utilisateur au sein du groupe
-     */
-    @Override
-    public Double soldeUtilisateur(Groupe groupe, Utilisateur utilisateur) {
-        return null;
-    }
 
     /**
-     * @param groupe
-     * @param unNom
-     * @return le groupe modifié
+     *
+     * @param utilisateurConcerne un utilisateur du groupe
+     * @param groupe un groupe
+     * @return double le solde de l'utilisateur du total payé ou à payer pour toutes les factures de son groupe
      */
-    @Override
-    public Groupe modifierNomGroupe(Groupe groupe, String unNom) {
-
-        return null;
-    }
-
-    /**
-     * @param groupe
-     * @param paiement
-     */
-    @Override
-    public void payerUnUtilisateurDansSonGroupe(Groupe groupe, Paiement paiement) {
-       /** Map<Utilisateur, Double> utilisateurMap = groupe.getSoldeParUtilisateur();
-        Utilisateur utilisateurPayeur = paiement.getUtilisateurPayeur();
-        Utilisateur utilisateurPaye = paiement.getUtilisateurPaye();
-        if(utilisateurMap.containsKey(utilisateurPayeur)
-            && utilisateurMap.containsKey(utilisateurPaye)) {
-
-            double soldePayeur=utilisateurMap.get(paiement.getUtilisateurPayeur());
-            double soldePaye=utilisateurMap.get(paiement.getUtilisateurPaye());
-            utilisateurMap.put(utilisateurPayeur,soldePayeur+paiement.getMontant());
-            utilisateurMap.put(utilisateurPaye, soldePaye- paiement.getMontant());
-        }**/
-
-
-
-    }
 
     @Override
     public double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConcerne, Groupe groupe) {
