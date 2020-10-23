@@ -25,7 +25,7 @@ public class GestionUtilisateur implements IGestionUtilisateur {
     /**
      * Accesseur de l'instance d'un Singleton
      */
-    public void setSource(SourceDonneesMock dataSource){
+    public void setSource(ISourceDonnee dataSource){
         assert dataSource!=null;
         _dataSource= dataSource;
     }

@@ -18,6 +18,7 @@ public class Utilisateur {
         this.prenom = prenom;
         this.nom = nom;
         this.courriel = courriel;
+        this.motPasse =  motPasse;
     }
 
     public Utilisateur(String nom, String courriel, String motPasse, Monnaie monnaie) {
@@ -25,6 +26,14 @@ public class Utilisateur {
         this.courriel = courriel;
         this.motPasse=motPasse;
         this.monnaieUsuelle=monnaie;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 
     public String getNom() {
