@@ -73,7 +73,7 @@ public class GroupeTest {
         groupeTest.setMonnaieDuGroupe(Monnaie.GBP);
         assertEquals(groupeTest.getMonnaieDuGroupe(), Monnaie.GBP);
     }
-
+    
     @Test
     public  void testGetUsers(){
         LinkedList<Utilisateur> listeSuppose= new LinkedList<>();

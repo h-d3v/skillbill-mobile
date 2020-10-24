@@ -1,13 +1,10 @@
 package com.jde.skillbill.domaine.interacteurs;
 
-import android.util.Log;
 
-import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.*;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 
 import java.util.List;
-import java.util.Map;
 
 public class GestionGroupes implements IGestionGroupes {
 
@@ -154,7 +151,7 @@ public class GestionGroupes implements IGestionGroupes {
             for (Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()) {
                 total += facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 nbrUtilisateurSurLaFacture++;
-                if (utilisateur.equals(utilisateur)) {
+                if (utilisateur.equals(utilisateurConnecte)) {
                     montantPayeUtilisateurConnecte += facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 }
             }
