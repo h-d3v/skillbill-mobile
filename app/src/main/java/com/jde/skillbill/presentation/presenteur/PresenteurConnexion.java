@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
+import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVPConnexion;
 import com.jde.skillbill.presentation.modele.Modele;
@@ -18,7 +19,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
 
     private VueConnexion _vueConnexion;
     private Modele _modele;
-    private SourceDonneesMock _dataSource;
+    private ISourceDonnee _dataSource;
     private Activity _activite;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private static final int MSG_TENTER_CONNECTION_REUSSI =1;
@@ -51,7 +52,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         };
     }
 
-    public void setDataSource(SourceDonneesMock dataSource) {
+    public void setDataSource(ISourceDonnee dataSource) {
         _dataSource = dataSource;
     }
 

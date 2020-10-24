@@ -8,6 +8,7 @@ import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 
+import java.io.IOException;
 import java.time.chrono.IsoChronology;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class GestionUtilisateur implements IGestionUtilisateur {
         return utilisateur != null;
     }
 
-    public Utilisateur tenterConnexion(String email, String mdp){
+    public Utilisateur tenterConnexion(String email, String mdp)  {
         return _dataSource.tenterConnexion(email, mdp);
     }
 
