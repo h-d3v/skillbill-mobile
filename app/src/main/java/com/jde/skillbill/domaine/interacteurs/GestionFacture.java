@@ -30,10 +30,6 @@ public class GestionFacture implements IGestionFacture {
         return iSourceDonnee.ajouterFacture(montantTotal, utilisateurPayeur, localDate, groupe , titre);
     }
 
-    @Override
-    public Facture ajouterPaiement(Facture facture, Paiement paiement) {
-        return null;
-    }
 
     @Override
     public Facture ajouterPhotoFacture(Facture facture, String uri, Bitmap bitmap) {
