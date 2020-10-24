@@ -36,7 +36,7 @@ public class GestionGroupes implements IGestionGroupes {
     @Override
     public boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur) {
 
-      return sourceDonnee.ajouterMembre(groupe, utilisateur);
+        return sourceDonnee.ajouterMembre(groupe, utilisateur);
     }
 
 
@@ -71,15 +71,6 @@ public class GestionGroupes implements IGestionGroupes {
         return sourceDonnee.lireUTilisateurParGroupe(groupe);
     }
 
-    /**
-     * @param groupe
-     * @param utilisateur
-     * @return le solde d'un utilisateur au sein du groupe
-     */
-    @Override
-    public Double soldeUtilisateur(Groupe groupe, Utilisateur utilisateur) {
-        return null;
-    }
 
     /**
      *
@@ -87,16 +78,7 @@ public class GestionGroupes implements IGestionGroupes {
      * @param groupe un groupe
      * @return double le solde de l'utilisateur du total payé ou à payer pour toutes les factures de son groupe
      */
-    @Override
-    public Groupe modifierNomGroupe(Groupe groupe, String unNom) {
 
-        return null;
-    }
-
-    /**
-     * @param groupe
-     * @param paiement
-     */
     @Override
     public double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConcerne, Groupe groupe) {
 

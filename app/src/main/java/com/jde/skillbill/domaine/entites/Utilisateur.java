@@ -4,7 +4,6 @@ import java.util.Objects;
 
 public class Utilisateur {
 
-    private String prenom;
     private String nom;
     private String motPasse;
     private String uriPhoto;
@@ -12,28 +11,11 @@ public class Utilisateur {
     private String numeroTelephone;
     private Monnaie monnaieUsuelle;
 
-    //On va utiliser le constructeur avec seulement l'attribut nom qui inclure aussi le prenom
-    // pour des raisons de logistiques et paresse
-    public Utilisateur(String prenom, String nom, String courriel, String motPasse) {
-        this.prenom = prenom;
-        this.nom = nom;
-        this.courriel = courriel;
-        this.motPasse =  motPasse;
-    }
-
     public Utilisateur(String nom, String courriel, String motPasse, Monnaie monnaie) {
         this.nom = nom;
         this.courriel = courriel;
         this.motPasse=motPasse;
         this.monnaieUsuelle=monnaie;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
     }
 
     public String getNom() {

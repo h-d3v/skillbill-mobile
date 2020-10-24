@@ -7,18 +7,17 @@ import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
-import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
+
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
-import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
+
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirUnGroupe;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
-import java.util.Objects;
 
 public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe {
     public static final int ERREUR_ACCES =0;
@@ -73,7 +72,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     @Override
     public int ajouterUtilisateurAuGroupe(String courriel) {
         if(gestionUtilisateur.utilisateurExiste(courriel)){
-            if(gestionGroupes.ajouterMembre(groupeEncours, new Utilisateur("","",courriel, ""))) {
+            if(gestionGroupes.ajouterMembre(groupeEncours, new Utilisateur("",courriel, "", Monnaie.CAD))) {
                 return AJOUT_OK;
             } else return ERREUR_ACCES;
         } else return EMAIL_INCONNU ;
@@ -91,7 +90,6 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
        }
 
     public List<Facture> getFacturesGroupe(){
-        //Log.i("nb factures gp courrant", String.valueOf(groupeEncours.getFactures().size())) ;
 
         //return groupeEncours.getFactures();
 
@@ -105,7 +103,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         return this.getFacturesGroupe().get(posFacture).getMontantPayeParParUtilisateur().get(modele.getUtilisateurConnecte());
     }
 
-    //Todo, possiblite d'annuler la supression
+
     //Todo supprimer suelement par l'utilisateur qui l'a creer
     //Todo supprimer dans la bd ou le service
     //@Override

@@ -3,9 +3,7 @@ package com.jde.skillbill.domaine.interacteurs;
 import android.graphics.Bitmap;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
-import com.jde.skillbill.domaine.entites.Paiement;
 import com.jde.skillbill.domaine.entites.Utilisateur;
-import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 
 
@@ -30,10 +28,6 @@ public class GestionFacture implements IGestionFacture {
         return iSourceDonnee.ajouterFacture(montantTotal, utilisateurPayeur, localDate, groupe , titre);
     }
 
-    @Override
-    public Facture ajouterPaiement(Facture facture, Paiement paiement) {
-        return null;
-    }
 
     @Override
     public Facture ajouterPhotoFacture(Facture facture, String uri, Bitmap bitmap) {
