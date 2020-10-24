@@ -92,12 +92,16 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         _activite.startActivity(intentInscription);
     }
     private void redirigerVersActiviteVoirLesGroupes(){
+
         //redirection vers ses groupes
+
         Intent intent = new Intent(_activite, ActivityVoirGroupes.class);
         intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte().getCourriel());
         _activite.startActivity(intent);
         //Pour eviter de retourner au login
         _activite.finish();
+
+
     }
 
 
