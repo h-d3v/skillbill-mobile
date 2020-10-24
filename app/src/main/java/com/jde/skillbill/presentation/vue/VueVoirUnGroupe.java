@@ -146,8 +146,6 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
             }
 
         });
-
-
         return racine;
     }
 
