@@ -1,9 +1,8 @@
 package com.jde.skillbill.domaine.entites;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Map;
-import java.util.Set;
+
 
 public class Facture {
     private  LocalDate dateFacture;

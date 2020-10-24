@@ -1,6 +1,6 @@
 package com.jde.skillbill.domaine.interacteurs.interfaces;
 
-import android.graphics.Bitmap;
+
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
@@ -8,27 +8,26 @@ import com.jde.skillbill.domaine.entites.Utilisateur;
 import java.util.List;
 
 public interface IGestionUtilisateur {
-    //Pour verifier si l'email est pris
+    /**
+     *
+     * @param email
+     * @return true si le courriel est dans la source de donnée
+     */
     boolean utilisateurExiste(String email);
 
     /**
      *
      * @param nom
      * @param courriel
-     * @return Utilisateur l'utilisateur cree
+     * @return Utilisateur l'utilisateur crée
      */
     Utilisateur creerUtilisateur(String nom, String courriel, String motPasse, Monnaie monnaie);
+
 
     /**
      *
      * @param utilisateur
-     * @param motPasse
-     * @return boolen true si la modification est faite, false sinon
+     * @return la liste des groupes auxquels l'utilisateur est inscrit
      */
-    boolean modifierMotPasse(Utilisateur utilisateur, String motPasse);
-    boolean ajouterPhotoProfil(Utilisateur utilisateur,Bitmap bitmap);
-    boolean modifierPhotoProfil(Utilisateur utilisateur, Bitmap bitmap);
-    boolean modifierNumeroTelephone(Utilisateur utilisateur, int numeroTelephone);
-
     List<Groupe> trouverGroupesAbonne(Utilisateur utilisateur);
 }

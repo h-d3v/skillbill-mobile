@@ -1,15 +1,10 @@
 package com.jde.skillbill.presentation.presenteur;
 
 import android.content.Intent;
-import android.widget.ArrayAdapter;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
-import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
-import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
-import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
-import com.jde.skillbill.domaine.interacteurs.interfaces.GestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;

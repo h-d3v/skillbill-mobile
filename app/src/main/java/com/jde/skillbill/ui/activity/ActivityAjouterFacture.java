@@ -7,7 +7,7 @@ import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
-import com.jde.skillbill.domaine.interacteurs.interfaces.GestionFacture;
+import com.jde.skillbill.domaine.interacteurs.GestionFacture;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.presenteur.PresenteurAjouterFacture;

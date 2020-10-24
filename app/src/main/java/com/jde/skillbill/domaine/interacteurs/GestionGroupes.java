@@ -1,6 +1,5 @@
 package com.jde.skillbill.domaine.interacteurs;
 
-
 import com.jde.skillbill.domaine.entites.*;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 
@@ -40,16 +39,6 @@ public class GestionGroupes implements IGestionGroupes {
       return sourceDonnee.ajouterMembre(groupe, utilisateur);
     }
 
-    /**
-     * @param groupe
-     * @param utilisateur
-     * @return boolean true si supprime, false sinon
-     */
-    @Override
-    public boolean supprimerMembre(Groupe groupe, Utilisateur utilisateur) {
-
-        return false;
-    }
 
     /**
      * @param groupe
@@ -71,15 +60,7 @@ public class GestionGroupes implements IGestionGroupes {
         return sourceDonnee.lireFacturesParGroupe(groupe);
     }
 
-    /**
-     * @param groupe
-     * @param facture
-     * @return la facture touvée, null sinon
-     */
-    @Override
-    public Facture trouverUneFacture(Groupe groupe, Facture facture) {
-       return null;
-    }
+
 
     /**
      * @param groupe
@@ -101,9 +82,10 @@ public class GestionGroupes implements IGestionGroupes {
     }
 
     /**
-     * @param groupe
-     * @param unNom
-     * @return le groupe modifié
+     *
+     * @param utilisateurConcerne un utilisateur du groupe
+     * @param groupe un groupe
+     * @return double le solde de l'utilisateur du total payé ou à payer pour toutes les factures de son groupe
      */
     @Override
     public Groupe modifierNomGroupe(Groupe groupe, String unNom) {
@@ -116,31 +98,13 @@ public class GestionGroupes implements IGestionGroupes {
      * @param paiement
      */
     @Override
-    public void payerUnUtilisateurDansSonGroupe(Groupe groupe, Paiement paiement) {
-       /** Map<Utilisateur, Double> utilisateurMap = groupe.getSoldeParUtilisateur();
-        Utilisateur utilisateurPayeur = paiement.getUtilisateurPayeur();
-        Utilisateur utilisateurPaye = paiement.getUtilisateurPaye();
-        if(utilisateurMap.containsKey(utilisateurPayeur)
-            && utilisateurMap.containsKey(utilisateurPaye)) {
-
-            double soldePayeur=utilisateurMap.get(paiement.getUtilisateurPayeur());
-            double soldePaye=utilisateurMap.get(paiement.getUtilisateurPaye());
-            utilisateurMap.put(utilisateurPayeur,soldePayeur+paiement.getMontant());
-            utilisateurMap.put(utilisateurPaye, soldePaye- paiement.getMontant());
-        }**/
-
-
-
-    }
-
-    @Override
-    public double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConnecte, Groupe groupe) {
+    public double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConcerne, Groupe groupe) {
 
         List<Facture> factures = sourceDonnee.lireFacturesParGroupe(groupe);
         if (factures == null || factures.size() == 0) {
             throw new NullPointerException("Pas de factures"); //TODO exception personalisée et NON nullPointer
         }
-        double montantPayeUtilisateurConnecte = 0;
+        double montantPayeUtilisateurConcerne = 0;
         double total = 0;
         double solde = 0;
 
@@ -151,12 +115,12 @@ public class GestionGroupes implements IGestionGroupes {
             for (Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()) {
                 total += facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 nbrUtilisateurSurLaFacture++;
-                if (utilisateur.equals(utilisateurConnecte)) {
-                    montantPayeUtilisateurConnecte += facture.getMontantPayeParParUtilisateur().get(utilisateur);
+                if (utilisateur.equals(utilisateurConcerne)) {
+                    montantPayeUtilisateurConcerne += facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 }
             }
             double montantDuParUtilisateur = total / nbrUtilisateurSurLaFacture;
-            solde = (montantPayeUtilisateurConnecte - montantDuParUtilisateur);
+            solde = (montantPayeUtilisateurConcerne - montantDuParUtilisateur);
         }
         return solde;
     }
