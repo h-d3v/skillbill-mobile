@@ -1,7 +1,7 @@
 package com.jde.skillbill.presentation.presenteur;
 
 import android.app.Instrumentation;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import com.jde.skillbill.domaine.entites.Monnaie;
@@ -11,12 +11,9 @@ import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueConnexion;
 import com.jde.skillbill.ui.activity.ActivityConnexion;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class PresenteurConnexionTest {
