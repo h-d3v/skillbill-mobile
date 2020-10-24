@@ -40,7 +40,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
     public void creerCompte() {
         //TODO Faire les operations avec la source de donnees en fil esclave pour l'api
         GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
-        gestionUtilisateur.setSource(_dataSource);
+
         boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
         if(emailDejaPris) _vueCreerCompte.afficherEmailDejaPrit();
         else{
@@ -49,7 +49,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
             _vueCreerCompte.afficherCompteCreer(utilisateurCreer.getNom(), utilisateurCreer.getCourriel(), utilisateurCreer.getMonnaieUsuelle());
         }
 
-        //TODO la creation du compte si l'email n'est pas pris (persistance)
+        //TODO la creation reele du compte si l'email n'est pas pris (persistance)
     }
 
 

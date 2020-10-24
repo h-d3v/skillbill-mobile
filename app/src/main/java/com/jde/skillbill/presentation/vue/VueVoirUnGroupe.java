@@ -39,7 +39,8 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
 
    private PresenteurVoirUnGroupe _presenteur;
    private TextView tvNomGroupe;
-   private TabLayout tabLayout;
+    private TextView tvMsgFactures;
+    private TabLayout tabLayout;
    private TextView detailMembres;
    private Button ajouterMembre;
 
@@ -56,17 +57,18 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
         ajouterMembre.setVisibility(View.INVISIBLE);
         tvNomGroupe=racine.findViewById(R.id.tvNomGroupe);
         tabLayout=racine.findViewById(R.id.tabLayoutFactureMembres);
-
+        tvMsgFactures=racine.findViewById(R.id.tvMsgFactures);
         rvFactures=racine.findViewById(R.id.rvFactures);
         rvFacturesAdapter=new RvVoirFactureAdapter(_presenteur);
         rvFactures.setAdapter(rvFacturesAdapter);
         rvFactures.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFactures.addItemDecoration(new DividerItemDecoration(rvFactures.getContext(), DividerItemDecoration.VERTICAL));
 
+        tvNomGroupe.setText(_presenteur.getNomGroupe());
+
         //pour le swipe to delete
         ItemTouchHelper itemTouchHelper= new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(rvFactures);
-
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -144,6 +146,8 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
             }
 
         });
+
+
         return racine;
     }
 

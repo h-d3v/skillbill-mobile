@@ -9,6 +9,10 @@ import com.jde.skillbill.presentation.vue.VueCreerGroupe;
 
 public class ActivityCreerGroupe extends AppCompatActivity {
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

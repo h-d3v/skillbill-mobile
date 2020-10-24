@@ -20,7 +20,7 @@ public class GestionUtilisateurTest {
 
   private ISourceDonnee sourceDonnee = mock(ISourceDonnee.class);
   private GestionUtilisateur gestionUtilisateur;
-  private Utilisateur utilisateurCobaye = new Utilisateur("Mi","Ma", "emailExiste","motDePasseAuTop" );
+    private Utilisateur utilisateurCobaye = new Utilisateur("Mi","Ma", "motDePasseAuTop", Monnaie.CAD );
 
 
 

@@ -20,20 +20,34 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
     private Activity _activite;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
 
+    /**
+     *
+     * @param activite
+     * @param modele
+     * @param vueConnexion
+     */
     public PresenteurConnexion(Activity activite,Modele modele, VueConnexion vueConnexion) {
         _activite=activite;
         _modele = modele;
         _vueConnexion= vueConnexion;
     }
 
+    /**
+     *
+     * @param dataSource
+     */
     public void setDataSource(SourceDonneesMock dataSource) {
         _dataSource = dataSource;
     }
 
+    /**
+     *
+     * @param email
+     * @param mdp
+     */
     @Override
     public void tenterConnexion(String email, String mdp){
     GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
-    gestionUtilisateur.setSource(_dataSource);
     Utilisateur utilisateurConnecter= gestionUtilisateur.tenterConnexion(email, mdp);
 
     if (utilisateurConnecter!=null){
@@ -55,6 +69,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
 
 
     }
+
 
     @Override
     public void allerInscription() {

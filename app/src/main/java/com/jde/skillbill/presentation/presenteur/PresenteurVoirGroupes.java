@@ -33,7 +33,13 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     private GestionGroupes gestionGroupe;
 
 
-
+    /**
+     *
+     * @param modele
+     * @param vueVoirGroupes
+     * @param activity
+     * @param gestionGroupes
+     */
     public PresenteurVoirGroupes(Modele modele, VueVoirGroupes vueVoirGroupes, Activity activity,  GestionGroupes gestionGroupes) {
         this.modele = modele;
         this.vueVoirGroupes = vueVoirGroupes;
@@ -43,12 +49,20 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
 
     }
 
+    /**
+     *
+     * @return groupe auquel l'utilisateur est connecter
+     */
     @Override
     public List<Groupe> getGroupeAbonnes() {
         modele.setGroupesAbonnesUtilisateurConnecte( new GestionUtilisateur(new SourceDonneesMock()).trouverGroupesAbonne(modele.getUtilisateurConnecte()));
         return modele.getListGroupeAbonneUtilisateurConnecte();
     }
 
+    /**
+     *
+     * @param position du groupe dans le rv
+     */
     @Override
     public void commencerVoirUnGroupeActivite(int position) {
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
@@ -57,6 +71,11 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         activity.startActivity(intent);
     }
 
+    /**
+     *
+     * @param position du groupe dans le rv
+     * @return
+     */
     @Override
     public String  getSoldeGroupe(int position) {
         if (BuildConfig.DEBUG && position < 0) {
@@ -109,8 +128,11 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     }
 
 
-
-
+    /**
+     *
+     * @param position du groupe dans le rv
+     * @return nom du groupe dans le rv
+     */
     @Override
     public String getNomGroupe(int position) {
         if (BuildConfig.DEBUG && position < 0) {
@@ -119,6 +141,10 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         return modele.getListGroupeAbonneUtilisateurConnecte().get(position).getNomGroupe();
     }
 
+    /**
+     *
+     * @param position pos du groupe dans le rv
+     */
     @Override
     public void commencerAjouterFactureActivite(int position) {
         Intent intent = new Intent(activity, ActivityAjouterFacture.class);
@@ -127,6 +153,9 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         activity.startActivity(intent);
     }
 
+    /**
+     * -_-
+     */
     @Override
     public void commencerCreerGroupeActivite() {
         Intent intent = new Intent(activity, ActivityCreerGroupe.class);

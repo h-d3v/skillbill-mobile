@@ -32,6 +32,8 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
         modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD));
     }
 
+    //*
+
     @Override
     public void creerGroupe() {
         IGestionGroupes gestionGroupes = new GestionGroupes(new SourceDonneesMock());

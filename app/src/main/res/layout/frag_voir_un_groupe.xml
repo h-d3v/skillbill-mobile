@@ -8,16 +8,21 @@
     android:background="@drawable/login_bg"
     android:id="@+id/frag_voir_un_groupe"
     >
-    <androidx.appcompat.widget.Toolbar android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvNomGroupe"
-                style="@style/Widget.MaterialComponents.TextView"
-                android:layout_width="match_parent"
-                android:layout_height="79dp"
-                android:textAlignment="center"
-                android:textSize="50sp"
-                tools:text="test" />
+            android:id="@+id/tvNomGroupe"
+            style="@style/Widget.MaterialComponents.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="79dp"
+            android:textAlignment="center"
+            android:textSize="50sp"
+            tools:text="test" />
     </androidx.appcompat.widget.Toolbar>
+
     <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,13 +42,25 @@
                 android:text="Membres"
         />
     </com.google.android.material.tabs.TabLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvMsgFactures"
+        style="@style/Widget.MaterialComponents.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="79dp"
+        android:textAlignment="center"
+        android:textSize="50sp" />
+
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/detailMembres"/>
+
     <Button
-            android:text="@string/action_ajouter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/btnAjouter"/>
+        android:id="@+id/btnAjouter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="@string/action_ajouter" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFactures"

@@ -144,6 +144,8 @@ public class SourceDonneesMock implements ISourceDonnee{
                 if(result==0) throw new UnsupportedOperationException("Erreur d'insertion dans la bd, email deja utiliser");
                 break;
             }
+
+            _utilisateurs.add(utilisateurACreer);
             return utilisateurACreer;
         }
 

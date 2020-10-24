@@ -33,6 +33,15 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
 
+    /**
+     *
+     * @param modele
+     * @param vueVoirUnGroupe
+     * @param activityVoirUnGroupe
+     * @param gestionGroupes
+     * @param gestionFacture
+     * @param gestionUtilisateur
+     */
     public PresenteurVoirUnGroupe(Modele modele, VueVoirUnGroupe vueVoirUnGroupe, ActivityVoirUnGroupe activityVoirUnGroupe, IGestionGroupes gestionGroupes, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur) {
         this.modele = modele;
         this.vueVoirUnGroupe = vueVoirUnGroupe;
@@ -49,6 +58,11 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         Log.e("position groupe en cours",String.valueOf(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1)));
     }
 
+
+    /**
+     *
+     * @return noms des membres du groupe
+     */
     @Override
     public String getMembresGroupe() {
         if(groupeEncours.getUtilisateurs()==null || groupeEncours.getUtilisateurs().size()<1) return null;
@@ -63,12 +77,21 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         return noms;
     }
 
+    /**
+     *
+     * @return true si le groupe ne contient qu'un seul utilisateur
+     */
     public boolean isGroupeSolo(){
         if( gestionGroupes.trouverTousLesUtilisateurs(groupeEncours)==null) return false;
         return  gestionGroupes.trouverTousLesUtilisateurs(groupeEncours).size()<=1;
     }
 
 
+    /**
+     *
+     * @param courriel de l'utilisateur a ajouter
+     * @return int du message, pour le handler
+     */
     @Override
     public int ajouterUtilisateurAuGroupe(String courriel) {
         if(gestionUtilisateur.utilisateurExiste(courriel)){
@@ -78,6 +101,10 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         } else return EMAIL_INCONNU ;
     }
 
+    /**
+     *
+     * @param courriel courriel auquel on veut envoyer une invitation
+     */
     @Override
     public void envoyerCourriel(String courriel) {
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -89,6 +116,10 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         activityVoirUnGroupe.startActivity(Intent.createChooser(intent, "Invitation SkillBill"));
        }
 
+    /**
+     *
+     * @return factures du groupes
+     */
     public List<Facture> getFacturesGroupe(){
 
         //return groupeEncours.getFactures();
@@ -97,6 +128,11 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
 
     }
 
+    /**
+     *
+     * @param posFacture dans le rv
+     * @return montant qu'a payer l'utilisateur dans la facture
+     */
     //TODO faire en sorte que ce montant reflete ce que l'utilisateur dois payer et non ce qu'il a deja payer
     //@Override
     public double getMontantFacturePayerParUser(int posFacture) {
@@ -104,12 +140,25 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     }
 
 
+    /**
+     *
+     * @param position de la facture dans le rv
+     */
     //Todo supprimer suelement par l'utilisateur qui l'a creer
     //Todo supprimer dans la bd ou le service
     //@Override
     public void requeteSupprimerFacture(int position) {
         vueVoirUnGroupe.rafraichir();
         this.getFacturesGroupe().remove(position);
+    }
+
+
+    /**
+     *
+     * @return nom du groupe
+     */
+    public String getNomGroupe(){
+        return groupeEncours.getNomGroupe();
     }
 
 

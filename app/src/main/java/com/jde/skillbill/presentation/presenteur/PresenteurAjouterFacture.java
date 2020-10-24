@@ -48,6 +48,10 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     }
 
 
+    /**
+     *
+     * @return liste des noms des utilisateurs du groupe
+     */
     @Override
     public String[] presenterListeUtilsateur() {
 
@@ -63,6 +67,9 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         return membres;
     }
 
+    /**
+     * ajoute une facture a un groupe
+     */
     @Override
     public void ajouterFacture() {
         try{
