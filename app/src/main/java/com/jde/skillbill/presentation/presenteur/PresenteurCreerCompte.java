@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 
+import android.util.Log;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
@@ -44,7 +45,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
                     _vueCreerCompte.afficherCompteCreer(utilisateurCree.getNom(), utilisateurCree.getCourriel(), utilisateurCree.getMonnaieUsuelle());
                 }
                 else if(msg.what==MESSAGE.ERREUR){
-
+                    //TODO Sera implementé lors de l'implémentation de la source API
                 }
                 else if(msg.what==MESSAGE.EMAIL_DEJA_PRIS){
                     _vueCreerCompte.afficherEmailDejaPrit();
@@ -71,11 +72,13 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
                 boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
                 if(emailDejaPris){
                     msg = handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
+                    Log.e("Presenteur creer compte", "je suis ligne 75");
                 }
                 else {
                     Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
                     if(utilisateurCreer!=null){
                         handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE,utilisateurCreer);
+                        Log.e("Presenteur creer compte", "je suis ligne 81");
                     }
                     else handler.obtainMessage(MESSAGE.ERREUR);
 
