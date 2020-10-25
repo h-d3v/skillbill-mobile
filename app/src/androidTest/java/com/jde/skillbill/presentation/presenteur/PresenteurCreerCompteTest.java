@@ -56,6 +56,7 @@ public class PresenteurCreerCompteTest {
         when(vueCreerCompte.getNom()).thenReturn("nom");
         when(vueCreerCompte.getPass()).thenReturn("motdepasse");
         when(vueCreerCompte.getMonnaieChoisie()).thenReturn(Monnaie.CAD);
+        when(sourceDonnee.creerUtilisateur(new Utilisateur("nom","email@email.com","motdepasse",Monnaie.CAD))).thenReturn(new Utilisateur("nom","email@email.com","motdepasse",Monnaie.CAD));
 
 
         Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();

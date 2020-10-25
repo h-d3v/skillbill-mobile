@@ -1,5 +1,7 @@
 package com.jde.skillbill.donnees.APIRest;
 
+import android.util.JsonReader;
+import android.util.JsonWriter;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,6 +11,7 @@ import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -73,7 +76,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     @Override
     public Utilisateur tenterConnexion(String email, String mdp) {
         URL url = null;
-        Utilisateur utilisateur=null;
+        UtilisateurRestAPI utilisateur=null;
         try {
             url = new URL(URI_BASE+POINT_ENTREE_UTILISATEUR+"login");
         } catch (MalformedURLException e) {
@@ -82,27 +85,35 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setRequestProperty("Accept", "application/json");
+            httpURLConnection.setRequestProperty("Content-Type", "application/json");
             httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
             OutputStream outputStream = httpURLConnection.getOutputStream();
             String json = "{\"courriel\": \""+email+"\"," +
-                    "\"mot_de _passe\": \""+mdp+"\" }";
-            byte[] input = json.getBytes();
+                    "\"mot_de_passe\": \""+mdp+"\" }";
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input,0, input.length);
             Log.e("restAPI response code", String.valueOf( httpURLConnection.getResponseCode()));
             Log.e("restAPI", json);
             if(httpURLConnection.getResponseCode()==200){
               InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
               Gson gson = new GsonBuilder().create();
-              Log.e("restAPI", inputStreamReader.toString());
-              utilisateur = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
-              Log.e("restAPI", gson.toJson(utilisateur));
+              BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+              StringBuffer stringBuffer = new StringBuffer();
+              String str;
+              while ((str = bufferedReader.readLine())!=null){
+                  stringBuffer.append(str);
+              }
+              utilisateur = gson.fromJson(stringBuffer.toString(), UtilisateurRestAPI.class);
+              if(utilisateur.getId()==0) return null;
+
 
             }
 
         } catch (IOException e) {
-            Log.e("SOurceDonneAPI: ", e.toString());
+            Log.e("SOurceDonneAPIRest: ", e.toString());
         }
+
         return utilisateur;
     }
 

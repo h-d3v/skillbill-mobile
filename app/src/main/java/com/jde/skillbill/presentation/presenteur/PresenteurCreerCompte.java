@@ -81,7 +81,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
                         Log.e("Presenteur creer compte", "je suis ligne 81");
                     }
                     else handler.obtainMessage(MESSAGE.ERREUR);
-
+                    Log.e("Presenteur creer compte", "je suis ligne 84");
                 }
 
                 handler.sendMessage(msg);
