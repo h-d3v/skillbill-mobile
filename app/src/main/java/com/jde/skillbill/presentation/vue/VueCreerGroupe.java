@@ -1,6 +1,8 @@
 package com.jde.skillbill.presentation.vue;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,17 +29,33 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
         View racine = inflater.inflate(R.layout.frag_creer_groupe, container, false);
         texteEntre=racine.findViewById(R.id.textViewNomGroupeEntree);
         boutonEnregistrer=racine.findViewById(R.id.btnEnregistrer);
-        boutonEnregistrer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenteurCreerGroupe.creerGroupe();
-            }
-        });
+        boutonEnregistrer.setOnClickListener(view -> presenteurCreerGroupe.creerGroupe());
         boutonAnnuler = racine.findViewById(R.id.btnAnuller);
-        boutonAnnuler.setOnClickListener(new View.OnClickListener() {
+        boutonAnnuler.setOnClickListener(view -> presenteurCreerGroupe.retournerEnArriere());
+
+        boutonEnregistrer.setEnabled(false);
+
+        texteEntre.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                presenteurCreerGroupe.retournerEnArriere();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(!getNomGroupe().matches("^[A-z]+(([',. -][A-z])?[a-z-Z]*)*$")){
+                    boutonEnregistrer.setEnabled(false);
+                    texteEntre.setError("Le nom du groupe doit etre valide.");
+                }
+
+                else {
+                    boutonEnregistrer.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
         return racine;

@@ -40,31 +40,19 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
         btnInscription=vue.findViewById(R.id.btnInscriptionCnx);
         btnMdpOublie=vue.findViewById(R.id.btnMdpOublie);
 
-        btnInscription.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _presenteur.allerInscription();
-            }
-        });
+        btnInscription.setOnClickListener(v -> _presenteur.allerInscription());
 
         btnCnx.setEnabled(false);
-        btnCnx.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _presenteur.tenterConnexion(getEmail(), getMdp());
-            }
-        });
+        btnCnx.setOnClickListener(v -> _presenteur.tenterConnexion(getEmail(), getMdp()));
 
 
         etEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -85,12 +73,10 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
         etMdp.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override

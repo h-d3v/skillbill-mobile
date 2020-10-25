@@ -1,5 +1,6 @@
 package com.jde.skillbill.presentation.presenteur;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 
@@ -22,20 +23,16 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
     private ISourceDonnee _dataSource;
     private Activity _activite;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
-    private static final int MSG_TENTER_CONNECTION_REUSSI =1;
-    private static final int MSG_ERREUR =2;
+    private static final int MSG_TENTER_CONNECTION_REUSSI =0;
+    private static final int MSG_ERREUR =1;
 
     private final Handler handlerRéponse;
 
     private Thread filEsclave = null;
 
-    /**
-     *
-     * @param activite
-     * @param modele
-     * @param vueConnexion
-     */
-    public PresenteurConnexion(Activity activite,Modele modele, VueConnexion vueConnexion) {
+
+    @SuppressLint("HandlerLeak")
+    public PresenteurConnexion(Activity activite, Modele modele, VueConnexion vueConnexion) {
         _activite = activite;
         _modele = modele;
         _vueConnexion = vueConnexion;
@@ -44,78 +41,68 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 filEsclave = null;
-                if (msg.what == MSG_TENTER_CONNECTION_REUSSI) {
+                if(msg.what == MSG_TENTER_CONNECTION_REUSSI){
                     _vueConnexion.afficherMsgConnecter(_modele.getUtilisateurConnecte().getCourriel(), _modele.getUtilisateurConnecte().getNom());
                     redirigerVersActiviteVoirLesGroupes();
-                } else if (msg.what == MSG_ERREUR) {
+                }
+                else if(msg.what == MSG_ERREUR){
                     _vueConnexion.afficherMsgErreur();
                 }
 
             }
 
-            /**
-             * @param dataSource
-             */
-            public void setDataSource(SourceDonneesMock dataSource) {
 
+        };
+    }
+
+    public void setDataSource(ISourceDonnee dataSource) {
+        _dataSource = dataSource;
+    }
+
+    @Override
+    public void tenterConnexion(String email, String mdp){
+        GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
+        gestionUtilisateur.setSource(_dataSource);
+
+        filEsclave= new Thread(() -> {
+            Utilisateur utilisateurConnecter= gestionUtilisateur.tenterConnexion(email, mdp);
+            Message msg = null;
+
+            if (utilisateurConnecter!=null){
+                _modele.setUtilisateurConnecte(utilisateurConnecter);
+                msg = handlerRéponse.obtainMessage(MSG_TENTER_CONNECTION_REUSSI);
             }
 
-            ;
-        }
-
-        public void setDataSource (ISourceDonnee dataSource){
-            _dataSource = dataSource;
-        }
-
-        /**
-         *
-         * @param email
-         * @param mdp
-         */
-        @Override
-        public void tenterConnexion (String email, String mdp){
-            GestionUtilisateur gestionUtilisateur = new GestionUtilisateur(_dataSource);
-            Utilisateur utilisateurConnecter = gestionUtilisateur.tenterConnexion(email, mdp);
-            gestionUtilisateur.setSource(_dataSource);
-
-            filEsclave = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Utilisateur utilisateurConnecter = gestionUtilisateur.tenterConnexion(email, mdp);
-                    Message msg = null;
-
-                    if (utilisateurConnecter != null) {
-                        _modele.setUtilisateurConnecte(utilisateurConnecter);
-                        msg = handlerRéponse.obtainMessage(MSG_TENTER_CONNECTION_REUSSI);
-                    } else {
-                        msg = handlerRéponse.obtainMessage(MSG_ERREUR);
-
-                    }
-                    handlerRéponse.sendMessage(msg);
-                }
-            });
-            filEsclave.start();
+            else {
+                msg = handlerRéponse.obtainMessage(MSG_ERREUR);
+            }
+            handlerRéponse.sendMessage(msg);
+        });
+        filEsclave.start();
 
 
-        }
 
-        @Override
-        public void allerInscription () {
-            Intent intentInscription = new Intent(_activite, ActivityCreerCompte.class);
-            _activite.startActivity(intentInscription);
-        }
-        private void redirigerVersActiviteVoirLesGroupes () {
-
-            //redirection vers ses groupes
-
-            Intent intent = new Intent(_activite, ActivityVoirGroupes.class);
-            intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte().getCourriel());
-            _activite.startActivity(intent);
-            //Pour eviter de retourner au login
-            _activite.finish();
-
-
-        }
 
     }
+
+    @Override
+    public void allerInscription() {
+        Intent intentInscription = new Intent(_activite, ActivityCreerCompte.class);
+        _activite.startActivity(intentInscription);
+    }
+
+    private void redirigerVersActiviteVoirLesGroupes(){
+
+        //redirection vers ses groupes
+
+        Intent intent = new Intent(_activite, ActivityVoirGroupes.class);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte().getCourriel());
+        _activite.startActivity(intent);
+        //Pour eviter de retourner au login
+        _activite.finish();
+
+
+    }
+
+
 }
