@@ -11,6 +11,7 @@ public interface IContratVuePresenteurVoirGroupes {
         void setPresenteur(PresenteurVoirGroupes presenteurVoirGroupes);
 
 
+        void rafraichir();
     }
 
     interface IPresenteurVoirGroupe{
@@ -20,7 +21,7 @@ public interface IContratVuePresenteurVoirGroupes {
         void commencerVoirUnGroupeActivite(int position);
 
 
-        String getSoldeGroupe(int position);
+        void chargerSoldeGroupe(int position);
 
         String getNomGroupe(int position);
 

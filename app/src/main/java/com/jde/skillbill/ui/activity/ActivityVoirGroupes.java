@@ -25,7 +25,7 @@ public class ActivityVoirGroupes extends AppCompatActivity {
         setContentView(R.layout.activite_voir_groupes);
         VueVoirGroupes vueVoirGroupes= new VueVoirGroupes();
         Modele modele= new Modele();
-        PresenteurVoirGroupes presenteurVoirGroupes = new PresenteurVoirGroupes(modele,vueVoirGroupes, this, new GestionGroupes(new SourceDonneesMock()));
+        PresenteurVoirGroupes presenteurVoirGroupes = new PresenteurVoirGroupes(modele,vueVoirGroupes, this, new SourceDonneesMock());
         vueVoirGroupes.setPresenteur(presenteurVoirGroupes);
         FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.layout_voir_groupe, vueVoirGroupes);

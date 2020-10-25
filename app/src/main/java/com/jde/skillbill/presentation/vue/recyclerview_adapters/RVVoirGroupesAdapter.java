@@ -37,7 +37,7 @@ public class RVVoirGroupesAdapter extends RecyclerView.Adapter {
         });
 
         ((Button)holder.itemView.findViewById(R.id.rv_groupe_item_button_voir_le_groupe)).setText(presenteurVoirGroupes.getNomGroupe(position));
-        ((Button)holder.itemView.findViewById(R.id.btn_detail_solde)).setText(presenteurVoirGroupes.getSoldeGroupe(position));
+        ((Button)holder.itemView.findViewById(R.id.btn_detail_solde)).setText(presenteurVoirGroupes.getMessageSoldeParPosition(position));
 
         (holder.itemView.findViewById(R.id.btn_ajouter_facture_groupe)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +54,7 @@ public class RVVoirGroupesAdapter extends RecyclerView.Adapter {
         else if (presenteurVoirGroupes.getGroupeAbonnes()==null) return 0;
         return presenteurVoirGroupes.getGroupeAbonnes().size();
     }
+
 
 
 

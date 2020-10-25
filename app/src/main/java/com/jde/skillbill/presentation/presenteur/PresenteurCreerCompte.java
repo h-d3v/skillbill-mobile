@@ -72,16 +72,16 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
                 boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
                 if(emailDejaPris){
                     msg = handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
-                    Log.e("Presenteur creer compte", "je suis ligne 75");
+
                 }
                 else {
                     Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
                     if(utilisateurCreer!=null){
                         handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE,utilisateurCreer);
-                        Log.e("Presenteur creer compte", "je suis ligne 81");
+
                     }
                     else handler.obtainMessage(MESSAGE.ERREUR);
-                    Log.e("Presenteur creer compte", "je suis ligne 84");
+
                 }
 
                 handler.sendMessage(msg);

@@ -37,15 +37,15 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         buttonSoldeGroupe=racine.findViewById(R.id.btn_detail_solde);
         tvPasDeGroupes= racine.findViewById(R.id.tvMessagePasDeGroupes);
         tvPasDeGroupes.setVisibility(View.INVISIBLE);
-
         rvMesGroupes=racine.findViewById(R.id.rvMesGroupes);
         rvVoirGroupesAdapter=new RVVoirGroupesAdapter(presenteurVoirGroupes);
         if(rvVoirGroupesAdapter.getItemCount()==0){
             tvPasDeGroupes.setVisibility(View.VISIBLE);
-        }else{rvMesGroupes.setAdapter(rvVoirGroupesAdapter);
-            rvMesGroupes.setLayoutManager(new LinearLayoutManager(getContext()));
-            rvMesGroupes.addItemDecoration(new DividerItemDecoration(rvMesGroupes.getContext(), DividerItemDecoration.VERTICAL));
         }
+        rvMesGroupes.setAdapter(rvVoirGroupesAdapter);
+        rvMesGroupes.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvMesGroupes.addItemDecoration(new DividerItemDecoration(rvMesGroupes.getContext(), DividerItemDecoration.VERTICAL));
+
 
         buttonCommencerActiviteCreerGroupe.setOnClickListener(view -> presenteurVoirGroupes.commencerCreerGroupeActivite());
 
@@ -56,6 +56,14 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
     @Override
     public void setPresenteur(PresenteurVoirGroupes presenteurVoirGroupes){
         this.presenteurVoirGroupes=presenteurVoirGroupes;
+    }
+
+    @Override
+    public void rafraichir() {
+        rvVoirGroupesAdapter.notifyDataSetChanged();
+        if(rvVoirGroupesAdapter.getItemCount()>0){
+            tvPasDeGroupes.setVisibility(View.INVISIBLE);
+        }
     }
 
 

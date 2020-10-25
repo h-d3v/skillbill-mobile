@@ -48,7 +48,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         groupeEncours= modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1));
         groupeEncours.setUtilisateurs(gestionGroupes.trouverTousLesUtilisateurs(groupeEncours));
 
-        Log.e("position groupe en cours",String.valueOf(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1)));
+
     }
 
     @Override
