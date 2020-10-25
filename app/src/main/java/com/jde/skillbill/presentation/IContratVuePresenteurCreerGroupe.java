@@ -13,8 +13,10 @@ public interface IContratVuePresenteurCreerGroupe {
     }
 
     interface PresenteurCreerGroupe {
-       void creerGroupe();
+        void creerGroupe();
 
         void retournerEnArriere();
+
+        void redirigerVersGroupeCreer();
     }
 }

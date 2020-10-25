@@ -17,7 +17,6 @@ import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVuePresenteurCreerGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueCreerGroupe;
-import com.jde.skillbill.ui.activity.ActivityVoirGroupes;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 
@@ -58,7 +57,6 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
     }
 
 
-
     @Override
     public void creerGroupe() {
         IGestionGroupes gestionGroupes = new GestionGroupes(new SourceDonneesMock());
@@ -82,7 +80,8 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
 
     }
 
-    private void redirigerVersGroupeCreer(){
+    @Override
+    public void redirigerVersGroupeCreer(){
         IGestionUtilisateur gestionUtilisateur = new GestionUtilisateur(new SourceDonneesMock());
         //redirection vers ses groupes
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
@@ -94,11 +93,11 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
         activity.finish();
     }
 
+
     @Override
     public void retournerEnArriere(){
         activity.onBackPressed();
     }
-
 
 
 }
