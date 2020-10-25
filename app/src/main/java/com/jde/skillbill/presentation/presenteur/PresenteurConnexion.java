@@ -3,8 +3,11 @@ package com.jde.skillbill.presentation.presenteur;
 import android.app.Activity;
 import android.content.Intent;
 
+import android.os.Handler;
+import android.os.Message;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
+import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVPConnexion;
 import com.jde.skillbill.presentation.modele.Modele;
@@ -16,9 +19,15 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
 
     private VueConnexion _vueConnexion;
     private Modele _modele;
-    private SourceDonneesMock _dataSource;
+    private ISourceDonnee _dataSource;
     private Activity _activite;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
+    private static final int MSG_TENTER_CONNECTION_REUSSI =1;
+    private static final int MSG_ERREUR =2;
+
+    private final Handler handlerRéponse;
+
+    private Thread filEsclave = null;
 
     /**
      *
@@ -27,55 +36,86 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
      * @param vueConnexion
      */
     public PresenteurConnexion(Activity activite,Modele modele, VueConnexion vueConnexion) {
-        _activite=activite;
+        _activite = activite;
         _modele = modele;
-        _vueConnexion= vueConnexion;
-    }
+        _vueConnexion = vueConnexion;
+        handlerRéponse = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                filEsclave = null;
+                if (msg.what == MSG_TENTER_CONNECTION_REUSSI) {
+                    _vueConnexion.afficherMsgConnecter(_modele.getUtilisateurConnecte().getCourriel(), _modele.getUtilisateurConnecte().getNom());
+                    redirigerVersActiviteVoirLesGroupes();
+                } else if (msg.what == MSG_ERREUR) {
+                    _vueConnexion.afficherMsgErreur();
+                }
 
-    /**
-     *
-     * @param dataSource
-     */
-    public void setDataSource(SourceDonneesMock dataSource) {
-        _dataSource = dataSource;
-    }
+            }
 
-    /**
-     *
-     * @param email
-     * @param mdp
-     */
-    @Override
-    public void tenterConnexion(String email, String mdp){
-    GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
-    Utilisateur utilisateurConnecter= gestionUtilisateur.tenterConnexion(email, mdp);
+            /**
+             * @param dataSource
+             */
+            public void setDataSource(SourceDonneesMock dataSource) {
 
-    if (utilisateurConnecter!=null){
-        //TODO rediriger vers le menu principal a partir de ses informations
-        //Pour l'instant on dis qu'il a ete connecter avec succes
-        _modele.setUtilisateurConnecte(utilisateurConnecter);
-        _vueConnexion.afficherMsgConnecter(_modele.getUtilisateurConnecte().getCourriel(), _modele.getUtilisateurConnecte().getNom());
-        //redirection vers ses groupes
-        Intent intent = new Intent(_activite, ActivityVoirGroupes.class);
-        intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte().getCourriel());
-        _activite.startActivity(intent);
-        //Pour eviter de retourner au login
-        _activite.finish();
+            }
+
+            ;
         }
 
-    else {
-        _vueConnexion.afficherMsgErreur();
+        public void setDataSource (ISourceDonnee dataSource){
+            _dataSource = dataSource;
+        }
+
+        /**
+         *
+         * @param email
+         * @param mdp
+         */
+        @Override
+        public void tenterConnexion (String email, String mdp){
+            GestionUtilisateur gestionUtilisateur = new GestionUtilisateur(_dataSource);
+            Utilisateur utilisateurConnecter = gestionUtilisateur.tenterConnexion(email, mdp);
+            gestionUtilisateur.setSource(_dataSource);
+
+            filEsclave = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Utilisateur utilisateurConnecter = gestionUtilisateur.tenterConnexion(email, mdp);
+                    Message msg = null;
+
+                    if (utilisateurConnecter != null) {
+                        _modele.setUtilisateurConnecte(utilisateurConnecter);
+                        msg = handlerRéponse.obtainMessage(MSG_TENTER_CONNECTION_REUSSI);
+                    } else {
+                        msg = handlerRéponse.obtainMessage(MSG_ERREUR);
+
+                    }
+                    handlerRéponse.sendMessage(msg);
+                }
+            });
+            filEsclave.start();
+
+
+        }
+
+        @Override
+        public void allerInscription () {
+            Intent intentInscription = new Intent(_activite, ActivityCreerCompte.class);
+            _activite.startActivity(intentInscription);
+        }
+        private void redirigerVersActiviteVoirLesGroupes () {
+
+            //redirection vers ses groupes
+
+            Intent intent = new Intent(_activite, ActivityVoirGroupes.class);
+            intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte().getCourriel());
+            _activite.startActivity(intent);
+            //Pour eviter de retourner au login
+            _activite.finish();
+
+
+        }
+
     }
-
-
-    }
-
-
-    @Override
-    public void allerInscription() {
-        Intent intentInscription = new Intent(_activite, ActivityCreerCompte.class);
-        _activite.startActivity(intentInscription);
-    }
-
-
 }

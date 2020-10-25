@@ -25,7 +25,7 @@ public class GestionUtilisateurTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
          gestionUtilisateur = new GestionUtilisateur(sourceDonnee);
          utilisateurCobaye.setMonnaieUsuelle(Monnaie.CAD);
     }
