@@ -53,10 +53,9 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 filEsclave = null;
-
                 if(msg.what == MSG_GET_GROUPES){
-                     modele.setModele( (Modele) msg.obj);
-
+                    modele.setSoldeParPosition(((Modele) msg.obj).getSoldeParPosition());
+                    modele.setGroupesAbonnesUtilisateurConnecte((((Modele) msg.obj).getListGroupeAbonneUtilisateurConnecte()));
                     vueVoirGroupes.rafraichir();
                 }
 
@@ -95,7 +94,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
                             } else {
                                 textes[position] = activity.getResources().getString(R.string.solde_utilisateur_crediteur) + " " + solde;
                             }
-
 
                         } catch (NullPointerException e) { //TODO vraie exception
                             textes[position] =  activity.getResources().getString(R.string.pas_de_facture_dans_le_groupe);
