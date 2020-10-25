@@ -10,6 +10,7 @@ public interface IContratVuePresenteurVoirGroupes {
     interface IVueVoirGroupes{
         void setPresenteur(PresenteurVoirGroupes presenteurVoirGroupes);
 
+
     }
 
     interface IPresenteurVoirGroupe{

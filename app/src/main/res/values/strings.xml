@@ -51,4 +51,6 @@
     <string name="tab_membres">Membres</string>
 
 
+    <string name="rv_pas_de_groupes">Bienvenue, Vous n\'avez pas encore de groupes, appuyez sur le bouton + pour en ajouter un</string>
+
 </resources>

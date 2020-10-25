@@ -18,5 +18,15 @@
             android:layout_marginTop="48dp"
             app:layout_constraintBottom_toTopOf="@+id/floatingActionButtonAjouterGroupe"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="1dp"
-            android:layout_marginEnd="1dp" app:layout_constraintEnd_toEndOf="parent" android:id="@+id/rvMesGroupes"/>
+            android:layout_marginEnd="1dp" app:layout_constraintEnd_toEndOf="parent" android:id="@+id/rvMesGroupes"
+            app:layout_constraintHorizontal_bias="1.0">
+    </androidx.recyclerview.widget.RecyclerView>
+    <TextView
+            android:text="@string/rv_pas_de_groupes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/tvMessagePasDeGroupes"
+            app:layout_constraintBottom_toBottomOf="@+id/rvMesGroupes"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="350dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

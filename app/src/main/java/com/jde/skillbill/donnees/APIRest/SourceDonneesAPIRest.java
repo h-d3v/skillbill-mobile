@@ -93,8 +93,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                     "\"mot_de_passe\": \""+mdp+"\" }";
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input,0, input.length);
-            Log.e("restAPI response code", String.valueOf( httpURLConnection.getResponseCode()));
-            Log.e("restAPI", json);
             if(httpURLConnection.getResponseCode()==200){
               InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
               Gson gson = new GsonBuilder().create();
@@ -105,7 +103,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                   stringBuffer.append(str);
               }
               utilisateur = gson.fromJson(stringBuffer.toString(), UtilisateurRestAPI.class);
-              if(utilisateur.getId()==0) return null;
+              if(utilisateur==null || utilisateur.getId()==0) return null;
 
 
             }
