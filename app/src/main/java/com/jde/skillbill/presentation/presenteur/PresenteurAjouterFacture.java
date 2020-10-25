@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.jde.skillbill.R;
-import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
