@@ -80,7 +80,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
                 if(groupes!=null){
                     int position= 0;
                     int taille = groupes.size();
-                    Log.e("taille", String.valueOf(taille));
                     String[] textes = new String[taille];
                     while (position<taille){
 
