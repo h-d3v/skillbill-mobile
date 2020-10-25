@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import android.view.Display;
+
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -23,7 +22,6 @@ import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
 import com.jde.skillbill.ui.activity.ActivityCreerGroupe;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -66,7 +64,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     }
 
 
-
+    @Override
     public void chargerGroupes(){
         IGestionUtilisateur gestionUtilisateur = new GestionUtilisateur(sourceDonnee);
         IGestionGroupes gestionGroupe = new GestionGroupes(sourceDonnee);

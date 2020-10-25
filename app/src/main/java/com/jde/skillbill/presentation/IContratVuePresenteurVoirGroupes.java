@@ -15,6 +15,8 @@ public interface IContratVuePresenteurVoirGroupes {
     }
 
     interface IPresenteurVoirGroupe{
+        void chargerGroupes();
+
         List<Groupe> getGroupeAbonnes();
         void commencerCreerGroupeActivite();
 
