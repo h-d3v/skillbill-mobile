@@ -10,9 +10,9 @@ import java.util.List;
 
 public class Modele {
 
-    List<String> soldeParPostion = new ArrayList<>();
+    String[] soldeParPostion;
     Utilisateur utilisateurConnecte;
-   List<Groupe> groupesAbonnes;
+    List<Groupe> groupesAbonnes;
 
     public Utilisateur getUtilisateurConnecte() {
         return utilisateurConnecte;
@@ -22,8 +22,11 @@ public class Modele {
         this.utilisateurConnecte= utilisateur;
 
     }
-    public List<String> getSoldeParPosition(){
+    public String[] getSoldeParPosition(){
         return soldeParPostion;
+    }
+    public void setSoldeParPosition(String[] liste){
+        this.soldeParPostion = liste;
     }
 
     public List<Groupe> getListGroupeAbonneUtilisateurConnecte() {
@@ -32,5 +35,10 @@ public class Modele {
 
     public void setGroupesAbonnesUtilisateurConnecte(List<Groupe> groupesAbonnes) {
         this.groupesAbonnes = groupesAbonnes;
+    }
+
+    public void setModele(Modele obj) {
+        soldeParPostion = obj.getSoldeParPosition();
+        groupesAbonnes = obj.groupesAbonnes;
     }
 }

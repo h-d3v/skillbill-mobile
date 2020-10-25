@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+import android.view.Display;
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -12,6 +14,7 @@ import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
+import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirGroupes;
 import com.jde.skillbill.presentation.modele.Modele;
@@ -20,6 +23,7 @@ import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
 import com.jde.skillbill.ui.activity.ActivityCreerGroupe;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,7 +38,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     private Thread filEsclave;
     private ISourceDonnee sourceDonnee;
     private static final int MSG_GET_GROUPES=1;
-    private static final int MSG_GET_SOLDE=2;
 
 
 
@@ -52,23 +55,11 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
                 filEsclave = null;
 
                 if(msg.what == MSG_GET_GROUPES){
-                    modele.setGroupesAbonnesUtilisateurConnecte((List<Groupe>) msg.obj);
-                    int i= 0;
-                    int taille =0;
-                    if(modele.getListGroupeAbonneUtilisateurConnecte()!=null){
-                        taille = modele.getListGroupeAbonneUtilisateurConnecte().size();
-                    }
-                    while (i<taille){
-                        chargerSoldeGroupe(i);
-                        i++;
-                    }
+                     modele.setModele( (Modele) msg.obj);
 
                     vueVoirGroupes.rafraichir();
                 }
-                else if(msg.what==MSG_GET_SOLDE){
-                    modele.getSoldeParPosition().add(msg.arg1, msg.obj.toString());
-                    vueVoirGroupes.rafraichir();
-                }
+
             }
         };
         chargerGroupes();
@@ -79,12 +70,45 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
 
     public void chargerGroupes(){
         IGestionUtilisateur gestionUtilisateur = new GestionUtilisateur(sourceDonnee);
+        IGestionGroupes gestionGroupe = new GestionGroupes(sourceDonnee);
         filEsclave = new Thread(new Runnable() {
             @Override
             public void run() {
 
                 List<Groupe> groupes= gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte());
-                Message msg = handler.obtainMessage(MSG_GET_GROUPES, groupes);
+                modele.setGroupesAbonnesUtilisateurConnecte(groupes);
+
+                if(groupes!=null){
+                    int position= 0;
+                    int taille = groupes.size();
+                    Log.e("taille", String.valueOf(taille));
+                    String[] textes = new String[taille];
+                    while (position<taille){
+
+                        try {
+                            double solde = gestionGroupe.getSoldeParUtilisateurEtGroupe(modele.getUtilisateurConnecte(), modele.getListGroupeAbonneUtilisateurConnecte().get(position));
+                            if (solde == 0) {
+                                textes[position] = activity.getResources().getString(R.string.solde_utilisateur_nul);
+
+                            } else if (solde < 0) {
+                                textes[position] = activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde);
+                            } else {
+                                textes[position] = activity.getResources().getString(R.string.solde_utilisateur_crediteur) + " " + solde;
+                            }
+
+
+                        } catch (NullPointerException e) { //TODO vraie exception
+                            textes[position] =  activity.getResources().getString(R.string.pas_de_facture_dans_le_groupe);
+
+                        }
+                        position++;
+
+                    }
+
+                    modele.setSoldeParPosition(textes);
+                }
+
+                Message msg = handler.obtainMessage(MSG_GET_GROUPES, modele);
                 handler.sendMessage(msg);
 
             }
@@ -107,45 +131,10 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     }
 
     @Override
-    public void chargerSoldeGroupe(int position) {
-        if (BuildConfig.DEBUG && position < 0) {
-            throw new AssertionError("Assertion failed");
-        }
-        GestionGroupes gestionGroupe = new GestionGroupes(sourceDonnee);
-
-        filEsclave = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Message message = null;
-                try {
-                    double solde = gestionGroupe.getSoldeParUtilisateurEtGroupe(modele.getUtilisateurConnecte(), modele.getListGroupeAbonneUtilisateurConnecte().get(position));
-                    if (solde == 0 /* && personne ne doit rien lui devoir aussi*/) {
-                        message = handler.obtainMessage(MSG_GET_SOLDE, position, 0, activity.getResources().getString(R.string.solde_utilisateur_nul));
-
-                    } else if (solde < 0) {
-                        message = handler.obtainMessage(MSG_GET_SOLDE , position, 0, activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde));
-                    } else {
-                        message = handler.obtainMessage(MSG_GET_SOLDE,position,0, activity.getResources().getString(R.string.solde_utilisateur_crediteur) + " " + solde);
-                    }
-
-
-                } catch (NullPointerException e) {
-                    message = handler.obtainMessage(MSG_GET_SOLDE, activity.getResources().getString(R.string.pas_de_facture_dans_le_groupe));
-
-                }
-                handler.sendMessage(message);
-            }
-        });
-        filEsclave.start();
-
-    }
-
     public String getMessageSoldeParPosition(int position){
-        if(modele.getSoldeParPosition().size()==0) return "";
-        return modele.getSoldeParPosition().get(position);
+        if(modele.getSoldeParPosition().length ==0 || position>= modele.getSoldeParPosition().length) return "";
+        return modele.getSoldeParPosition()[position];
     }
-
-
 
 
     @Override

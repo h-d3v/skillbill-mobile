@@ -21,7 +21,7 @@ public interface IContratVuePresenteurVoirGroupes {
         void commencerVoirUnGroupeActivite(int position);
 
 
-        void chargerSoldeGroupe(int position);
+        String getMessageSoldeParPosition(int position);
 
         String getNomGroupe(int position);
 
