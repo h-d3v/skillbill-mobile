@@ -36,7 +36,7 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         buttonCommencerActivityAjouterFacture=racine.findViewById(R.id.btn_ajouter_facture_groupe);
         buttonSoldeGroupe=racine.findViewById(R.id.btn_detail_solde);
         tvPasDeGroupes= racine.findViewById(R.id.tvMessagePasDeGroupes);
-
+        tvPasDeGroupes.setVisibility(View.INVISIBLE);
 
         rvMesGroupes=racine.findViewById(R.id.rvMesGroupes);
         rvVoirGroupesAdapter=new RVVoirGroupesAdapter(presenteurVoirGroupes);

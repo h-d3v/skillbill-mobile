@@ -3,6 +3,7 @@ package com.jde.skillbill.presentation.presenteur;
 import android.content.Intent;
 import android.util.Log;
 
+import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
@@ -84,10 +85,10 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/html");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{ courriel});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Invitation SkillBill");
-        intent.putExtra(Intent.EXTRA_TEXT, "Telecharge SkillBill, mais bon on n'est pas sur le PlayStore, un APK ?");
+        intent.putExtra(Intent.EXTRA_SUBJECT, activityVoirUnGroupe.getResources().getString(R.string.invitation_objet_courriel));
+        intent.putExtra(Intent.EXTRA_TEXT,activityVoirUnGroupe.getResources().getString(R.string.texte_courriel) );
 
-        activityVoirUnGroupe.startActivity(Intent.createChooser(intent, "Invitation SkillBill"));
+        activityVoirUnGroupe.startActivity(Intent.createChooser(intent, activityVoirUnGroupe.getResources().getString(R.string.invitation_objet_courriel)));
        }
 
     public List<Facture> getFacturesGroupe(){

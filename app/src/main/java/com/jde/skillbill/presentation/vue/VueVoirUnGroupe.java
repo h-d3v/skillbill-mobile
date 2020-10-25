@@ -77,9 +77,9 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
                     detailMembres.setVisibility(View.VISIBLE);
                     ajouterMembre.setVisibility(View.VISIBLE);
                     if(_presenteur.isGroupeSolo()){
-                        detailMembres.setText("Vous n'avez aucun autre membres dans ce groupe, cliquez sur Ajouter pour en ajouter");
+                        detailMembres.setText(getString(R.string.pas_de_membres_dans_groupe));
                     }else{
-                        detailMembres.setText("Vous partagez vos factures avec "+_presenteur.getMembresGroupe());
+                        detailMembres.setText(getString(R.string.membres_dans_le_groupe)+_presenteur.getMembresGroupe());
                     }
                 }
             }
@@ -105,25 +105,25 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
             public void onClick(View view) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(racine.getContext());
-                builder.setTitle("Entrez le courriel du membre à ajouter");
+                builder.setTitle(getString(R.string.titre_ajouter_un_membre_au_groupe));
                 final View customLayout = getLayoutInflater().inflate(R.layout.alert_dialog_ajouter_membre, null);
                 builder.setView(customLayout);
-                builder.setPositiveButton("Ajouter", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getString(R.string.ajouter), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         EditText champsCourriel = customLayout.findViewById(R.id.editTextTextEmailAddressAjouterMembre);
                         int code = _presenteur.ajouterUtilisateurAuGroupe(champsCourriel.getText().toString());
                         if(_presenteur.AJOUT_OK==code){
-                            detailMembres.setText("Vous partagez vos factures avec "+_presenteur.getMembresGroupe());
+                            detailMembres.setText(getString(R.string.membres_dans_le_groupe)+_presenteur.getMembresGroupe());
                         }else if(_presenteur.EMAIL_INCONNU==code){
-                            Toast.makeText(racine.getContext(), "Email inconnu, vous pouvez l'inviter ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(racine.getContext(), getString(R.string.email_inconnu), Toast.LENGTH_LONG).show();
                         }else if(_presenteur.ERREUR_ACCES==code){
-                            Toast.makeText(racine.getContext(), "Vous avez dejà ajouté cet utilisateur ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(racine.getContext(), getString(R.string.email_deja_dans_groupe), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
-                builder.setNeutralButton("Inviter", new DialogInterface.OnClickListener() {
+                builder.setNeutralButton(getString(R.string.Inviter), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         EditText champsCourriel = customLayout.findViewById(R.id.editTextTextEmailAddressAjouterMembre);
@@ -132,7 +132,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
                     }
                 });
 
-                builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(getString(R.string.Annuler), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
@@ -194,7 +194,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
 
             int position = viewHolder.getAdapterPosition();
             Snackbar.make(rvFactures, _presenteur.getFacturesGroupe().get(position).getLibelle(), Snackbar.LENGTH_LONG)
-                    .setAction("Supprimer la facture", new View.OnClickListener(){
+                    .setAction(getString(R.string.supprimer_facture), new View.OnClickListener(){
                         @Override
                         public void onClick(View v) {
                             _presenteur.requeteSupprimerFacture(position);

@@ -50,7 +50,22 @@
     <string name="tab_factures">Factures</string>
     <string name="tab_membres">Membres</string>
 
-
+    <!-- Strings pour Voir les groupes activity -->
     <string name="rv_pas_de_groupes">Bienvenue, Vous n\'avez pas encore de groupes, appuyez sur le bouton + pour en ajouter un</string>
+
+    <!-- Strings pour VoirUnGroupeActivity-->
+    <string name="invitation_objet_courriel">Invitation SkillBill</string>
+    <string name="texte_courriel"> Télécharge SkillBill, mais bon on n\'est pas sur le PlayStore, un APK ? On sera bientôt disponibles sur FDroid</string>
+    <string name="pas_de_membres_dans_groupe">Vous n\'avez aucun autre membres dans ce groupe, cliquez sur Ajouter pour en ajouter un</string>
+    <string name="membres_dans_le_groupe">Vous partagez vos factures avec : </string>
+    <string name="titre_ajouter_un_membre_au_groupe">Entrez le courriel du membre à ajouter</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="Inviter">Inviter</string>
+    <string name="Annuler">Annuler</string>
+    <string name="email_inconnu">Email inconnu, vous pouvez l\'inviter</string>
+    <string name="email_deja_dans_groupe">Vous avez dejà ajouté cet utilisateur </string>
+    <string name="supprimer_facture">Supprimer la facture</string>
+
+
 
 </resources>
