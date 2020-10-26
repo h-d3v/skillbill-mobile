@@ -22,9 +22,11 @@
                 android:layout_height="match_parent">
             <ImageButton
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_input_add"
+                    android:layout_height="match_parent" app:srcCompat="@drawable/outline_request_quote_black_18dp"
                     android:id="@+id/btn_ajouter_facture_groupe" android:layout_weight="1"
-                    android:contentDescription="TODO" style="@android:style/Widget.Holo.ImageButton"/>
+                    android:contentDescription="@string/ajouter" style="@android:style/Widget.Holo.ImageButton"
+                    android:tint="@color/colorPrimary"
+                    android:background="@android:color/primary_text_light"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
