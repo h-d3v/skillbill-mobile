@@ -33,6 +33,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
     private static final int MSG_GROUPE_CREER_REUSSI = 0;
     private static final int MSG_ERREUR = 1;
 
+
     @SuppressLint("HandlerLeak")
     public PresenteurCreerGroupe(Modele modele, VueCreerGroupe vueCreerGroupe, Activity activity) {
         this.modele = modele;
@@ -40,10 +41,11 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
         this.activity = activity;
 
         //TODO ajuster la monnaie pour quelle ne sois pas coder en dur
-        if(modele.getUtilisateurConnecte()==null) {
+        if (modele.getUtilisateurConnecte() == null) {
             modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR), null, Monnaie.CAD));
         }
         handlerReponse = new Handler() {
+            @SuppressLint("HandlerLeak")
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -52,7 +54,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
                     redirigerVersGroupeCreer();
 
                 } else if (msg.what == MSG_ERREUR) {
-                   //TODO impleter lors de l'api
+                    //TODO impleter lors de l'api
                 }
             }
         };
@@ -66,17 +68,15 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
     public void creerGroupe() {
         IGestionGroupes gestionGroupes = new GestionGroupes(new SourceDonneesMock());
 
-        filEsclave= new Thread(() -> {
-            Groupe groupeACreer=gestionGroupes.creerGroupe(vueCreerGroupe.getNomGroupe(), modele.getUtilisateurConnecte(),null);
+        filEsclave = new Thread(() -> {
+            Groupe groupeACreer = gestionGroupes.creerGroupe(vueCreerGroupe.getNomGroupe(), modele.getUtilisateurConnecte(), null);
 
             Message msg;
 
-            if (groupeACreer!=null){
+            if (groupeACreer != null) {
 
                 msg = handlerReponse.obtainMessage(MSG_GROUPE_CREER_REUSSI);
-            }
-
-            else {
+            } else {
                 msg = handlerReponse.obtainMessage(MSG_ERREUR);
             }
             handlerReponse.sendMessage(msg);
@@ -89,13 +89,13 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
      * redirige vers voirUnGroupe pour le groupe qui vient d'etre creer
      */
     @Override
-    public void redirigerVersGroupeCreer(){
+    public void redirigerVersGroupeCreer() {
         IGestionUtilisateur gestionUtilisateur = new GestionUtilisateur(new SourceDonneesMock());
 
         //redirection vers ses groupes
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
         intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
-        intent.putExtra(EXTRA_GROUPE_POSITION, gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte()).size()-1);
+        intent.putExtra(EXTRA_GROUPE_POSITION, gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte()).size() - 1);
         activity.startActivity(intent);
 
         //Pour eviter de retourner a l'activite de creation.
@@ -106,7 +106,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
      * retours arriere
      */
     @Override
-    public void retournerEnArriere(){
+    public void retournerEnArriere() {
         activity.onBackPressed();
     }
 

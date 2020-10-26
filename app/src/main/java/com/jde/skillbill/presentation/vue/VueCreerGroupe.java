@@ -43,7 +43,7 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!getNomGroupe().matches("^[A-z]+(([',. -][A-z])?[a-z-Z]*)*$")){
+                if(!getNomGroupe().matches("^[A-z0-9]+(([',. -][A-z0-9])?[a-z-Z0-9]*)*$")){
                     boutonEnregistrer.setEnabled(false);
                     texteEntre.setError("Le nom du groupe doit etre valide.");
                 }
