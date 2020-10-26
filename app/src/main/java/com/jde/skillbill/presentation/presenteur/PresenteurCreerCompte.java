@@ -61,48 +61,32 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
 
 
 
+
+    //TODO Faire les operations avec la source de donnees en fil esclave pour l'api
+    //TODO la creation reele du compte si l'email n'est pas pris (persistance)
     @Override
     public void creerCompte() {
-        filEsclave = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Message msg = null;
-                GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
-                gestionUtilisateur.setSource(_dataSource);
-                boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
-                if(emailDejaPris){
-                    msg = handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
+        filEsclave = new Thread(() -> {
+            Message msg = null;
+            GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
+            boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
 
-                }
-                else {
-                    Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
-                    if(utilisateurCreer!=null){
-                        handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE,utilisateurCreer);
-
-                    }
-                    else handler.obtainMessage(MESSAGE.ERREUR);
-
-                }
-
-                handler.sendMessage(msg);
+            if(emailDejaPris){
+                msg = handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
             }
+            else {
+                Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
+                if(utilisateurCreer!=null){
+                    msg=handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE,utilisateurCreer);
+                }
+                else msg=handler.obtainMessage(MESSAGE.ERREUR);
+            }
+
+            handler.sendMessage(msg);
         });
         filEsclave.start();
-        //TODO Faire les operations avec la source de donnees en fil esclave pour l'api
-        GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
 
-        boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
-        if(emailDejaPris) _vueCreerCompte.afficherEmailDejaPrit();
-        else{
-            Utilisateur utilisateurCreer= gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(),_vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
-            //Affichage pour tester la creation du compte
-            _vueCreerCompte.afficherCompteCreer(utilisateurCreer.getNom(), utilisateurCreer.getCourriel(), utilisateurCreer.getMonnaieUsuelle());
-        }
-
-        //TODO la creation reele du compte si l'email n'est pas pris (persistance)
     }
-
-
 
     @Override
     public void retourLogin() {

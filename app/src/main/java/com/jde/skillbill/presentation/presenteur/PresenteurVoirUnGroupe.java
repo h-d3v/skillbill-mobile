@@ -34,6 +34,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
 
+
     /**
      *
      * @param modele
