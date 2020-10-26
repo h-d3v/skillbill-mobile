@@ -23,7 +23,7 @@ public class ActivityConnexion extends AppCompatActivity {
 
         VueConnexion vue=new VueConnexion();
         _presenteur=new PresenteurConnexion(this,modele, vue);
-        _presenteur.setDataSource(new SourceDonneesAPIRest());
+        _presenteur.setDataSource(new SourceDonneesMock());
         vue.setPresenteur(_presenteur);
         FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
         ft.add(R.id.layout_connexion, vue);
