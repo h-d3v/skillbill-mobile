@@ -8,18 +8,17 @@ import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
-import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
+
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
-import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
+
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirUnGroupe;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
-import java.util.Objects;
 
 public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe {
     public static final int ERREUR_ACCES =0;
@@ -35,6 +34,15 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
 
+    /**
+     *
+     * @param modele
+     * @param vueVoirUnGroupe
+     * @param activityVoirUnGroupe
+     * @param gestionGroupes
+     * @param gestionFacture
+     * @param gestionUtilisateur
+     */
     public PresenteurVoirUnGroupe(Modele modele, VueVoirUnGroupe vueVoirUnGroupe, ActivityVoirUnGroupe activityVoirUnGroupe, IGestionGroupes gestionGroupes, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur) {
         this.modele = modele;
         this.vueVoirUnGroupe = vueVoirUnGroupe;
@@ -51,6 +59,11 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
 
     }
 
+
+    /**
+     *
+     * @return noms des membres du groupe
+     */
     @Override
     public String getMembresGroupe() {
         if(groupeEncours.getUtilisateurs()==null || groupeEncours.getUtilisateurs().size()<1) return null;
@@ -65,21 +78,34 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         return noms;
     }
 
+    /**
+     *
+     * @return true si le groupe ne contient qu'un seul utilisateur
+     */
     public boolean isGroupeSolo(){
         if( gestionGroupes.trouverTousLesUtilisateurs(groupeEncours)==null) return false;
         return  gestionGroupes.trouverTousLesUtilisateurs(groupeEncours).size()<=1;
     }
 
 
+    /**
+     *
+     * @param courriel de l'utilisateur a ajouter
+     * @return int du message, pour le handler
+     */
     @Override
     public int ajouterUtilisateurAuGroupe(String courriel) {
         if(gestionUtilisateur.utilisateurExiste(courriel)){
-            if(gestionGroupes.ajouterMembre(groupeEncours, new Utilisateur("","",courriel, ""))) {
+            if(gestionGroupes.ajouterMembre(groupeEncours, new Utilisateur("",courriel, "", Monnaie.CAD))) {
                 return AJOUT_OK;
             } else return ERREUR_ACCES;
         } else return EMAIL_INCONNU ;
     }
 
+    /**
+     *
+     * @param courriel courriel auquel on veut envoyer une invitation
+     */
     @Override
     public void envoyerCourriel(String courriel) {
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -91,8 +117,11 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         activityVoirUnGroupe.startActivity(Intent.createChooser(intent, activityVoirUnGroupe.getResources().getString(R.string.invitation_objet_courriel)));
        }
 
+    /**
+     *
+     * @return factures du groupes
+     */
     public List<Facture> getFacturesGroupe(){
-        //Log.i("nb factures gp courrant", String.valueOf(groupeEncours.getFactures().size())) ;
 
         //return groupeEncours.getFactures();
 
@@ -100,19 +129,37 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
 
     }
 
+    /**
+     *
+     * @param posFacture dans le rv
+     * @return montant qu'a payer l'utilisateur dans la facture
+     */
     //TODO faire en sorte que ce montant reflete ce que l'utilisateur dois payer et non ce qu'il a deja payer
     //@Override
     public double getMontantFacturePayerParUser(int posFacture) {
         return this.getFacturesGroupe().get(posFacture).getMontantPayeParParUtilisateur().get(modele.getUtilisateurConnecte());
     }
 
-    //Todo, possiblite d'annuler la supression
+
+    /**
+     *
+     * @param position de la facture dans le rv
+     */
     //Todo supprimer suelement par l'utilisateur qui l'a creer
     //Todo supprimer dans la bd ou le service
     //@Override
     public void requeteSupprimerFacture(int position) {
         vueVoirUnGroupe.rafraichir();
         this.getFacturesGroupe().remove(position);
+    }
+
+
+    /**
+     *
+     * @return nom du groupe
+     */
+    public String getNomGroupe(){
+        return groupeEncours.getNomGroupe();
     }
 
 

@@ -12,6 +12,8 @@ public interface IContratVPAjouterFacture {
         void ajouterFacture();
 
         void prendrePhoto();
+
+        void redirigerVersListeFactures();
     }
 
     interface IVueAjouterFacture{

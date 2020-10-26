@@ -88,7 +88,18 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
             }
         });
         filEsclave.start();
+        //TODO Faire les operations avec la source de donnees en fil esclave pour l'api
+        GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
 
+        boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
+        if(emailDejaPris) _vueCreerCompte.afficherEmailDejaPrit();
+        else{
+            Utilisateur utilisateurCreer= gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(),_vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
+            //Affichage pour tester la creation du compte
+            _vueCreerCompte.afficherCompteCreer(utilisateurCreer.getNom(), utilisateurCreer.getCourriel(), utilisateurCreer.getMonnaieUsuelle());
+        }
+
+        //TODO la creation reele du compte si l'email n'est pas pris (persistance)
     }
 
 

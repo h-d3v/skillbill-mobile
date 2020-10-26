@@ -25,7 +25,7 @@ public class GestionGroupesTest {
     private Groupe groupeCobaye;
     private ISourceDonnee iSourceDonnee;
     private GestionGroupes gestionGroupes;
-    private Utilisateur utilisateurCobaye = new Utilisateur("Mi","Ma", "emailExiste","motDePasseAuTop" );
+    private Utilisateur utilisateurCobaye = new Utilisateur("Mi","Ma", "motDePasseAuTop", Monnaie.CAD );
 
     @Before
     public void setUp(){
@@ -96,8 +96,8 @@ public class GestionGroupesTest {
     public void getSoldeParUtilisateurEtGroupeTestAvecFactureDansLeGroupe() {
         Facture facture = new Facture();
         List<Facture> factures = new ArrayList<>();
-        Utilisateur utilisateur1 = new Utilisateur("","1","4","");
-        Utilisateur utilisateur2 = new Utilisateur("","2","5","");
+        Utilisateur utilisateur1 = new Utilisateur("","1","4",Monnaie.CAD);
+        Utilisateur utilisateur2 = new Utilisateur("","2","5",Monnaie.CAD);
         HashMap<Utilisateur, Double> montantPayeParUtilisateur= new HashMap<>();
         montantPayeParUtilisateur.put(utilisateur1, 100.0);
         montantPayeParUtilisateur.put(utilisateur2, 0.0);

@@ -1,5 +1,6 @@
 package com.jde.skillbill.presentation.presenteur;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 
@@ -22,14 +23,16 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
     private ISourceDonnee _dataSource;
     private Activity _activite;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
-    private static final int MSG_TENTER_CONNECTION_REUSSI =1;
-    private static final int MSG_ERREUR =2;
+    private static final int MSG_TENTER_CONNECTION_REUSSI =0;
+    private static final int MSG_ERREUR =1;
 
     private final Handler handlerRéponse;
 
     private Thread filEsclave = null;
 
-    public PresenteurConnexion(Activity activite,Modele modele, VueConnexion vueConnexion) {
+
+    @SuppressLint("HandlerLeak")
+    public PresenteurConnexion(Activity activite, Modele modele, VueConnexion vueConnexion) {
         _activite = activite;
         _modele = modele;
         _vueConnexion = vueConnexion;
@@ -58,12 +61,10 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
 
     @Override
     public void tenterConnexion(String email, String mdp){
-    GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
-    gestionUtilisateur.setSource(_dataSource);
+        GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
+        gestionUtilisateur.setSource(_dataSource);
 
-    filEsclave= new Thread(new Runnable() {
-        @Override
-        public void run() {
+        filEsclave= new Thread(() -> {
             Utilisateur utilisateurConnecter= gestionUtilisateur.tenterConnexion(email, mdp);
             Message msg = null;
 
@@ -74,12 +75,10 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
 
             else {
                 msg = handlerRéponse.obtainMessage(MSG_ERREUR);
-
             }
-        handlerRéponse.sendMessage(msg);
-        }
-    });
-    filEsclave.start();
+            handlerRéponse.sendMessage(msg);
+        });
+        filEsclave.start();
 
 
 
@@ -91,6 +90,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         Intent intentInscription = new Intent(_activite, ActivityCreerCompte.class);
         _activite.startActivity(intentInscription);
     }
+
     private void redirigerVersActiviteVoirLesGroupes(){
 
         //redirection vers ses groupes

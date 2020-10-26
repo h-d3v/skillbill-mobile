@@ -141,6 +141,8 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     }
 
 
+
+
     @Override
     public String getNomGroupe(int position) {
         if (BuildConfig.DEBUG && position < 0) {
@@ -157,12 +159,14 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         activity.startActivity(intent);
     }
 
+
     @Override
     public void commencerCreerGroupeActivite() {
         Intent intent = new Intent(activity, ActivityCreerGroupe.class);
         intent.putExtra(EXTRA_ID_UTILISATEUR,modele.getUtilisateurConnecte().getCourriel());
         activity.startActivity(intent);
     }
+
     @Override
     public void commencerPrendrePhotoFacture(int position){
         //TODO remove

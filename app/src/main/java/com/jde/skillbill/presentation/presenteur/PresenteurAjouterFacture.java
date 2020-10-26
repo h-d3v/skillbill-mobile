@@ -1,10 +1,14 @@
 package com.jde.skillbill.presentation.presenteur;
 
 import android.content.ActivityNotFoundException;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.os.Handler;
+import android.os.Message;
+
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
@@ -38,7 +42,12 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private final IGestionGroupes iGestionGroupes;
     private static final int REQUETE_PRENDRE_PHOTO= 2;
 
+    private Thread filEsclave = null;
+    private final Handler handlerReponse;
+    private static final int MSG_AJOUT_FACTURE_REUSSI = 0;
+    private static final int MSG_ERREUR = 1;
 
+    @SuppressLint("HandlerLeak")
     public PresenteurAjouterFacture(ActivityAjouterFacture activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
         this.activityAjouterFacture = activityAjouterFacture;
         this.vueAjouterFacture = vueAjouterFacture;
@@ -52,9 +61,31 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         modele.setGroupesAbonnesUtilisateurConnecte(gestionUtilisateur.trouverGroupesAbonne(utilisateurConnecte));
         groupe = modele.getListGroupeAbonneUtilisateurConnecte().get(position);
 
+
+
+        handlerReponse = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                filEsclave = null;
+                if (msg.what == MSG_AJOUT_FACTURE_REUSSI) {
+                    redirigerVersListeFactures();
+
+                } else if (msg.what == MSG_ERREUR) {
+
+                    vueAjouterFacture.afficherMessageErreurAlertDialog(
+                            activityAjouterFacture.getResources().getString(R.string.txt_message_erreur)
+                            ,activityAjouterFacture.getResources().getString(R.string.titre_erreur_generique)
+                    );
+                }
+            }
+        };
     }
 
-
+    /**
+     *
+     * @return liste des noms des utilisateurs du groupe
+     */
     @Override
     public String[] presenterListeUtilsateur() {
 
@@ -70,31 +101,51 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         return membres;
     }
 
+    /**
+     * ajoute une facture a un groupe
+     */
     @Override
     public void ajouterFacture() {
-        try{
-            Double montant =  vueAjouterFacture.getMontantFactureInput();
-            LocalDate date = vueAjouterFacture.getDateFactureInput();
-            String titre = vueAjouterFacture.getTitreInput();
-            if(titre==null){
-                titre=activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut)+" "+date.toString();
+
+        filEsclave= new Thread (()-> {
+            Message msg;
+
+            try {
+                double montant = vueAjouterFacture.getMontantFactureInput();
+                LocalDate date = vueAjouterFacture.getDateFactureInput();
+                String titre = vueAjouterFacture.getTitreInput();
+                if (titre == null) {
+                    titre = activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut) + " " + date.toString();
+                }
+
+                boolean factureAjoutee = iGestionFacture.creerFacture(montant, utilisateurConnecte, date, groupe, titre);
+                msg = handlerReponse.obtainMessage(MSG_AJOUT_FACTURE_REUSSI, factureAjoutee);
+
+            } catch (NumberFormatException | DateTimeParseException e) {
+                msg = handlerReponse.obtainMessage(MSG_ERREUR);
+
             }
+            handlerReponse.sendMessage( msg );
+        });
+        filEsclave.start();
+    }
 
-            if(iGestionFacture.creerFacture(montant,utilisateurConnecte,date, groupe,  titre)){
-                Intent intent = new Intent(activityAjouterFacture, ActivityVoirUnGroupe.class);
-                intent.putExtra(EXTRA_GROUPE_POSITION, position);
-                intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
-                intent.putExtra("com.jde.skillbill.utlisateur_identifiant", modele.getUtilisateurConnecte().getCourriel());
-                intent.putExtra("com.jde.skillbill.groupe_identifiant", activityAjouterFacture.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, -1));
-                activityAjouterFacture.startActivity(intent);
-            };
-        }catch (NumberFormatException  | DateTimeParseException  e){
-             vueAjouterFacture.afficherMessageErreurAlertDialog(
-                     activityAjouterFacture.getResources().getString(R.string.txt_message_erreur)
-                    ,activityAjouterFacture.getResources().getString(R.string.titre_erreur_generique)
-             );
-        }
 
+    /**
+     * Redirige vers l'activite voirUnGroupe pour montrer la nouvelle facture ajoutee
+     */
+    @Override
+    public void redirigerVersListeFactures(){
+        Intent intent = new Intent(activityAjouterFacture, ActivityVoirUnGroupe.class);
+        intent.putExtra(EXTRA_GROUPE_POSITION, position);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
+        intent.putExtra("com.jde.skillbill.utlisateur_identifiant", modele.getUtilisateurConnecte().getCourriel());
+        intent.putExtra("com.jde.skillbill.groupe_identifiant", activityAjouterFacture.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, -1));
+
+        activityAjouterFacture.startActivity(intent);
+
+        //ne pourra pas retourner a l'activite de creation de facture
+        activityAjouterFacture.finish();
     }
 
     @Override

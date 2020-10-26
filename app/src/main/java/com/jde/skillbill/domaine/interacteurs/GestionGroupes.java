@@ -36,7 +36,7 @@ public class GestionGroupes implements IGestionGroupes {
     @Override
     public boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur) {
 
-      return sourceDonnee.ajouterMembre(groupe, utilisateur);
+        return sourceDonnee.ajouterMembre(groupe, utilisateur);
     }
 
 

@@ -16,6 +16,11 @@ import com.jde.skillbill.presentation.vue.VueCreerCompte;
 public class ActivityCreerCompte extends AppCompatActivity {
 
     private PresenteurCreerCompte _presenteur;
+
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
