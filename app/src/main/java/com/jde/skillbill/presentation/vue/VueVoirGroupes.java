@@ -50,6 +50,7 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         buttonCommencerActiviteCreerGroupe.setOnClickListener(view -> presenteurVoirGroupes.commencerCreerGroupeActivite());
 
 
+
         return racine;
     }
 

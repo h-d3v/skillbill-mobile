@@ -6,6 +6,7 @@
               android:layout_height="wrap_content"
               android:id="@+id/linearLayout" android:orientation="vertical">
 
+
     <androidx.appcompat.widget.Toolbar
             android:layout_width="411dp"
             android:layout_height="45dp"
@@ -27,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/action_ajouter"
         />
+
 
     </androidx.appcompat.widget.Toolbar>
     <TextView
@@ -64,14 +66,21 @@
             android:text="@string/titre_payeur"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/titre_payeur_facture"/>
+
+    <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_camera"
+            android:id="@+id/btn_ajouter_facture_groupe_avec_photo" android:layout_weight="1"
+            style="@android:style/Widget.Holo.ImageButton"/>
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/ic_remove_circle_black_24dp"
+            android:id="@+id/imageFact"/>
     <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/spinner_choix_payeur"
             android:entries="@array/spinner_ajouter_facture_choix"/>
-    <TextView
-            android:text="@string/text_montant_paye_utilisateurs_facture"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/textView3"/>
+
     <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/spinner_choix_remboursement"

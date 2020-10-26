@@ -28,5 +28,7 @@ public interface IContratVuePresenteurVoirGroupes {
         String getNomGroupe(int position);
 
         void commencerAjouterFactureActivite(int position);
+
+        void commencerPrendrePhotoFacture(int position);
     }
 }

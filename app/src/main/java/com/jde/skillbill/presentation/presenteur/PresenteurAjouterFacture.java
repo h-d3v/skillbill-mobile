@@ -1,6 +1,10 @@
 package com.jde.skillbill.presentation.presenteur;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.provider.MediaStore;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
@@ -24,6 +28,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     Modele modele;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
+    private static final String IMAGE ="com.jde.skillbill.BitmapImage";
     private final int position;
 
     private final Utilisateur utilisateurConnecte;
@@ -31,6 +36,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private final IGestionFacture iGestionFacture;
     private final IGestionUtilisateur iGestionUtilisateur;
     private final IGestionGroupes iGestionGroupes;
+    private static final int REQUETE_PRENDRE_PHOTO= 2;
 
 
     public PresenteurAjouterFacture(ActivityAjouterFacture activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
@@ -45,6 +51,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         position=activityAjouterFacture.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1);
         modele.setGroupesAbonnesUtilisateurConnecte(gestionUtilisateur.trouverGroupesAbonne(utilisateurConnecte));
         groupe = modele.getListGroupeAbonneUtilisateurConnecte().get(position);
+
     }
 
 
@@ -88,5 +95,16 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
              );
         }
 
+    }
+
+    @Override
+    public void prendrePhoto() {
+        Intent prendrePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try { //TODO verifier que l'appareil est capable de prendre des photos
+            prendrePhotoIntent.putExtra(EXTRA_GROUPE_POSITION, position);
+            activityAjouterFacture.startActivityForResult(prendrePhotoIntent, REQUETE_PRENDRE_PHOTO );
+        }catch (ActivityNotFoundException e){
+            //TODO
+        }
     }
 }

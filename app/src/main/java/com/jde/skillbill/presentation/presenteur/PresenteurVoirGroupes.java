@@ -1,10 +1,15 @@
 package com.jde.skillbill.presentation.presenteur;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import android.provider.MediaStore;
+import android.widget.ImageView;
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -20,6 +25,7 @@ import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirGroupes;
 import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
 import com.jde.skillbill.ui.activity.ActivityCreerGroupe;
+import com.jde.skillbill.ui.activity.ActivityVoirGroupes;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
@@ -36,6 +42,9 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     private Thread filEsclave;
     private ISourceDonnee sourceDonnee;
     private static final int MSG_GET_GROUPES=1;
+    private static final int REQUETE_PRENDRE_PHOTO= 2;
+
+
 
 
 
@@ -154,4 +163,12 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         intent.putExtra(EXTRA_ID_UTILISATEUR,modele.getUtilisateurConnecte().getCourriel());
         activity.startActivity(intent);
     }
+    @Override
+    public void commencerPrendrePhotoFacture(int position){
+        //TODO remove
+    }
+
+
+
+
 }

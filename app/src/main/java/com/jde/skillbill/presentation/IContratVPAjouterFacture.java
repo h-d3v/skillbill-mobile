@@ -10,6 +10,8 @@ public interface IContratVPAjouterFacture {
         String[] presenterListeUtilsateur();
 
         void ajouterFacture();
+
+        void prendrePhoto();
     }
 
     interface IVueAjouterFacture{

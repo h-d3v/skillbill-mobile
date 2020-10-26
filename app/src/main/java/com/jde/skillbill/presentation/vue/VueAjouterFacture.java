@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -31,14 +32,23 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     Spinner spinnerChoixUtilisateursRedevables;
     CalendarView calendarView;
     EditText date;
+    ImageView imageFacture;
+    private ImageButton btnAjouterFacture;
 
-    @SuppressLint("WrongConstant")
+
     @Override
     public View onCreateView (LayoutInflater inflater,
                               ViewGroup container,
                               Bundle savedInstanceState) {
         View racine = inflater.inflate(R.layout.frag_ajouter_facture, container, false);
-        editTextTitre=racine.findViewById(R.id.edit_t_nom_activie);
+        btnAjouterFacture =racine.findViewById(R.id.btn_ajouter_facture_groupe_avec_photo);
+        btnAjouterFacture.setOnClickListener(view -> {
+            presenteurAjouterFacture.prendrePhoto();
+
+        });
+
+         imageFacture = (ImageView) racine.findViewById(R.id.imageFact);
+         editTextTitre=racine.findViewById(R.id.edit_t_nom_activie);
          boutonAjouter= racine.findViewById(R.id.btnAjouter);
          boutonAjouter.setOnClickListener(view -> {
              presenteurAjouterFacture.ajouterFacture();
@@ -140,6 +150,10 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
             return null;
         }
         return editTextTitre.getText().toString();
+    }
+
+    public void setImageFacture(Bitmap bitmap) {
+
     }
 
     private void afficherAlertDialog(){
