@@ -10,7 +10,7 @@
     <androidx.appcompat.widget.Toolbar
             android:layout_width="411dp"
             android:layout_height="45dp"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             android:theme="?attr/actionBarTheme"
             android:minHeight="?attr/actionBarSize" android:id="@+id/toolbarAjouterFacture"
 
@@ -21,13 +21,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/action_annuler"
-        />
+                android:textColor="@color/design_default_color_on_primary" app:rippleColor="@color/colorPrimary"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
         <Button
                 android:id="@+id/btnAjouter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/action_ajouter"
-        />
+                android:shadowColor="#8F5B5B" app:rippleColor="@color/colorPrimary"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:textColor="@color/design_default_color_on_primary"/>
 
 
     </androidx.appcompat.widget.Toolbar>
@@ -67,20 +70,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/titre_payeur_facture"/>
 
-    <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" app:srcCompat="@android:drawable/ic_menu_camera"
-            android:id="@+id/btn_ajouter_facture_groupe_avec_photo" android:layout_weight="1"
-            style="@android:style/Widget.Holo.ImageButton"/>
-    <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" app:srcCompat="@drawable/ic_remove_circle_black_24dp"
-            android:id="@+id/imageFact"/>
     <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/spinner_choix_payeur"
             android:entries="@array/spinner_ajouter_facture_choix"/>
 
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageFact"/>
+    <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="0dp" app:srcCompat="@android:drawable/ic_menu_camera"
+            android:id="@+id/btn_ajouter_facture_groupe_avec_photo" android:layout_weight="1"
+            style="@android:style/Widget.Material.ImageButton" android:background="@color/colorPrimary"/>
     <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/spinner_choix_remboursement"

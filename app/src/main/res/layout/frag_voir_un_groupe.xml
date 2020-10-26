@@ -42,8 +42,9 @@
             android:layout_height="wrap_content" android:id="@+id/detailMembres"/>
     <Button
             android:text="@string/action_ajouter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/btnAjouter"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/btnAjouter"
+            style="@style/Widget.MaterialComponents.Button.TextButton" android:textColor="@color/colorPrimary"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFactures"
