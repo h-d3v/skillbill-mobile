@@ -40,7 +40,9 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
         this.activity = activity;
 
         //TODO ajuster la monnaie pour quelle ne sois pas coder en dur
-        modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR), null, Monnaie.CAD));
+        if(modele.getUtilisateurConnecte()==null) {
+            modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR), null, Monnaie.CAD));
+        }
         handlerReponse = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -57,6 +59,9 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
     }
 
 
+    /**
+     * cree un groupe
+     */
     @Override
     public void creerGroupe() {
         IGestionGroupes gestionGroupes = new GestionGroupes(new SourceDonneesMock());
@@ -67,7 +72,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
             Message msg;
 
             if (groupeACreer!=null){
-                //modele.setUtilisateurConnecte(utilisateurConnecter);
+
                 msg = handlerReponse.obtainMessage(MSG_GROUPE_CREER_REUSSI);
             }
 
@@ -80,9 +85,13 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
 
     }
 
+    /**
+     * redirige vers voirUnGroupe pour le groupe qui vient d'etre creer
+     */
     @Override
     public void redirigerVersGroupeCreer(){
         IGestionUtilisateur gestionUtilisateur = new GestionUtilisateur(new SourceDonneesMock());
+
         //redirection vers ses groupes
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
         intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
@@ -93,7 +102,9 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
         activity.finish();
     }
 
-
+    /**
+     * retours arriere
+     */
     @Override
     public void retournerEnArriere(){
         activity.onBackPressed();

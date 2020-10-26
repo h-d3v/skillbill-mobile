@@ -17,9 +17,6 @@ import static org.mockito.Mockito.*;
 
 @RunWith(AndroidJUnit4.class)
 public class PresenteurConnexionTest {
-
-
-
     @Test
     public void testTenterConnectionReussie(){
         final ISourceDonnee source = mock(ISourceDonnee.class);
@@ -79,6 +76,7 @@ public class PresenteurConnexionTest {
 
                 }
         );
+
         instrumentation.waitForIdle(new Runnable() {
             @Override
             public void run() {
