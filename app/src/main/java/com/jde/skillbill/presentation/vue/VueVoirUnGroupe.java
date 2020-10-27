@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
 
    private PresenteurVoirUnGroupe _presenteur;
    private TextView tvNomGroupe;
+   //TODO afficher un message si il n'y a aucune facture dans le groupe
     private TextView tvMsgFactures;
     private TabLayout tabLayout;
    private TextView detailMembres;
@@ -102,53 +105,67 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
 
             }
         });
-        ajouterMembre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        ajouterMembre.setOnClickListener((View.OnClickListener) view -> {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(racine.getContext());
-                builder.setTitle(getString(R.string.titre_ajouter_un_membre_au_groupe));
-                final View customLayout = getLayoutInflater().inflate(R.layout.alert_dialog_ajouter_membre, null);
-                builder.setView(customLayout);
-                builder.setPositiveButton(getString(R.string.ajouter), new DialogInterface.OnClickListener() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(racine.getContext());
+            builder.setTitle(getString(R.string.titre_ajouter_un_membre_au_groupe));
+            final View customLayout = getLayoutInflater().inflate(R.layout.alert_dialog_ajouter_membre, null);
+            EditText champsCourriel = customLayout.findViewById(R.id.editTextTextEmailAddressAjouterMembre);
+            builder.setView(customLayout);
+
+            builder.setPositiveButton(getString(R.string.ajouter), (dialogInterface, i) -> {
+
+                int code = _presenteur.ajouterUtilisateurAuGroupe(champsCourriel.getText().toString());
+                if(_presenteur.AJOUT_OK==code){
+                    detailMembres.setText(getString(R.string.membres_dans_le_groupe)+_presenteur.getMembresGroupe());
+                }else if(_presenteur.EMAIL_INCONNU==code){
+                    Toast.makeText(racine.getContext(), getString(R.string.email_inconnu), Toast.LENGTH_LONG).show();
+                }else if(_presenteur.ERREUR_ACCES==code){
+                    Toast.makeText(racine.getContext(), getString(R.string.email_deja_dans_groupe), Toast.LENGTH_LONG).show();
+                }
+            });
+            builder.setNeutralButton(getString(R.string.Inviter), (dialogInterface, i) -> _presenteur.envoyerCourriel(champsCourriel.getText().toString()));
+
+            builder.setNegativeButton(getString(R.string.Annuler), (dialogInterface, i) -> dialogInterface.dismiss());
+
+            AlertDialog dialog = builder.create();
+            dialog.setOnShowListener(dialog1 -> {
+                ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_NEUTRAL).setEnabled(false);
+                champsCourriel.addTextChangedListener(new TextWatcher() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                        EditText champsCourriel = customLayout.findViewById(R.id.editTextTextEmailAddressAjouterMembre);
-                        int code = _presenteur.ajouterUtilisateurAuGroupe(champsCourriel.getText().toString());
-                        if(_presenteur.AJOUT_OK==code){
-                            detailMembres.setText(getString(R.string.membres_dans_le_groupe)+_presenteur.getMembresGroupe());
-                        }else if(_presenteur.EMAIL_INCONNU==code){
-                            Toast.makeText(racine.getContext(), getString(R.string.email_inconnu), Toast.LENGTH_LONG).show();
-                        }else if(_presenteur.ERREUR_ACCES==code){
-                            Toast.makeText(racine.getContext(), getString(R.string.email_deja_dans_groupe), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if(champsCourriel.getText().toString().matches("[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,4}")){
+                            ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                            ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_NEUTRAL).setEnabled(true);
+                        }
+                        else{
+                            ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                            ((AlertDialog)dialog).getButton(AlertDialog.BUTTON_NEUTRAL).setEnabled(false);
+                            champsCourriel.setError("Entrez un email valide");
                         }
                     }
-                });
-                builder.setNeutralButton(getString(R.string.Inviter), new DialogInterface.OnClickListener() {
+
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        EditText champsCourriel = customLayout.findViewById(R.id.editTextTextEmailAddressAjouterMembre);
-                        _presenteur.envoyerCourriel(champsCourriel.getText().toString());
+                    public void afterTextChanged(Editable s) {
 
                     }
                 });
-
-                builder.setNegativeButton(getString(R.string.Annuler), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-
+            });
+            dialog.show();
         });
         return racine;
     }
 
+    /**
+     *
+     * @param presenteur presenteur qui sera attribuer a la vue
+     */
     @Override
 
     public void setPresenteur(IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe presenteur) {

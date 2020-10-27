@@ -14,13 +14,22 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tvNomGroupe"
-                style="@style/Widget.MaterialComponents.TextView"
-                android:layout_width="match_parent"
-                android:layout_height="79dp"
-                android:textAlignment="center"
-                android:textSize="50sp"
-                tools:text="test" />
+            android:id="@+id/tvNomGroupe"
+            style="@style/Widget.MaterialComponents.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="50sp"
+            android:autoSizeMinTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:autoText="false"
+            android:maxHeight="90dp"
+            android:maxLines="2"
+            android:textAlignment="center"
+            android:textSize="50sp"
+            app:autoSizeMaxTextSize="50sp"
+            app:autoSizeMinTextSize="20sp"
+            app:autoSizeTextType="uniform"
+            tools:text="test" />
     </androidx.appcompat.widget.Toolbar>
     <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
@@ -57,7 +66,8 @@
             android:text="@string/action_ajouter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" android:id="@+id/btnAjouter"
-            style="@style/Widget.MaterialComponents.Button.TextButton" android:textColor="@color/colorPrimary"/>
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:textColor="@color/colorPrimary"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFactures"

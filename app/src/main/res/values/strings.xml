@@ -65,7 +65,7 @@
     <string name="email_inconnu">Email inconnu, vous pouvez l\'inviter</string>
     <string name="email_deja_dans_groupe">Vous avez dejà ajouté cet utilisateur </string>
     <string name="supprimer_facture">Supprimer la facture</string>
-
+    <string name="nom_du_nouveau_groupe">Nom du nouveau groupe</string>
 
 
 </resources>

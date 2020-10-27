@@ -15,9 +15,6 @@ public interface IContratVPCreerCompte {
 
         Monnaie getMonnaieChoisie();
         boolean tousLesChampsValides();
-        boolean verifierMDP();
-        boolean verifierNom();
-        boolean verifierEmail();
         void afficherCompteCreer(String nom, String email, Monnaie monnaie);
         void afficherEmailDejaPrit();
     }

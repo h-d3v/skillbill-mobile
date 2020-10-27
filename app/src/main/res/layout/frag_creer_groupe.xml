@@ -1,38 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" android:orientation="vertical">
-    <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:theme="?attr/actionBarTheme"
-            android:minHeight="?attr/actionBarSize" android:id="@+id/toolbarCreerGroupe"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/register_bg"
+    android:orientation="vertical">
 
-            app:title="@string/titre_toolbar_creer_groupe">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarCreerGroupe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+
+        app:title="@string/titre_toolbar_creer_groupe"
+        app:titleTextColor="@color/design_default_color_on_secondary">
+
         <Button
-                android:id="@+id/btnEnregistrer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/action_enregistrer" style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:textColor="@color/design_default_color_on_primary"/>
+
+            android:id="@+id/btnEnregistrer"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/design_default_color_on_secondary"
+            android:text="@string/action_enregistrer"
+            android:textColor="@color/colorPrimary" />
+
         <Button
-                android:id="@+id/btnAnuller"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/action_annuler" android:textColor="@color/design_default_color_on_primary"
-                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+            android:id="@+id/btnAnuller"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="@color/design_default_color_on_secondary"
+            android:text="@string/action_annuler"
+            android:textColor="@color/error" />
 
     </androidx.appcompat.widget.Toolbar>
-    <TextView
-            android:text="@string/titre_nom_Groupe"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tiNomGroupe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="31dp"
+        app:boxCornerRadiusBottomEnd="30dp"
+        app:boxCornerRadiusBottomStart="30dp"
+        app:boxCornerRadiusTopEnd="30dp"
+        app:boxCornerRadiusTopStart="30dp"
+        app:endIconMode="clear_text"
+        app:boxStrokeColor="@color/colorPrimary"
+
+        app:hintTextColor="@color/colorPrimary"
+        app:startIconDrawable="@drawable/baseline_group_add_white_18dp"
+        app:startIconTint="@color/colorAccent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textViewNomGroupeEntree"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/textViewNomGroupeTitre" />
-    <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/textViewNomGroupeEntree"
-            android:inputType="text" tools:text="@string/textview_nom_groupe_a_creer"
-            android:autofillHints="@string/textview_nom_groupe_a_creer"/>
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:hint="@string/nom_du_nouveau_groupe"
+            android:textColorHint="@color/colorPrimary"
+            android:inputType="textPersonName"
+            android:maxLength="20"
+
+            android:shadowColor="@color/colorPrimary"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
 </LinearLayout>

@@ -98,27 +98,46 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
     }
 
 
+    /**
+     *
+     * @return le mdp
+     */
     @Override
     public String getMdp() {
        return etMdp.getText().toString();
     }
 
+    /**
+     *
+     * @return l'email
+     */
     @Override
     public String getEmail() {
         return etEmail.getText().toString();
     }
 
+    /**
+     *
+     * @return true si tous les champs remplis par l'utilisateur sont valide
+     */
     @Override
     public boolean tousLesChampsValides() {
         return emailValide && mdpValide;
     }
 
+    /**
+     *
+     * @param presenteur
+     */
     @Override
     public void setPresenteur(PresenteurConnexion presenteur) {
         _presenteur=presenteur;
     }
 
-    //Affiche une erreur avec
+    /**
+     * Affiche que l'email ou le mot de passe ne sont pas bons
+     */
+
     public void afficherMsgErreur() {
         MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
         alertBuilder.setTitle("Connexion impossible!");
@@ -126,7 +145,12 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
         alertBuilder.show();
     }
 
-    //Pour test seulement, sera enlever au merge
+    /**
+     * A des fins de tests, sera enlever a la livraison finale
+     * @param email l'email de l'utilisateur
+     * @param nom le nom de l'utilisateur
+     */
+    
     public void afficherMsgConnecter(String email, String nom) {
         MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
         alertBuilder.setTitle("Connexion réussie!");

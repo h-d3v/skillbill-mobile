@@ -64,7 +64,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
 
          date.setOnFocusChangeListener((view, b) -> {
              if(b) {
-                 calendarView.setVisibility(View.FOCUSABLE);
+                 calendarView.setVisibility(View.VISIBLE);
              }else {
                  calendarView.setVisibility(View.GONE);
              }
@@ -118,18 +118,33 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         return racine;
     }
 
+    /**
+     *
+     * @param presenteurAjouterFacture
+     */
     @Override
     public void setPresenteur(IContratVPAjouterFacture.IPresenteurAjouterFacture presenteurAjouterFacture) {
         this.presenteurAjouterFacture=presenteurAjouterFacture;
     }
 
+    /**
+     *
+     * @return la date de la facture
+     * @throws NullPointerException
+     * @throws DateTimeParseException
+     */
     @Override
     public LocalDate getDateFactureInput() throws NullPointerException, DateTimeParseException{
         return  LocalDate.parse( date.getText());
     }
 
 
-
+    /**
+     *
+     * @return le montant de la facture
+     * @throws NullPointerException
+     * @throws NumberFormatException
+     */
     @Override
     public double getMontantFactureInput() throws NullPointerException, NumberFormatException {
         if(Double.parseDouble( editTextMontant.getText().toString())<=0){
@@ -137,6 +152,12 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         }
         return Double.parseDouble( editTextMontant.getText().toString());
     }
+
+    /**
+     *
+     * @param message erreur si la facture ne peut etre ajoutee
+     * @param titre du message
+     */
     @Override
     public void afficherMessageErreurAlertDialog(String message, String titre){
         MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
@@ -144,6 +165,11 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         alertBuilder.setMessage(message);
         alertBuilder.show();
     }
+
+    /**
+     *
+     * @return titre de la facture
+     */
     @Override
     public String getTitreInput(){
         if(editTextTitre.getText().toString()==null || editTextTitre.getText().toString().trim().equals("")){
@@ -156,6 +182,11 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
 
     }
 
+    //TODO implementer le partage inegale de la facture(vision future)
+    /**
+     * affiche la selection des autres utilisateurs
+     * dans le cas ou on veut separer la facture innegalement
+     */
     private void afficherAlertDialog(){
         Context context= this.getContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

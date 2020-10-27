@@ -198,41 +198,72 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
         return vue;
     }
 
+    /**
+     *
+     * @param presenteurCreerCompte
+     */
     @Override
     public void setPresenteur(PresenteurCreerCompte presenteurCreerCompte) {
         _presenteur=presenteurCreerCompte;
     }
 
+    /**
+     *
+     * @return nom du user
+     */
     @Override
     public String getNom() {
         return Objects.requireNonNull(tfNom.getText()).toString();
     }
 
+    /**
+     *
+     * @return email du user
+     */
     @Override
     public String getEmail() {
         return Objects.requireNonNull(tfEmail.getText()).toString();
     }
 
+    /**
+     *
+     * @return pass du user
+     */
     @Override
     public String getPass() {
         return Objects.requireNonNull(tfMdp.getText()).toString();
     }
 
+    /**
+     *
+     * @return pass du user
+     */
     @Override
     public String getPassVerif() {
         return Objects.requireNonNull(tfMdpVerif.getText()).toString();
     }
 
+    /**
+     *
+     * @return true si tous les champs remplis par le user sont valides
+     */
     @Override
     public boolean tousLesChampsValides(){
         return emailValide && nomValide && mdpValide;
     }
 
+    /**
+     *
+     * @return monnaie choisie par le user
+     */
     @Override
     public Monnaie getMonnaieChoisie(){
         return Monnaie.valueOf(editTextFilledExposedDropdown.getText().toString());
     }
 
+    /**
+     * affiche un message comme quoi que l'email est deja prit
+     */
     @Override
     public void afficherEmailDejaPrit(){
         MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
@@ -241,7 +272,12 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
                 alertBuilder.show();
     }
 
-    //Pour test seulement, devra etre enlever
+    /**
+     * Pour test seulement, devra etre enlever
+     * @param nom du compte creer
+     * @param email du compte creer
+     * @param monnaie du compte creer
+     */
     @Override
     public void afficherCompteCreer(String nom, String email, Monnaie monnaie){
         MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
@@ -251,21 +287,5 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     }
 
 
-    // les trois methodes suivantes sont la pour la verification dans le presenteur si on veut instaurer
-    // une verifcation dans le presenteur. Pout l'instant inutile.
-    @Override
-    public boolean verifierMDP() {
-        return false;
-    }
-
-    @Override
-    public boolean verifierNom() {
-        return false;
-    }
-
-    @Override
-    public boolean verifierEmail() {
-        return false;
-    }
 
 }
