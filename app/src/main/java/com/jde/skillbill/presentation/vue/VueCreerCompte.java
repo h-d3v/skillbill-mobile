@@ -144,9 +144,14 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             }
             @Override
             public void afterTextChanged(Editable s) {
-                if(!getPass().matches("[.\\S]+") || getPass().length()<8){
+                if(!getPass().matches("[.\\S]+") || getPass().length()<8 ){
                     btnRegister.setEnabled(false);
                     tfMdp.setError("Le mot de passe ne doit pas contenir d'espace et plus de 8 caractères.");
+                }
+                else if(!getPass().equals(getPassVerif())) {
+                    btnRegister.setEnabled(false);
+                    tfMdpVerif.setError("Le mot de passe ne correspond pas");
+                    mdpValide = false;
                 }
                 else {
                     mdpValide = true;
@@ -165,9 +170,6 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
                 if(!getPass().equals(getPassVerif())){
                     btnRegister.setEnabled(false);
                     tfMdpVerif.setError("Le mot de passe ne correspond pas");
@@ -179,6 +181,10 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
                         btnRegister.setEnabled(true);
                     }
                 }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -285,7 +291,4 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
         alertBuilder.setMessage("Courriel: "+email+"Nom: "+nom+" Monnaie choisie: "+monnaie.name());
         alertBuilder.show();
     }
-
-
-
 }
