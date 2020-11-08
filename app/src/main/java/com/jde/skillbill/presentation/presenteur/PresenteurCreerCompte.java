@@ -1,5 +1,6 @@
 package com.jde.skillbill.presentation.presenteur;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 
 import android.os.Handler;
@@ -30,7 +31,8 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
     };
 
 
-    public PresenteurCreerCompte(Activity activite,Modele modele, VueCreerCompte vueCreerCompte) {
+    @SuppressLint("HandlerLeak")
+    public PresenteurCreerCompte(Activity activite, Modele modele, VueCreerCompte vueCreerCompte) {
         _activite=activite;
         _modele = modele;
         _vueCreerCompte=vueCreerCompte;
@@ -69,18 +71,18 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
         filEsclave = new Thread(() -> {
             Message msg = null;
             GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
-            boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
+            //boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
 
-            if(emailDejaPris){
-                msg = handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
-            }
-            else {
+            //if(emailDejaPris){
+                //msg = handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
+            //}
+            //else {
                 Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
                 if(utilisateurCreer!=null){
                     msg=handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE,utilisateurCreer);
                 }
                 else msg=handler.obtainMessage(MESSAGE.ERREUR);
-            }
+            //}
 
             handler.sendMessage(msg);
         });
