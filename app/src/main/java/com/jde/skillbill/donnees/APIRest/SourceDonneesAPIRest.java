@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
@@ -91,29 +92,26 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "{\r\n    'Nom': '"+utilisateur.getNom()+"',\r\n    'Courriel': '"+utilisateur.getCourriel()+"',\r\n    'MotDePasse': '"+utilisateur.getMotPasse()+"'\r\n}");
         Request request = new Request.Builder()
-                .url("http://192.168.50.10:51360/api/Register")
+                .url("http://192.168.1.32:51360/api/Register")
                 .method("POST", body)
                 .addHeader("Content-Type", "application/json")
                 .build();
         try {
             Response response = client.newCall(request).execute();
+
             if(response.code()==200) {
-                //TODO retourner les infos de l'utilisateur
-                Gson gson = new Gson();
-                ResponseBody responseBody = client.newCall(request).execute().body();
-                System.out.println(Objects.requireNonNull(response.body()).string());
-                utilisateurRetour = gson.fromJson(responseBody.string(), UtilisateurRestAPI.class);
-                //pour test, a enlever
-
+                //peut seulement etre consommer une seule fois, regarder documentation okhttp
+                utilisateurRetour = decoderUtilisateur(Objects.requireNonNull(response.body()).byteStream());
             }
-            //si la connection a l'api est impossible
-        } catch(SocketTimeoutException e){
-            Log.e("erreur connection api", "message:" +Objects.requireNonNull(e.getMessage())+ " \n cause: "+ e.getCause());
+        }//si la connection a l'api est impossible, on retourne un user null
+        catch(ConnectException e) {
+            Log.e("erreur connection api", "message:" + Objects.requireNonNull(e.getMessage()) + " \n cause: " + e.getCause());
 
-        } catch (IOException e) {
+        } //si l'email entrer est deja pris, on retourne un user invalide
+        catch (IOException e) {
+            utilisateurRetour=new Utilisateur("-1", "-1", "-1", Monnaie.CAD);
             e.printStackTrace();
         }
-
         return utilisateurRetour;
     }
 
