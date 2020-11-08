@@ -1,14 +1,21 @@
 package com.jde.skillbill.domaine.entites;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Utilisateur {
-
+public class Utilisateur implements Serializable {
+    @SerializedName("Nom")
     private String nom;
+    @SerializedName("MotDePasse")
     private String motPasse;
+
     private String uriPhoto;
+    @SerializedName("Courriel")
     private String courriel;
     private String numeroTelephone;
+    @SerializedName("Monnaie")
     private Monnaie monnaieUsuelle;
 
     public Utilisateur(String nom, String courriel, String motPasse, Monnaie monnaie) {

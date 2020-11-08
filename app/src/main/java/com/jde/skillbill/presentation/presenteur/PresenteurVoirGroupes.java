@@ -1,5 +1,6 @@
 package com.jde.skillbill.presentation.presenteur;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -47,15 +48,16 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
 
 
 
-
+    @SuppressLint("HandlerLeak")
     public PresenteurVoirGroupes(Modele modele, VueVoirGroupes vueVoirGroupes, Activity activity,  ISourceDonnee sourceDonnee) {
         this.modele = modele;
         this.vueVoirGroupes = vueVoirGroupes;
         this.activity=activity;
-        modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD));
+        modele.setUtilisateurConnecte((Utilisateur) activity.getIntent().getSerializableExtra(EXTRA_ID_UTILISATEUR));
         this.sourceDonnee = sourceDonnee;
 
         handler = new Handler(){
+
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -130,7 +132,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     public void commencerVoirUnGroupeActivite(int position) {
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
         intent.putExtra(EXTRA_GROUPE_POSITION, position);
-        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
         activity.startActivity(intent);
     }
 
@@ -155,7 +157,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     public void commencerAjouterFactureActivite(int position) {
         Intent intent = new Intent(activity, ActivityAjouterFacture.class);
         intent.putExtra(EXTRA_GROUPE_POSITION, position);
-        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
         activity.startActivity(intent);
     }
 
@@ -163,7 +165,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     @Override
     public void commencerCreerGroupeActivite() {
         Intent intent = new Intent(activity, ActivityCreerGroupe.class);
-        intent.putExtra(EXTRA_ID_UTILISATEUR,modele.getUtilisateurConnecte().getCourriel());
+        intent.putExtra(EXTRA_ID_UTILISATEUR,modele.getUtilisateurConnecte());
         activity.startActivity(intent);
     }
 

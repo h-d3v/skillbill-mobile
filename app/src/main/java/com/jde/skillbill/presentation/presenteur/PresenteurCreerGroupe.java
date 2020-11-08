@@ -13,6 +13,7 @@ import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
+import com.jde.skillbill.donnees.APIRest.SourceDonneesAPIRest;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVuePresenteurCreerGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
@@ -42,7 +43,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
 
         //TODO ajuster la monnaie pour quelle ne sois pas coder en dur
         if (modele.getUtilisateurConnecte() == null) {
-            modele.setUtilisateurConnecte(new Utilisateur("", activity.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR), null, Monnaie.CAD));
+            modele.setUtilisateurConnecte((Utilisateur) activity.getIntent().getSerializableExtra(EXTRA_ID_UTILISATEUR));
         }
         handlerReponse = new Handler() {
             @SuppressLint("HandlerLeak")
@@ -66,10 +67,10 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
      */
     @Override
     public void creerGroupe() {
-        IGestionGroupes gestionGroupes = new GestionGroupes(new SourceDonneesMock());
+        IGestionGroupes gestionGroupes = new GestionGroupes(new SourceDonneesAPIRest());
 
         filEsclave = new Thread(() -> {
-            Groupe groupeACreer = gestionGroupes.creerGroupe(vueCreerGroupe.getNomGroupe(), modele.getUtilisateurConnecte(), null);
+            Groupe groupeACreer = gestionGroupes.creerGroupe(vueCreerGroupe.getNomGroupe(), modele.getUtilisateurConnecte(), Monnaie.CAD);
 
             Message msg;
 

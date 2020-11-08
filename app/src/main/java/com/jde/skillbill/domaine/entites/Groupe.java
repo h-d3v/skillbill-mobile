@@ -1,18 +1,24 @@
 package com.jde.skillbill.domaine.entites;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class Groupe {
-
+    @SerializedName("Nom")
     private String nomGroupe;
+    @SerializedName("DateCreation")
     private Date dateCreation;
+    @SerializedName("UtilisateursAbonnes")
     private List<Utilisateur> utilisateurs;
+    @SerializedName("factures")
     private List<Facture> factures;
     private Map<Utilisateur, Double> soldeParUtilisateur;
     private Monnaie monnaieDuGroupe;
+    @SerializedName("UtilisateurCreateur")
     private Utilisateur utilisateurCreateurGroupe;
 
     public Groupe(String nomGroupe, Utilisateur utilisateurCreateurGroupe,  Monnaie monnaieDuGroupe) {

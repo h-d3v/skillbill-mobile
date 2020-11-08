@@ -9,23 +9,33 @@ import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
+import com.jde.skillbill.donnees.APIRest.entites.GroupeRestApi;
 import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
-    private String URI_BASE = "http://192.168.0.16:8080/restAPI-1.0-SNAPSHOT/api/v0/";
+    private String URI_BASE = "http://192.168.0.23:44302/api/";
     private String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
     private String POINT_ENTREE_GROUPE = "groupes/";
+    private String POINT_ENTREE_LOGIN ="login";
 
 
     @Override
@@ -50,12 +60,13 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setRequestProperty("Accept", "application/json");
+            httpURLConnection.setRequestProperty("Accept", "application/json; utf-8");
             httpURLConnection.setDoOutput(true);
             OutputStream outputStream = httpURLConnection.getOutputStream();
             String json = "{\"courriel\": \""+email+"}";
-            byte[] input = json.getBytes("utf-8");
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input,0, input.length);
+            Log.e("code reponse", String.valueOf(httpURLConnection.getResponseCode()));
             if(httpURLConnection.getResponseCode()==200){
                 httpURLConnection.getInputStream();
             }
@@ -78,31 +89,27 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         URL url = null;
         UtilisateurRestAPI utilisateur=null;
         try {
-            url = new URL(URI_BASE+POINT_ENTREE_UTILISATEUR+"login");
+            url = new URL(URI_BASE+POINT_ENTREE_LOGIN);
         } catch (MalformedURLException e) {
-            Log.e("SOurceDonneAPI: ", e.toString());
+            Log.e("SOurceDonneAPI : ", e.toString());
         }
         try {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setRequestProperty("Content-Type", "application/json");
+            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+            httpURLConnection.setRequestProperty("User-agent", "Skillbill android");
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
             OutputStream outputStream = httpURLConnection.getOutputStream();
-            String json = "{\"courriel\": \""+email+"\"," +
-                    "\"mot_de_passe\": \""+mdp+"\" }";
+            Gson gson = new GsonBuilder().create();
+            String json =  gson.toJson(new UtilisateurRestAPI("",email,mdp, null , 0));
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
-            outputStream.write(input,0, input.length);
+            outputStream.write(input, 0,input.length);
+
             if(httpURLConnection.getResponseCode()==200){
               InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
-              Gson gson = new GsonBuilder().create();
-              BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-              StringBuffer stringBuffer = new StringBuffer();
-              String str;
-              while ((str = bufferedReader.readLine())!=null){
-                  stringBuffer.append(str);
-              }
-              utilisateur = gson.fromJson(stringBuffer.toString(), UtilisateurRestAPI.class);
+              utilisateur = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
+
               if(utilisateur==null || utilisateur.getId()==0) return null;
 
 
@@ -117,11 +124,71 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
     @Override
     public boolean creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) {
+        URL url = null;
+
+
+
+        try {
+
+            url = new URL(URI_BASE+POINT_ENTREE_UTILISATEUR+((UtilisateurRestAPI) utilisateur).getId()+"/groupes");
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI : ", e.toString());
+        }
+        try {
+            HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+            httpURLConnection.setRequestProperty("User-agent", "Skillbill android");
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            Gson gson = new GsonBuilder().create();
+            String json = gson.toJson(new GroupeRestApi(groupe.getNomGroupe(), null, groupe.getMonnaieDuGroupe(), 0));
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
+            outputStream.write(input, 0,input.length);
+
+            if(httpURLConnection.getResponseCode()==200){
+
+                return httpURLConnection.getResponseMessage().equals("true");
+            }
+
+        }
+        catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
         return false;
     }
 
     @Override
     public List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur) {
+        URL url = null;
+        try {
+
+            url = new URL(URI_BASE+POINT_ENTREE_UTILISATEUR+((UtilisateurRestAPI) utilisateur).getId()+"/groupes");
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI : ", e.toString());
+        }
+        try {
+            HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
+            Gson gson = new Gson();
+            if(httpURLConnection.getResponseCode()==200){
+                InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                GroupeRestApi[] groupeRestApis = gson.fromJson(inputStreamReader, GroupeRestApi[].class);
+                List<Groupe> groupeRestApis1 = new ArrayList<>();
+                if(groupeRestApis!=null){
+                    groupeRestApis1.addAll(Arrays.asList(groupeRestApis));
+                    return groupeRestApis1;
+                }
+
+            }
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
