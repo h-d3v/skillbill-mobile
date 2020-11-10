@@ -106,7 +106,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         }//si la connection a l'api est impossible, on retourne un user null
         catch(ConnectException e) {
             Log.e("erreur connection api", "message:" + Objects.requireNonNull(e.getMessage()) + " \n cause: " + e.getCause());
-
         } //si l'email entrer est deja pris, on retourne un user invalide
         catch (IOException e) {
             utilisateurRetour=new Utilisateur("-1", "-1", "-1", Monnaie.CAD);
