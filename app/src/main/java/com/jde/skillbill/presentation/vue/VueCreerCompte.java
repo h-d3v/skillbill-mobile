@@ -287,8 +287,18 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     @Override
     public void afficherCompteCreer(String nom, String email, Monnaie monnaie){
         MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
-        alertBuilder.setTitle("Compte bien creer");
-        alertBuilder.setMessage("Courriel: "+email+"Nom: "+nom+" Monnaie choisie: "+monnaie.name());
+        alertBuilder.setTitle("Compte bien créer");
+        alertBuilder.setMessage("Votre adresse courriel: "+email);
+        alertBuilder.show();
+    }
+
+    /**
+     * devras s'afficher si l'utilisateur ne peut se connecter à l'api
+     */
+    public void afficherErreurConnection(){
+        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+        alertBuilder.setTitle("Erreur de connexion");
+        alertBuilder.setMessage("Vérifiez que vous êtes bien connecté à Internet");
         alertBuilder.show();
     }
 }
