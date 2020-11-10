@@ -8,6 +8,7 @@ import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.GestionFacture;
+import com.jde.skillbill.donnees.APIRest.SourceDonneesAPIRest;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
@@ -24,7 +25,7 @@ public class ActivityVoirUnGroupe extends AppCompatActivity {
 
         VueVoirUnGroupe vueVoirUnGroupe= new VueVoirUnGroupe();
         Modele modele= new Modele();
-        ISourceDonnee iSourceDonnee = new SourceDonneesMock();
+        ISourceDonnee iSourceDonnee = new SourceDonneesAPIRest();
 
         IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe presenteurVoirUnGroupe =new PresenteurVoirUnGroupe(modele, vueVoirUnGroupe,
                 this, new GestionGroupes(iSourceDonnee), new GestionFacture(iSourceDonnee), new GestionUtilisateur(iSourceDonnee));

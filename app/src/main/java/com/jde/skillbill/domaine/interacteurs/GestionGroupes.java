@@ -22,10 +22,8 @@ public class GestionGroupes implements IGestionGroupes {
     @Override
     public Groupe creerGroupe(String nom, Utilisateur utilisateurCreateur, Monnaie monnaieAUtiliserDansLeGroupe) {
         Groupe groupe= new Groupe(nom, utilisateurCreateur, monnaieAUtiliserDansLeGroupe);
-
-        if(sourceDonnee.creerGroupeParUtilisateur(utilisateurCreateur,groupe)){
-            return new Groupe(nom, utilisateurCreateur, monnaieAUtiliserDansLeGroupe);
-        }else return null;
+        Groupe groupeCree =  sourceDonnee.creerGroupeParUtilisateur(utilisateurCreateur,groupe);
+         return groupeCree;
     }
 
     /**

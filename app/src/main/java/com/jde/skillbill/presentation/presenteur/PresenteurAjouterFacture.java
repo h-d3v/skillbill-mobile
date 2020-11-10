@@ -33,8 +33,6 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
     private static final String IMAGE ="com.jde.skillbill.BitmapImage";
-    private final int position;
-
     private final Utilisateur utilisateurConnecte;
     private final Groupe groupe;
     private final IGestionFacture iGestionFacture;
@@ -52,14 +50,13 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         this.activityAjouterFacture = activityAjouterFacture;
         this.vueAjouterFacture = vueAjouterFacture;
         this.modele = modele;
-        utilisateurConnecte=new Utilisateur("", activityAjouterFacture.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD);
+        utilisateurConnecte=(Utilisateur) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_ID_UTILISATEUR);
         this.iGestionFacture = gestionFacture;
         this.iGestionUtilisateur = gestionUtilisateur;
         this.iGestionGroupes = gestionGroupes;
         modele.setUtilisateurConnecte(utilisateurConnecte);
-        position=activityAjouterFacture.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1);
-        modele.setGroupesAbonnesUtilisateurConnecte(gestionUtilisateur.trouverGroupesAbonne(utilisateurConnecte));
-        groupe = modele.getListGroupeAbonneUtilisateurConnecte().get(position);
+        groupe=(Groupe) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_GROUPE_POSITION);
+
 
 
 
@@ -137,10 +134,8 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     @Override
     public void redirigerVersListeFactures(){
         Intent intent = new Intent(activityAjouterFacture, ActivityVoirUnGroupe.class);
-        intent.putExtra(EXTRA_GROUPE_POSITION, position);
-        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
-        intent.putExtra("com.jde.skillbill.utlisateur_identifiant", modele.getUtilisateurConnecte().getCourriel());
-        intent.putExtra("com.jde.skillbill.groupe_identifiant", activityAjouterFacture.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, -1));
+        intent.putExtra(EXTRA_GROUPE_POSITION, groupe);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
 
         activityAjouterFacture.startActivity(intent);
 
@@ -152,7 +147,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     public void prendrePhoto() {
         Intent prendrePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try { //TODO verifier que l'appareil est capable de prendre des photos
-            prendrePhotoIntent.putExtra(EXTRA_GROUPE_POSITION, position);
+            prendrePhotoIntent.putExtra(EXTRA_GROUPE_POSITION, groupe);
             activityAjouterFacture.startActivityForResult(prendrePhotoIntent, REQUETE_PRENDRE_PHOTO );
         }catch (ActivityNotFoundException e){
             //TODO

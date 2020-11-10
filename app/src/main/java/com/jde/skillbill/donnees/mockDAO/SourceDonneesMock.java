@@ -60,7 +60,7 @@ public class SourceDonneesMock implements ISourceDonnee{
     }
 
     @Override
-    public  boolean creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) {
+    public  Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) {
         if(utilisateurGroupeHashMap.get(utilisateur)==null && !utilisateurGroupeHashMap.containsKey(utilisateur)) {
             utilisateurGroupeHashMap.put(utilisateur,new ArrayList<Groupe>());
 
@@ -68,8 +68,8 @@ public class SourceDonneesMock implements ISourceDonnee{
         ArrayList<Utilisateur> utilisateurs = new ArrayList<>();
         utilisateurs.add(utilisateur);
         groupeUtilisateursHashmap.put(groupe, utilisateurs );
-
-        return utilisateurGroupeHashMap.get(utilisateur).add(groupe);
+        utilisateurGroupeHashMap.get(utilisateur).add(groupe);
+        return utilisateurGroupeHashMap.get(utilisateur).get(utilisateurGroupeHashMap.get(utilisateur).size()) ;
     }
 
     @Override

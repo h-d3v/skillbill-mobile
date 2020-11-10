@@ -37,12 +37,12 @@ public class GestionGroupesTest {
 
     @Test
     public void TestcreerGroupeReussi() {
-        when(iSourceDonnee.creerGroupeParUtilisateur(utilisateurCobaye,groupeCobaye)).thenReturn(true);
+        when(iSourceDonnee.creerGroupeParUtilisateur(utilisateurCobaye,groupeCobaye)).thenReturn(groupeCobaye);
         assertEquals(gestionGroupes.creerGroupe("le nom",utilisateurCobaye, Monnaie.CAD),groupeCobaye);
     }
     @Test
     public void TestcreerGroupeEchoue() {
-        when(iSourceDonnee.creerGroupeParUtilisateur(utilisateurCobaye,groupeCobaye)).thenReturn(false);
+        when(iSourceDonnee.creerGroupeParUtilisateur(utilisateurCobaye,groupeCobaye)).thenReturn(new Groupe("safasasddsa", null, null));
         assertEquals(gestionGroupes.creerGroupe("le nom",utilisateurCobaye, Monnaie.CAD),null);
     }
 

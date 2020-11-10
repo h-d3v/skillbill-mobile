@@ -43,6 +43,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     private Thread filEsclave;
     private ISourceDonnee sourceDonnee;
     private static final int MSG_GET_GROUPES=1;
+    private static final int MSG_GET_FACTURE=3;
     private static final int REQUETE_PRENDRE_PHOTO= 2;
 
 
@@ -66,6 +67,9 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
                     modele.setSoldeParPosition(((Modele) msg.obj).getSoldeParPosition());
                     modele.setGroupesAbonnesUtilisateurConnecte((((Modele) msg.obj).getListGroupeAbonneUtilisateurConnecte()));
                     vueVoirGroupes.rafraichir();
+                }
+                if(msg.what == MSG_GET_FACTURE){
+
                 }
 
             }
@@ -131,14 +135,15 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     @Override
     public void commencerVoirUnGroupeActivite(int position) {
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
-        intent.putExtra(EXTRA_GROUPE_POSITION, position);
+        intent.putExtra(EXTRA_GROUPE_POSITION, modele.getListGroupeAbonneUtilisateurConnecte().get(position) );
         intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
         activity.startActivity(intent);
     }
 
     @Override
     public String getMessageSoldeParPosition(int position){
-        if(modele.getSoldeParPosition().length ==0 || position>= modele.getSoldeParPosition().length) return "";
+      //TODO solution de contournement
+        if(modele==null || modele.getSoldeParPosition()==null || modele.getSoldeParPosition().length ==0 || position>= modele.getSoldeParPosition().length) return "";
         return modele.getSoldeParPosition()[position];
     }
 
@@ -156,7 +161,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     @Override
     public void commencerAjouterFactureActivite(int position) {
         Intent intent = new Intent(activity, ActivityAjouterFacture.class);
-        intent.putExtra(EXTRA_GROUPE_POSITION, position);
+        intent.putExtra(EXTRA_GROUPE_POSITION, modele.getListGroupeAbonneUtilisateurConnecte().get(position));
         intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
         activity.startActivity(intent);
     }

@@ -1,13 +1,17 @@
 package com.jde.skillbill.domaine.entites;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.time.LocalDate;
 import java.util.Map;
 
 
 public class Facture {
+
     private  LocalDate dateFacture;
     private  String uriImageFacture;
     private  Map<Utilisateur, Double> montantPayeParParUtilisateur;
+    @SerializedName("Nom")
     private String libelle;
 
     //Constructeur de test
@@ -49,5 +53,13 @@ public class Facture {
 
     public String getLibelle() {
         return libelle;
+    }
+
+    public double getMontantTotal(){
+        double somme=0;
+        for(Utilisateur utilisateur : montantPayeParParUtilisateur.keySet()){
+            somme+=montantPayeParParUtilisateur.get(montantPayeParParUtilisateur);
+        }
+        return somme;
     }
 }

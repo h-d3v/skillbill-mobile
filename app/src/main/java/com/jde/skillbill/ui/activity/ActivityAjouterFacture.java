@@ -11,6 +11,7 @@ import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.GestionFacture;
+import com.jde.skillbill.donnees.APIRest.SourceDonneesAPIRest;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.presenteur.PresenteurAjouterFacture;
@@ -24,7 +25,7 @@ public class ActivityAjouterFacture extends AppCompatActivity {
         setContentView(R.layout.activite_ajouter_facture);
         VueAjouterFacture vueAjouterFacture= new VueAjouterFacture();
         Modele modele= new Modele();
-        ISourceDonnee sourceDonnee = new SourceDonneesMock();
+        ISourceDonnee sourceDonnee = new SourceDonneesAPIRest();
         PresenteurAjouterFacture presenteurAjouterFacture= new PresenteurAjouterFacture(this, vueAjouterFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
         vueAjouterFacture.setPresenteur(presenteurAjouterFacture);
 

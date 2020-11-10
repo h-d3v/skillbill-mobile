@@ -30,6 +30,7 @@ public class PresenteurCreerGroupeTest {
         final VueCreerGroupe _vue = mock(VueCreerGroupe.class);
         final PresenteurCreerGroupe _presenteur=mock(PresenteurCreerGroupe.class);
         final Utilisateur utilisateur = new Utilisateur("Al","bonemail","bonMotPasse", Monnaie.CAD);
+        final Groupe groupeCree;
 
         modele.setUtilisateurConnecte(utilisateur);
         when(modele.getUtilisateurConnecte()).thenReturn(utilisateur);

@@ -1,6 +1,9 @@
 package com.jde.skillbill.presentation.presenteur;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.jde.skillbill.R;
@@ -24,15 +27,25 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     public static final int ERREUR_ACCES =0;
     public static final int AJOUT_OK=1;
     public static final int EMAIL_INCONNU=2;
-    Modele modele;
-    VueVoirUnGroupe vueVoirUnGroupe;
-    ActivityVoirUnGroupe activityVoirUnGroupe;
-    IGestionGroupes gestionGroupes;
-    IGestionFacture gestionFacture;
-    IGestionUtilisateur gestionUtilisateur;
-    Groupe groupeEncours;
+
+    private static final int MSG_GET_MEMBRES = 4;
+    private static final int MSG_GET_FACTURES = 5;
+    private static final int MSG_SUPPRIMER_FACTURE = 6;
+    private static final int MSG_AJOUTER_MEMBRES = 7;
+
+
+    private Modele modele;
+    private VueVoirUnGroupe vueVoirUnGroupe;
+    private ActivityVoirUnGroupe activityVoirUnGroupe;
+    private IGestionGroupes gestionGroupes;
+    private IGestionFacture gestionFacture;
+    private IGestionUtilisateur gestionUtilisateur;
+    private Groupe groupeEncours;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
+    private Handler handler;
+    private Thread filEsclave;
+    private List<Facture> facturesGroupe; //Ajouter au modele
 
 
     /**
@@ -44,6 +57,8 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
      * @param gestionFacture
      * @param gestionUtilisateur
      */
+
+    @SuppressLint("HandlerLeak")
     public PresenteurVoirUnGroupe(Modele modele, VueVoirUnGroupe vueVoirUnGroupe, ActivityVoirUnGroupe activityVoirUnGroupe, IGestionGroupes gestionGroupes, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur) {
         this.modele = modele;
         this.vueVoirUnGroupe = vueVoirUnGroupe;
@@ -52,11 +67,41 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         this.gestionFacture = gestionFacture;
         this.gestionUtilisateur = gestionUtilisateur;
 
-        modele.setUtilisateurConnecte(new Utilisateur("", activityVoirUnGroupe.getIntent().getStringExtra(EXTRA_ID_UTILISATEUR),null, Monnaie.CAD));
-        modele.setGroupesAbonnesUtilisateurConnecte(gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte()));
-        groupeEncours= modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION,-1));
-        groupeEncours.setUtilisateurs(gestionGroupes.trouverTousLesUtilisateurs(groupeEncours));
+        modele.setUtilisateurConnecte( (Utilisateur) activityVoirUnGroupe.getIntent().getSerializableExtra(EXTRA_ID_UTILISATEUR));
+        groupeEncours= (Groupe) activityVoirUnGroupe.getIntent().getSerializableExtra(EXTRA_GROUPE_POSITION);
 
+        handler =  new Handler() {
+
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                filEsclave = null;
+                if(msg.what == MSG_GET_MEMBRES){
+                    groupeEncours.setUtilisateurs((List<Utilisateur>) msg.obj);
+                    vueVoirUnGroupe.rafraichir();
+                }
+                if(msg.what == MSG_GET_FACTURES){
+                    facturesGroupe = (List<Facture>) msg.obj;
+                    vueVoirUnGroupe.rafraichir();
+                }
+            }
+        };
+        chargerMembres();
+        chargerFacturesGroupe();
+
+
+    }
+
+    private void chargerMembres(){
+        filEsclave = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message message = handler.obtainMessage(MSG_GET_MEMBRES);
+                message.obj = gestionGroupes.trouverTousLesUtilisateurs(groupeEncours);
+                handler.sendMessage(message);
+            }
+        });
+        filEsclave.start();
 
     }
 
@@ -67,6 +112,8 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
      */
     @Override
     public String getMembresGroupe() {
+
+
         if(groupeEncours.getUtilisateurs()==null || groupeEncours.getUtilisateurs().size()<1) return null;
         String noms="";
         for(Utilisateur utilisateur : groupeEncours.getUtilisateurs() ){
@@ -84,8 +131,8 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
      * @return true si le groupe ne contient qu'un seul utilisateur
      */
     public boolean isGroupeSolo(){
-        if( gestionGroupes.trouverTousLesUtilisateurs(groupeEncours)==null) return false;
-        return  gestionGroupes.trouverTousLesUtilisateurs(groupeEncours).size()<=1;
+        if( groupeEncours.getUtilisateurs()==null) return false;
+        return  groupeEncours.getUtilisateurs().size()<=1;
     }
 
 
@@ -122,11 +169,17 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
      *
      * @return factures du groupes
      */
-    public List<Facture> getFacturesGroupe(){
-
-        //return groupeEncours.getFactures();
-
-        return gestionGroupes.trouverToutesLesFactures(modele.getListGroupeAbonneUtilisateurConnecte().get(activityVoirUnGroupe.getIntent().getIntExtra(EXTRA_GROUPE_POSITION, -1)));
+    public void chargerFacturesGroupe(){
+        filEsclave = new Thread(new Runnable() {
+            @Override
+            public void run() {
+              List<Facture> factures =  gestionGroupes.trouverToutesLesFactures(groupeEncours);
+              Message message = handler.obtainMessage(MSG_GET_FACTURES);
+              message.obj=factures;
+              handler.sendMessage(message);
+            }
+        });
+        filEsclave.start();
 
     }
 
@@ -135,10 +188,11 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
      * @param posFacture dans le rv
      * @return montant qu'a payer l'utilisateur dans la facture
      */
-    //TODO faire en sorte que ce montant reflete ce que l'utilisateur dois payer et non ce qu'il a deja payer
+
     //@Override
     public double getMontantFacturePayerParUser(int posFacture) {
-        return this.getFacturesGroupe().get(posFacture).getMontantPayeParParUtilisateur().get(modele.getUtilisateurConnecte());
+        if(facturesGroupe==null) return 0;
+        return facturesGroupe.get(posFacture).getMontantTotal();
     }
 
 
@@ -151,7 +205,13 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     //@Override
     public void requeteSupprimerFacture(int position) {
         vueVoirUnGroupe.rafraichir();
-        this.getFacturesGroupe().remove(position);
+
+        this.facturesGroupe.remove(position);
+    }
+
+
+    public List<Facture> getFacturesGroupe(){
+        return facturesGroupe;
     }
 
 

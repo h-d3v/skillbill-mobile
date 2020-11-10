@@ -5,6 +5,8 @@ import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 
+import java.util.List;
+
 
 public class GroupeRestApi extends Groupe {
 
@@ -12,6 +14,12 @@ public class GroupeRestApi extends Groupe {
     int id;
     @SerializedName("Monnaie")
     int monnaie;
+    @SerializedName("UtilisateursAbonnes")
+    List<UtilisateurRestAPI> utilisateursRestApi;
+    @SerializedName("DateCreation")
+    String date;
+
+
 
     public GroupeRestApi(String nomGroupe, Utilisateur utilisateurCreateurGroupe, Monnaie monnaieDuGroupe, int id) {
         super(nomGroupe, utilisateurCreateurGroupe, monnaieDuGroupe);
@@ -34,6 +42,22 @@ public class GroupeRestApi extends Groupe {
         this.monnaie = monnaie;
     }
 
+    public List<UtilisateurRestAPI> getUtilisateursRestApi() {
+        return utilisateursRestApi;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
 
+
+    public void setUtilisateursRestApi(List<UtilisateurRestAPI> utilisateurs) {
+        this.utilisateursRestApi = utilisateurs;
+        super.setUtilisateurs( (List<Utilisateur>) (List<? extends Utilisateur>) utilisateurs);
+    }
 }

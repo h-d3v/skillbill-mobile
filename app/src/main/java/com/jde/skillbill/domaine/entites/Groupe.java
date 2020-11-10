@@ -1,18 +1,18 @@
 package com.jde.skillbill.domaine.entites;
 
 import com.google.gson.annotations.SerializedName;
+import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class Groupe {
+public class Groupe implements Serializable {
     @SerializedName("Nom")
     private String nomGroupe;
-    @SerializedName("DateCreation")
     private Date dateCreation;
-    @SerializedName("UtilisateursAbonnes")
     private List<Utilisateur> utilisateurs;
     @SerializedName("factures")
     private List<Facture> factures;

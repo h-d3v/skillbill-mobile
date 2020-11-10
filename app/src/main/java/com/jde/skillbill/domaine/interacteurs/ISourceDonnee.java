@@ -16,7 +16,7 @@ public interface ISourceDonnee {
     Utilisateur lireUtilisateur(String email);
     Utilisateur creerUtilisateur(Utilisateur utilisateur);
     Utilisateur tenterConnexion(String email, String mdp);
-    boolean creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) ;
+    Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) ;
     List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur);
     List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe);
 

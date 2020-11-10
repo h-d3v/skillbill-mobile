@@ -9,7 +9,9 @@ import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
+import com.jde.skillbill.donnees.APIRest.entites.FactureRestAPI;
 import com.jde.skillbill.donnees.APIRest.entites.GroupeRestApi;
+import com.jde.skillbill.donnees.APIRest.entites.PayeursEtMontant;
 import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 
 import org.json.JSONException;
@@ -40,15 +42,77 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
     @Override
     public List<Facture> lireFacturesParGroupe(Groupe groupe) {
+        URL url = null;
+        Utilisateur utilisateur = null;
+        try {
+            url = new URL(URI_BASE + "utilisateurs/0/groupes/" + ((GroupeRestApi) groupe).getId() + "/factures");
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI: ", e.toString());
+        }
+        try {
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            Gson gson = new Gson();
+            if (httpURLConnection.getResponseCode() == 200) {
+                InputStreamReader inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+
+                FactureRestAPI[] factureRestAPIS = gson.fromJson(inputStreamReader, FactureRestAPI[].class);
+                List<Facture> factureRestAPIS1 = new ArrayList<>();
+                if (factureRestAPIS != null) {
+                    factureRestAPIS1.addAll(Arrays.asList(factureRestAPIS));
+                    return factureRestAPIS1;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
-    @Override
+        @Override
     public boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) {
+            URL url = null;
+            try {
+                url = new URL(URI_BASE+"Factures");
+            } catch (MalformedURLException e) {
+                Log.e("SOurceDonneAPI: ", e.toString());
+            }
+            HttpURLConnection httpURLConnection= null;
+            try {
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setDoInput(true);
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                Log.e("localeDate", localDate.toString());
+                Log.e("localeDate", String.valueOf(localDate));
+                Gson gson = new GsonBuilder().create();
+                FactureRestAPI factureRestAPI = new FactureRestAPI(localDate.toString(), ((GroupeRestApi)groupe).getId(), montantTotal, ((UtilisateurRestAPI) utilisateurPayeur).getId());
+                factureRestAPI.setLibelle(titre);
+                List<PayeursEtMontant> payeursEtMontant  = new ArrayList<>();
+                payeursEtMontant.add( new PayeursEtMontant(((UtilisateurRestAPI)utilisateurPayeur).getId() ,montantTotal));
+
+                factureRestAPI.setPayeursEtMontantsListe(payeursEtMontant);
+                String json = gson.toJson(factureRestAPI);
+                Log.e("json", json);
+                byte[] input = json.getBytes(StandardCharsets.UTF_8);
+                outputStream.write(input, 0,input.length);
+
+                if(httpURLConnection.getResponseCode()==200){
+                    InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                    if (inputStreamReader.toString().equals("true"))return true;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
         return false;
     }
 
-    @Override
+    @Override    //NO GOOD TODO
     public Utilisateur lireUtilisateur(String email) {
         URL url = null;
         Utilisateur utilisateur=null;
@@ -58,6 +122,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             Log.e("SOurceDonneAPI: ", e.toString());
         }
         try {
+           //NO GOOD
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Accept", "application/json; utf-8");
@@ -97,7 +162,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
-            httpURLConnection.setRequestProperty("User-agent", "Skillbill android");
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
             OutputStream outputStream = httpURLConnection.getOutputStream();
@@ -123,7 +187,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     }
 
     @Override
-    public boolean creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) {
+    public Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) {
         URL url = null;
 
 
@@ -138,18 +202,18 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
-            httpURLConnection.setRequestProperty("User-agent", "Skillbill android");
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
             OutputStream outputStream = httpURLConnection.getOutputStream();
             Gson gson = new GsonBuilder().create();
-            String json = gson.toJson(new GroupeRestApi(groupe.getNomGroupe(), null, groupe.getMonnaieDuGroupe(), 0));
+            String json = gson.toJson(new GroupeRestApi(groupe.getNomGroupe(), utilisateur, groupe.getMonnaieDuGroupe(), 0));
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
 
             if(httpURLConnection.getResponseCode()==200){
-
-                return httpURLConnection.getResponseMessage().equals("true");
+                InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                GroupeRestApi groupeRestApi =gson.fromJson(inputStreamReader, GroupeRestApi.class);
+                return groupeRestApi;
             }
 
         }
@@ -158,7 +222,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             }
 
 
-        return false;
+        return null;
     }
 
     @Override
@@ -183,9 +247,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 }
 
             }
-
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -193,8 +254,33 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     }
 
     @Override
-    public List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe) {
-        return null;
+    public List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe)
+    {
+        URL url = null;
+        try {
+
+            url = new URL(URI_BASE+POINT_ENTREE_UTILISATEUR+"/0/groupes/"+((GroupeRestApi)groupe).getId());
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI : ", e.toString());
+        }
+        List<Utilisateur> utilisateursMembres= new ArrayList<Utilisateur>();
+        try{
+            HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
+            Gson gson = new Gson();
+            if(httpURLConnection.getResponseCode()==200){
+                InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                GroupeRestApi groupeRestApi = gson.fromJson(inputStreamReader, GroupeRestApi.class);
+                for(UtilisateurRestAPI utilisateur : groupeRestApi.getUtilisateursRestApi()){
+                    UtilisateurRestAPI utilisateurRestAPI = new UtilisateurRestAPI(utilisateur.getNom(),"","", ((UtilisateurRestAPI)utilisateur).getMonnaieUsuelle(),((UtilisateurRestAPI) utilisateur).getId());
+                    utilisateursMembres.add(utilisateurRestAPI);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return utilisateursMembres;
     }
 
     @Override

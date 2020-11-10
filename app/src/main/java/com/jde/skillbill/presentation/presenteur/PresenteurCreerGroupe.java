@@ -33,6 +33,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
     private final Handler handlerReponse;
     private static final int MSG_GROUPE_CREER_REUSSI = 0;
     private static final int MSG_ERREUR = 1;
+    private Groupe groupeCree;
 
 
     @SuppressLint("HandlerLeak")
@@ -52,10 +53,10 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
                 super.handleMessage(msg);
                 filEsclave = null;
                 if (msg.what == MSG_GROUPE_CREER_REUSSI) {
+                    groupeCree = (Groupe) msg.obj;
                     redirigerVersGroupeCreer();
 
                 } else if (msg.what == MSG_ERREUR) {
-                    //TODO impleter lors de l'api
                 }
             }
         };
@@ -76,7 +77,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
 
             if (groupeACreer != null) {
 
-                msg = handlerReponse.obtainMessage(MSG_GROUPE_CREER_REUSSI);
+                msg = handlerReponse.obtainMessage(MSG_GROUPE_CREER_REUSSI, groupeACreer);
             } else {
                 msg = handlerReponse.obtainMessage(MSG_ERREUR);
             }
@@ -91,12 +92,10 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
      */
     @Override
     public void redirigerVersGroupeCreer() {
-        IGestionUtilisateur gestionUtilisateur = new GestionUtilisateur(new SourceDonneesMock());
 
-        //redirection vers ses groupes
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
-        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte().getCourriel());
-        intent.putExtra(EXTRA_GROUPE_POSITION, gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte()).size() - 1);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
+        intent.putExtra(EXTRA_GROUPE_POSITION, groupeCree);
         activity.startActivity(intent);
 
         //Pour eviter de retourner a l'activite de creation.
