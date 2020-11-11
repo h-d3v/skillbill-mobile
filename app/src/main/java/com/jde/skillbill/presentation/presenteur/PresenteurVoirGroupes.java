@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ImageView;
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.R;
@@ -89,6 +90,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
 
                 List<Groupe> groupes= gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte());
                 modele.setGroupesAbonnesUtilisateurConnecte(groupes);
+
 
                 if(groupes!=null){
                     int position= 0;

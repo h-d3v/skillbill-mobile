@@ -2,11 +2,12 @@ package com.jde.skillbill.domaine.entites;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Map;
 
 
-public class Facture {
+public class Facture implements Serializable {
 
     private  LocalDate dateFacture;
     private  String uriImageFacture;
@@ -45,6 +46,7 @@ public class Facture {
 
     public void setMontantPayeParParUtilisateur(Map<Utilisateur, Double> soldeParUtilisateur) {
         this.montantPayeParParUtilisateur = soldeParUtilisateur;
+
     }
 
     public void setLibelle(String libelle) {

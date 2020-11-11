@@ -31,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
@@ -57,8 +58,19 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
                 FactureRestAPI[] factureRestAPIS = gson.fromJson(inputStreamReader, FactureRestAPI[].class);
                 List<Facture> factureRestAPIS1 = new ArrayList<>();
-                if (factureRestAPIS != null) {
+                if(factureRestAPIS!=null){
+                    //Ajouter dans l'obljet facture les montants payés par les utilisateurs  TODO: si possible daqns les entités REST
+                    HashMap<Utilisateur, Double> utilisateurMontantMap = new HashMap<>();
+                    for(FactureRestAPI factureRestAPI :factureRestAPIS) {
+                        for (PayeursEtMontant payeursEtMontant : factureRestAPI.getPayeursEtMontantsListe()) {
+                            utilisateurMontantMap.put(new UtilisateurRestAPI(payeursEtMontant.getIdPayeur()), payeursEtMontant.getMontantPaye());
+                        }
+                    }
                     factureRestAPIS1.addAll(Arrays.asList(factureRestAPIS));
+                    for(Facture facture : factureRestAPIS1){
+                        facture.setMontantPayeParParUtilisateur(utilisateurMontantMap);
+                    }
+
                     return factureRestAPIS1;
                 }
             }

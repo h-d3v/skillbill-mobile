@@ -1,10 +1,12 @@
 package com.jde.skillbill.donnees.APIRest.entites;
 
+
 import com.google.gson.annotations.SerializedName;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +40,12 @@ public class FactureRestAPI extends Facture {
 
     public void setPayeursEtMontantsListe(List<PayeursEtMontant> payeursEtMontantsListe) {
         this.payeursEtMontantsListe = payeursEtMontantsListe;
+        HashMap<Utilisateur, Double> utilisateurMontantMap = new HashMap<>();
+
+            for (PayeursEtMontant payeursEtMontant :payeursEtMontantsListe) {
+                utilisateurMontantMap.put(new UtilisateurRestAPI(payeursEtMontant.getIdPayeur()), payeursEtMontant.getMontantPaye());
+            }
+            super.setMontantPayeParParUtilisateur(utilisateurMontantMap);
     }
 
     public String getDate() {

@@ -15,6 +15,10 @@ public class UtilisateurRestAPI extends Utilisateur {
 
     }
 
+    public UtilisateurRestAPI(int idPayeur) {
+        id=idPayeur;
+    }
+
     public int getId() {
         return id;
     }
