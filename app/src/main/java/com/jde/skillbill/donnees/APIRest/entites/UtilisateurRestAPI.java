@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 
+import java.util.Objects;
+
 public class UtilisateurRestAPI extends Utilisateur {
     @SerializedName("Id")
     int id;
@@ -27,6 +29,8 @@ public class UtilisateurRestAPI extends Utilisateur {
         this.id = id;
     }
 
-
-  
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

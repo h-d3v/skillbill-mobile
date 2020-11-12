@@ -74,17 +74,27 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 FactureRestAPI[] factureRestAPIS = gson.fromJson(inputStreamReader, FactureRestAPI[].class);
                 List<Facture> factureRestAPIS1 = new ArrayList<>();
                 if(factureRestAPIS!=null){
-                    //Ajouter dans l'obljet facture les montants payés par les utilisateurs  TODO: si possible daqns les entités REST
-                    HashMap<Utilisateur, Double> utilisateurMontantMap = new HashMap<>();
+
                     for(FactureRestAPI factureRestAPI :factureRestAPIS) {
-                        for (PayeursEtMontant payeursEtMontant : factureRestAPI.getPayeursEtMontantsListe()) {
+                        HashMap<Utilisateur, Double> utilisateurMontantMap = new HashMap<>();
+
+                        for(PayeursEtMontant payeursEtMontant : factureRestAPI.getPayeursEtMontantsListe()){
+                         //   Log.e("nom", String.valueOf(payeursEtMontant.getIdPayeur()));
+                         //   Log.e("Montant", String.valueOf(payeursEtMontant.getMontantPaye()));
                             utilisateurMontantMap.put(new UtilisateurRestAPI(payeursEtMontant.getIdPayeur()), payeursEtMontant.getMontantPaye());
+                        }
+                        for(UtilisateurRestAPI utilisateurRestAPI : ((GroupeRestApi) groupe).getUtilisateursRestApi()){
+                            //   Log.e("nom", String.valueOf(utilisateurRestAPI.getId()));
+                            utilisateurMontantMap.putIfAbsent(utilisateurRestAPI,0.0);
+                        }
+                        factureRestAPI.setMontantPayeParParUtilisateur(utilisateurMontantMap);
+
+                        for(Utilisateur utilisateur1 : factureRestAPI.getMontantPayeParParUtilisateur().keySet()){
+                            Log.e("nom", String.valueOf(((UtilisateurRestAPI)utilisateur1).getId()));
+                            Log.e("Montant", String.valueOf(factureRestAPI.getMontantPayeParParUtilisateur().get(((UtilisateurRestAPI)utilisateur1))));
                         }
                     }
                     factureRestAPIS1.addAll(Arrays.asList(factureRestAPIS));
-                    for(Facture facture : factureRestAPIS1){
-                        facture.setMontantPayeParParUtilisateur(utilisateurMontantMap);
-                    }
 
                     return factureRestAPIS1;
                 }
@@ -112,8 +122,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 httpURLConnection.setDoOutput(true);
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
-                Log.e("localeDate", localDate.toString());
-                Log.e("localeDate", String.valueOf(localDate));
                 Gson gson = new GsonBuilder().create();
                 FactureRestAPI factureRestAPI = new FactureRestAPI(localDate.toString(), ((GroupeRestApi)groupe).getId(), montantTotal, ((UtilisateurRestAPI) utilisateurPayeur).getId());
                 factureRestAPI.setLibelle(titre);
@@ -345,12 +353,12 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         } catch (MalformedURLException e) {
             Log.e("SOurceDonneAPI : ", e.toString());
         }
-        Log.e("url",url.toString());
+
         HttpURLConnection httpURLConnection= null;
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
-            Log.e("response", String.valueOf(httpURLConnection.getResponseCode()));
+
             if(httpURLConnection.getResponseCode()==200){
                 InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);

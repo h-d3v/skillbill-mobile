@@ -1,7 +1,9 @@
 package com.jde.skillbill.domaine.interacteurs;
 
+import android.util.Log;
 import com.jde.skillbill.domaine.entites.*;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
+import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 
 import java.util.List;
 
@@ -93,6 +95,7 @@ public class GestionGroupes implements IGestionGroupes {
 
             nbrUtilisateurSurLaFacture = 0;
             for (Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()) {
+               // Log.e(String.valueOf(((UtilisateurRestAPI)utilisateur).getId()), String.valueOf(facture.getMontantPayeParParUtilisateur().get(utilisateur)));
                 total += facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 nbrUtilisateurSurLaFacture++;
                 if (utilisateur.equals(utilisateurConcerne)) {
