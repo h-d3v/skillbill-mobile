@@ -46,6 +46,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
     private TabLayout tabLayout;
    private TextView detailMembres;
    private Button ajouterMembre;
+   private View racine;
 
     RecyclerView rvFactures;
     RvVoirFactureAdapter rvFacturesAdapter;
@@ -53,7 +54,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View racine = inflater.inflate(R.layout.frag_voir_un_groupe, container, false);
+        racine = inflater.inflate(R.layout.frag_voir_un_groupe, container, false);
         ajouterMembre = racine.findViewById(R.id.btnAjouter);
         detailMembres = racine.findViewById(R.id.detailMembres);
         detailMembres.setVisibility(View.INVISIBLE);
@@ -115,14 +116,8 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
 
             builder.setPositiveButton(getString(R.string.ajouter), (dialogInterface, i) -> {
 
-                int code = _presenteur.ajouterUtilisateurAuGroupe(champsCourriel.getText().toString());
-                if(_presenteur.AJOUT_OK==code){
-                    detailMembres.setText(getString(R.string.membres_dans_le_groupe)+_presenteur.getMembresGroupe());
-                }else if(_presenteur.EMAIL_INCONNU==code){
-                    Toast.makeText(racine.getContext(), getString(R.string.email_inconnu), Toast.LENGTH_LONG).show();
-                }else if(_presenteur.ERREUR_ACCES==code){
-                    Toast.makeText(racine.getContext(), getString(R.string.email_deja_dans_groupe), Toast.LENGTH_LONG).show();
-                }
+                 _presenteur.ajouterUtilisateurAuGroupe(champsCourriel.getText().toString());
+
             });
             builder.setNeutralButton(getString(R.string.Inviter), (dialogInterface, i) -> _presenteur.envoyerCourriel(champsCourriel.getText().toString()));
 
@@ -170,6 +165,18 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
 
     public void setPresenteur(IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe presenteur) {
         _presenteur = (PresenteurVoirUnGroupe) presenteur;
+    }
+
+    public void setVueAjouterMembres(int code){
+
+        if(_presenteur.AJOUT_OK==code){
+            detailMembres.setText(getString(R.string.membres_dans_le_groupe)+_presenteur.getMembresGroupe());
+        }else if(_presenteur.EMAIL_INCONNU==code){
+            Toast.makeText(racine.getContext(), getString(R.string.email_inconnu), Toast.LENGTH_LONG).show();
+        }else if(_presenteur.ERREUR_ACCES==code){
+            Toast.makeText(racine.getContext(), getString(R.string.email_deja_dans_groupe), Toast.LENGTH_LONG).show();
+        }
+
     }
 
    // @Override

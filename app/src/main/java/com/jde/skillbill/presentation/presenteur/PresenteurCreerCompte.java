@@ -1,17 +1,19 @@
 package com.jde.skillbill.presentation.presenteur;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 
 import android.os.Handler;
 import android.os.Message;
 
-import android.util.Log;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.presentation.IContratVPCreerCompte;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueCreerCompte;
+
+import java.util.Objects;
 
 
 public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCreerCompte {
@@ -30,7 +32,8 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
     };
 
 
-    public PresenteurCreerCompte(Activity activite,Modele modele, VueCreerCompte vueCreerCompte) {
+    @SuppressLint("HandlerLeak")
+    public PresenteurCreerCompte(Activity activite, Modele modele, VueCreerCompte vueCreerCompte) {
         _activite=activite;
         _modele = modele;
         _vueCreerCompte=vueCreerCompte;
@@ -45,7 +48,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
                     _vueCreerCompte.afficherCompteCreer(utilisateurCree.getNom(), utilisateurCree.getCourriel(), utilisateurCree.getMonnaieUsuelle());
                 }
                 else if(msg.what==MESSAGE.ERREUR){
-                    //TODO Sera implementé lors de l'implémentation de la source API
+                    _vueCreerCompte.afficherErreurConnection();
                 }
                 else if(msg.what==MESSAGE.EMAIL_DEJA_PRIS){
                     _vueCreerCompte.afficherEmailDejaPrit();
@@ -67,20 +70,21 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
     @Override
     public void creerCompte() {
         filEsclave = new Thread(() -> {
-            Message msg = null;
+            Message msg=null;
             GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
-            boolean emailDejaPris=gestionUtilisateur.utilisateurExiste( _vueCreerCompte.getEmail());
 
-            if(emailDejaPris){
-                msg = handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
-            }
-            else {
                 Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
-                if(utilisateurCreer!=null){
+                if(utilisateurCreer==null){
+                    msg=handler.obtainMessage(MESSAGE.ERREUR);
+                }
+                else if(!utilisateurCreer.getCourriel().equals("-1")){
                     msg=handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE,utilisateurCreer);
                 }
-                else msg=handler.obtainMessage(MESSAGE.ERREUR);
-            }
+                else if(utilisateurCreer.getCourriel().equals("-1")){
+                    msg=handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
+                }
+
+
 
             handler.sendMessage(msg);
         });

@@ -13,7 +13,7 @@ public interface ISourceDonnee {
 
     boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre);
 
-    Utilisateur lireUtilisateur(String email);
+    boolean utilisateurExiste(String email);
     Utilisateur creerUtilisateur(Utilisateur utilisateur);
     Utilisateur tenterConnexion(String email, String mdp);
     Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) ;

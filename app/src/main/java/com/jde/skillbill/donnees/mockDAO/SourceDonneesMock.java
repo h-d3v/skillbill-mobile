@@ -122,19 +122,18 @@ public class SourceDonneesMock implements ISourceDonnee{
         return estReussi;
     }
 
-
-
-
     @Override
-    public Utilisateur lireUtilisateur(String email) {
-
-            Utilisateur utilisateurALire=null;
-            for (Utilisateur utilisateur:_utilisateurs) {
-                int result=utilisateur.getCourriel().compareTo(email);
-                if (result==0) utilisateurALire=utilisateur;
-            }
-            return utilisateurALire;
+    public boolean utilisateurExiste(String email) {
+        Utilisateur utilisateurALire=null;
+        for (Utilisateur utilisateur:_utilisateurs) {
+            int result=utilisateur.getCourriel().compareTo(email);
+            if (result==0) utilisateurALire=utilisateur;
         }
+        return utilisateurALire!=null;
+    }
+
+
+
 
         //Retourne l'utilisateur tel que recu, pas de persistace pour l'instant
         @Override
