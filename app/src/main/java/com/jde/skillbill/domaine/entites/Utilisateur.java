@@ -94,6 +94,7 @@ public class Utilisateur implements Serializable {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(courriel);
     }
 }
