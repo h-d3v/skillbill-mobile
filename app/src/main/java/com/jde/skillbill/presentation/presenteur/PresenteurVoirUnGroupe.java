@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Facture;
@@ -84,6 +83,15 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
                     facturesGroupe = (List<Facture>) msg.obj;
                     vueVoirUnGroupe.rafraichir();
                 }
+                if(msg.what== AJOUT_OK || msg.what==EMAIL_INCONNU|| msg.what==ERREUR_ACCES){
+
+
+                    vueVoirUnGroupe.setVueAjouterMembres(msg.what);
+                    if(msg.what==AJOUT_OK){
+                        chargerMembres();
+                        vueVoirUnGroupe.rafraichir();
+                    }
+                }
             }
         };
         chargerMembres();
@@ -139,15 +147,29 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     /**
      *
      * @param courriel de l'utilisateur a ajouter
-     * @return int du message, pour le handler
      */
     @Override
-    public int ajouterUtilisateurAuGroupe(String courriel) {
-        if(gestionUtilisateur.utilisateurExiste(courriel)){
-            if(gestionGroupes.ajouterMembre(groupeEncours, new Utilisateur("",courriel, "", Monnaie.CAD))) {
-                return AJOUT_OK;
-            } else return ERREUR_ACCES;
-        } else return EMAIL_INCONNU ;
+    public void ajouterUtilisateurAuGroupe(String courriel) {
+        filEsclave = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                if(gestionUtilisateur.utilisateurExiste(courriel)){
+                    if(gestionGroupes.ajouterMembre(groupeEncours, new Utilisateur("",courriel, "", Monnaie.CAD))) {
+                        Message message = handler.obtainMessage(AJOUT_OK);
+                        handler.sendMessage(message);
+                    } else{
+                        Message message = handler.obtainMessage(ERREUR_ACCES);
+                        handler.sendMessage(message);
+                    }
+                } else{
+                    Message message = handler.obtainMessage(EMAIL_INCONNU);
+                    handler.sendMessage(message);
+                }
+            }
+        });
+        filEsclave.start();
+
     }
 
     /**

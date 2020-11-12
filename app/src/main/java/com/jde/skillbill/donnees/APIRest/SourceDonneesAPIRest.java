@@ -127,27 +127,27 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         return false;
     }
 
-    @Override    //NO GOOD TODO
-    public Utilisateur lireUtilisateur(String email) {
+
+    public boolean utilisateurExiste(String email) {
         URL url = null;
-        Utilisateur utilisateur=null;
+
         try {
-             url = new URL(URI_BASE+POINT_ENTREE_GROUPE);
+             url = new URL(URI_BASE+"register"+"?courriel="+email);
         } catch (MalformedURLException e) {
             Log.e("SOurceDonneAPI: ", e.toString());
         }
+        Log.e("source API", url.toString());
         try {
-           //NO GOOD
+
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setRequestProperty("Accept", "application/json; utf-8");
-            httpURLConnection.setDoOutput(true);
-            OutputStream outputStream = httpURLConnection.getOutputStream();
-            String json = "{\"courriel\": \""+email+"}";
-            byte[] input = json.getBytes("utf-8");
-            outputStream.write(input,0, input.length);
+            httpURLConnection.setRequestMethod("HEAD");
+            httpURLConnection.addRequestProperty("Accept-Encoding", "identity");
+
             if(httpURLConnection.getResponseCode()==200){
-                httpURLConnection.getInputStream();
+                return false;
+            }
+            else if (httpURLConnection.getResponseCode()==409){
+                return true;
             }
 
         } catch (IOException e) {
@@ -155,7 +155,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         }
 
 
-        return null;
+        return false;
     }
 
     @Override
@@ -324,6 +324,36 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
     @Override
     public boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur) {
+
+        URL url = null;
+        try {
+
+            url = new URL(URI_BASE+POINT_ENTREE_GROUPE+((GroupeRestApi) groupe).getId()+"?courriel="+utilisateur.getCourriel());
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI : ", e.toString());
+        }
+        Log.e("url",url.toString());
+        HttpURLConnection httpURLConnection= null;
+        try {
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("POST");
+            Log.e("response", String.valueOf(httpURLConnection.getResponseCode()));
+            if(httpURLConnection.getResponseCode()==200){
+                InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                String sortie;
+                while ((sortie = bufferedReader.readLine())!=null){
+                    stringBuilder.append(sortie);
+                }
+
+                return "true".equals(stringBuilder.toString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         return false;
     }
 

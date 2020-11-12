@@ -41,14 +41,14 @@ public class GestionUtilisateurTest {
 
     @Test
     public void TestUtilisateurExisteQuandUtilisateurExiste() {
-        when(sourceDonnee.lireUtilisateur("emailExiste")).thenReturn(utilisateurCobaye);
+        when(sourceDonnee.utilisateurExiste("emailExiste")).thenReturn(true);
         assertEquals(gestionUtilisateur.utilisateurExiste("emailExiste"), true);
     }
 
     @Test
     public void TestUtilisateurExisteQuandUtilisateurInexistant() {
 
-        when(sourceDonnee.lireUtilisateur("emailInexistant")).thenReturn(null);
+        when(sourceDonnee.utilisateurExiste("emailInexistant")).thenReturn(false);
         assertEquals(gestionUtilisateur.utilisateurExiste("emailInexistant"), false);
     }
 

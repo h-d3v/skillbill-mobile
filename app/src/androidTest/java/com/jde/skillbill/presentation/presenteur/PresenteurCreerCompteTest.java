@@ -22,7 +22,7 @@ public class PresenteurCreerCompteTest {
        final Modele modele = mock(Modele.class);
        final VueCreerCompte vueCreerCompte = mock(VueCreerCompte.class);
        final ISourceDonnee sourceDonnee = mock(ISourceDonnee.class);
-       when(sourceDonnee.lireUtilisateur("email@email.com")).thenReturn(new Utilisateur("","email@email.com","", Monnaie.CAD));
+       when(sourceDonnee.utilisateurExiste("email@email.com")).thenReturn(true);
        when(vueCreerCompte.getEmail()).thenReturn("email@email.com");
 
 
@@ -51,7 +51,7 @@ public class PresenteurCreerCompteTest {
         final Modele modele = mock(Modele.class);
         final VueCreerCompte vueCreerCompte = mock(VueCreerCompte.class);
         final ISourceDonnee sourceDonnee = mock(ISourceDonnee.class);
-        when(sourceDonnee.lireUtilisateur("email@email.com")).thenReturn(null);
+        when(sourceDonnee.utilisateurExiste("email@email.com")).thenReturn(false);
         when(vueCreerCompte.getEmail()).thenReturn("email@email.com");
         when(vueCreerCompte.getNom()).thenReturn("nom");
         when(vueCreerCompte.getPass()).thenReturn("motdepasse");
