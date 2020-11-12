@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 
+import android.util.Log;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -15,6 +16,7 @@ import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 
+import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirUnGroupe;
@@ -122,14 +124,16 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     public String getMembresGroupe() {
 
 
-        if(groupeEncours.getUtilisateurs()==null || groupeEncours.getUtilisateurs().size()<1) return null;
+        if(groupeEncours.getUtilisateurs()==null || groupeEncours.getUtilisateurs().size()<=1) return null;
         String noms="";
-        for(Utilisateur utilisateur : groupeEncours.getUtilisateurs() ){
-            if(!utilisateur.equals(modele.getUtilisateurConnecte())){
+
+        for( Utilisateur utilisateur : groupeEncours.getUtilisateurs() ){
+            if(utilisateur.getNom().equals(modele.getUtilisateurConnecte().getNom())) continue;
                 noms+=utilisateur.getNom();
                 noms+=", ";
-            }
+
         }
+        if(noms.isEmpty()||noms.length()<=2) return null;
         noms=noms.substring(0, noms.length()-2)+".";
         return noms;
     }

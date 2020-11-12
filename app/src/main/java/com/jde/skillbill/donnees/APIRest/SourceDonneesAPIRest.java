@@ -324,6 +324,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 for(UtilisateurRestAPI utilisateur : groupeRestApi.getUtilisateursRestApi()){
                     UtilisateurRestAPI utilisateurRestAPI = new UtilisateurRestAPI(utilisateur.getNom(),"","", ((UtilisateurRestAPI)utilisateur).getMonnaieUsuelle(),((UtilisateurRestAPI) utilisateur).getId());
                     utilisateursMembres.add(utilisateurRestAPI);
+
                 }
             }
         } catch (IOException e) {
