@@ -12,6 +12,7 @@ import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.donnees.APIRest.entites.FactureRestAPI;
 import com.jde.skillbill.donnees.APIRest.entites.GroupeRestApi;
 import com.jde.skillbill.donnees.APIRest.entites.PayeursEtMontant;
@@ -25,13 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.ConnectException;
+import java.net.*;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -79,19 +75,17 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                         HashMap<Utilisateur, Double> utilisateurMontantMap = new HashMap<>();
 
                         for(PayeursEtMontant payeursEtMontant : factureRestAPI.getPayeursEtMontantsListe()){
-                         //   Log.e("nom", String.valueOf(payeursEtMontant.getIdPayeur()));
-                         //   Log.e("Montant", String.valueOf(payeursEtMontant.getMontantPaye()));
+
                             utilisateurMontantMap.put(new UtilisateurRestAPI(payeursEtMontant.getIdPayeur()), payeursEtMontant.getMontantPaye());
                         }
                         for(UtilisateurRestAPI utilisateurRestAPI : ((GroupeRestApi) groupe).getUtilisateursRestApi()){
-                            //   Log.e("nom", String.valueOf(utilisateurRestAPI.getId()));
+
                             utilisateurMontantMap.putIfAbsent(utilisateurRestAPI,0.0);
                         }
                         factureRestAPI.setMontantPayeParParUtilisateur(utilisateurMontantMap);
 
                         for(Utilisateur utilisateur1 : factureRestAPI.getMontantPayeParParUtilisateur().keySet()){
-                            Log.e("nom", String.valueOf(((UtilisateurRestAPI)utilisateur1).getId()));
-                            Log.e("Montant", String.valueOf(factureRestAPI.getMontantPayeParParUtilisateur().get(((UtilisateurRestAPI)utilisateur1))));
+
                         }
                     }
                     factureRestAPIS1.addAll(Arrays.asList(factureRestAPIS));
@@ -193,6 +187,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             Response response = client.newCall(request).execute();
 
+
             if(response.code()==200) {
                 //peut seulement etre consommer une seule fois, regarder documentation okhttp
                 utilisateurRetour = decoderUtilisateur(Objects.requireNonNull(response.body()).byteStream());
@@ -209,7 +204,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     }
 
     @Override
-    public Utilisateur tenterConnexion(String email, String mdp) {
+    public Utilisateur tenterConnexion(String email, String mdp) throws SourceDonneeException {
         URL url = null;
         UtilisateurRestAPI utilisateur=null;
         try {
@@ -219,15 +214,19 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         }
         try {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
+            httpURLConnection.setConnectTimeout(4000);
+            httpURLConnection.setReadTimeout(8000);
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
+
             OutputStream outputStream = httpURLConnection.getOutputStream();
             Gson gson = new GsonBuilder().create();
             String json =  gson.toJson(new UtilisateurRestAPI("",email,mdp, null , 0));
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
+            Log.e("code reponse ", String.valueOf(httpURLConnection.getResponseCode()));
 
             if(httpURLConnection.getResponseCode()==200){
               InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
@@ -238,9 +237,18 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
             }
 
-        } catch (IOException e) {
-            Log.e("SOurceDonneAPIRest: ", e.toString());
+
         }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+
+        catch (IOException e) {
+
+            Log.e("SOurceDonneAPIRest: ", e.toString());
+            throw new SourceDonneeException("Connection non disponible");
+        }
+
 
         return utilisateur;
     }

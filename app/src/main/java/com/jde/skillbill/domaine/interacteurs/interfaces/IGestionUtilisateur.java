@@ -7,7 +7,7 @@ import com.jde.skillbill.domaine.entites.Utilisateur;
 
 import java.util.List;
 
-public interface IGestionUtilisateur {
+public interface IGestionUtilisateur  {
     /**
      *
      * @param email

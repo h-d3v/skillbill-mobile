@@ -6,9 +6,12 @@ import android.content.Intent;
 
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
+import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.IContratVPConnexion;
 import com.jde.skillbill.presentation.modele.Modele;
@@ -25,6 +28,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private static final int MSG_TENTER_CONNECTION_REUSSI =0;
     private static final int MSG_ERREUR =1;
+    private static  final int MSG_PAS_DE_CONNECTION=3;
 
     private final Handler handlerRéponse;
 
@@ -50,6 +54,10 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
                     _vueConnexion.fermerProgressBar();
                     _vueConnexion.afficherMsgErreur();
                 }
+                else if(msg.what== MSG_PAS_DE_CONNECTION){
+                    _vueConnexion.fermerProgressBar();
+                    Toast.makeText(_activite, R.string.pas_de_connection_internet , Toast.LENGTH_LONG ).show();
+                }
 
             }
 
@@ -67,18 +75,27 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         gestionUtilisateur.setSource(_dataSource);
         _vueConnexion.ouvrirProgressBar();
         filEsclave= new Thread(() -> {
-            Utilisateur utilisateurConnecter= gestionUtilisateur.tenterConnexion(email, mdp);
             Message msg = null;
+            try{
+                Utilisateur utilisateurConnecter= gestionUtilisateur.tenterConnexion(email, mdp);
 
-            if (utilisateurConnecter!=null){
-                _modele.setUtilisateurConnecte(utilisateurConnecter);
-                msg = handlerRéponse.obtainMessage(MSG_TENTER_CONNECTION_REUSSI);
-            }
 
-            else {
-                msg = handlerRéponse.obtainMessage(MSG_ERREUR);
+                if (utilisateurConnecter!=null){
+                    _modele.setUtilisateurConnecte(utilisateurConnecter);
+                    msg = handlerRéponse.obtainMessage(MSG_TENTER_CONNECTION_REUSSI);
+                }
+
+                else {
+                    msg = handlerRéponse.obtainMessage(MSG_ERREUR);
+                }
+
+            } catch (SourceDonneeException e) {
+
+                msg = handlerRéponse.obtainMessage(MSG_PAS_DE_CONNECTION);
+
             }
             handlerRéponse.sendMessage(msg);
+
         });
         filEsclave.start();
 
