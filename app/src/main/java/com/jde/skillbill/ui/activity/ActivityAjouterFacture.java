@@ -3,6 +3,7 @@ package com.jde.skillbill.ui.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -43,6 +44,7 @@ public class ActivityAjouterFacture extends AppCompatActivity {
             if (imageBitmap != null) {
                 ImageView imageView = findViewById(R.id.imageFact);
                 imageView.setImageBitmap(imageBitmap);
+
             }
 
 

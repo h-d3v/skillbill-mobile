@@ -41,7 +41,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private final IGestionFacture iGestionFacture;
     private final IGestionUtilisateur iGestionUtilisateur;
     private final IGestionGroupes iGestionGroupes;
-    private static final int REQUETE_PRENDRE_PHOTO= 267676576;
+    private static final int REQUETE_PRENDRE_PHOTO= 2;
     private String[] nomsMembres;
 
     private Thread filEsclave = null;
@@ -186,7 +186,6 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     public void prendrePhoto() {
         Intent prendrePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try { //TODO verifier que l'appareil est capable de prendre des photos
-            prendrePhotoIntent.putExtra(EXTRA_GROUPE_POSITION, groupe);
             activityAjouterFacture.startActivityForResult(prendrePhotoIntent, REQUETE_PRENDRE_PHOTO );
         }catch (ActivityNotFoundException e){
             Log.e("dlld", e.getMessage());
