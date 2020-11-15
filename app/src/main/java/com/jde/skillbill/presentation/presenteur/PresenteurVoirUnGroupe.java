@@ -121,8 +121,8 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
             @Override
             public void run() {
                 try{
-                    message.obj = gestionGroupes.trouverTousLesUtilisateurs(groupeEncours);
                     message = handler.obtainMessage(MSG_GET_MEMBRES);
+                    message.obj = gestionGroupes.trouverTousLesUtilisateurs(groupeEncours);
                     handler.sendMessage(message);
                 }catch (SourceDonneeException e){
                     message= handler.obtainMessage(MSG_PAS_DE_CNX);
