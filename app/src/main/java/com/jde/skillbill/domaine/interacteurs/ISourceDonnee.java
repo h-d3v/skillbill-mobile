@@ -10,16 +10,16 @@ import java.util.List;
 
 public interface ISourceDonnee {
 
-    List<Facture> lireFacturesParGroupe(Groupe groupe);
+    List<Facture> lireFacturesParGroupe(Groupe groupe) throws SourceDonneeException;
 
-    boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre);
+    boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) throws SourceDonneeException;
 
-    boolean utilisateurExiste(String email);
-    Utilisateur creerUtilisateur(Utilisateur utilisateur);
+    boolean utilisateurExiste(String email) throws SourceDonneeException ;
+    Utilisateur creerUtilisateur(Utilisateur utilisateur)throws SourceDonneeException;
     Utilisateur tenterConnexion(String email, String mdp) throws SourceDonneeException;
-    Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) ;
-    List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur);
-    List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe);
+    Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe)throws SourceDonneeException ;
+    List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur)throws SourceDonneeException;
+    List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe)throws SourceDonneeException;
 
-    boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur);
+    boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur)throws SourceDonneeException;
 }

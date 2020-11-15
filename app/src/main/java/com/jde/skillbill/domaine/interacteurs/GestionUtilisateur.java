@@ -34,7 +34,7 @@ public class GestionUtilisateur  implements IGestionUtilisateur {
 
     //Pour verifier si l'email est pris
     @Override
-    public boolean utilisateurExiste(String email){
+    public boolean utilisateurExiste(String email) throws SourceDonneeException{
 
         return _dataSource.utilisateurExiste(email);
     }
@@ -44,13 +44,13 @@ public class GestionUtilisateur  implements IGestionUtilisateur {
     }
 
     @Override
-    public Utilisateur creerUtilisateur(String nom, String courriel, String motPasse, Monnaie monnaie) {
+    public Utilisateur creerUtilisateur(String nom, String courriel, String motPasse, Monnaie monnaie) throws SourceDonneeException {
         return _dataSource.creerUtilisateur(new Utilisateur(nom, courriel, motPasse, monnaie));
     }
 
 
     @Override
-    public List<Groupe> trouverGroupesAbonne(Utilisateur utilisateur) {
+    public List<Groupe> trouverGroupesAbonne(Utilisateur utilisateur) throws SourceDonneeException {
         return _dataSource.lireTousLesGroupesAbonnes(utilisateur) ;
     }
 }

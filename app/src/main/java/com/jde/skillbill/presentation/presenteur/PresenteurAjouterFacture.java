@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.os.Handler;
 import android.os.Message;
 
+import android.widget.Toast;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
@@ -16,6 +17,7 @@ import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueAjouterFacture;
@@ -39,11 +41,14 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private final IGestionUtilisateur iGestionUtilisateur;
     private final IGestionGroupes iGestionGroupes;
     private static final int REQUETE_PRENDRE_PHOTO= 2;
+    private String[] nomsMembres;
 
     private Thread filEsclave = null;
     private final Handler handlerReponse;
     private static final int MSG_AJOUT_FACTURE_REUSSI = 0;
     private static final int MSG_ERREUR = 1;
+    private static final int MSG_ERREUR_CNX = 4;
+    private static final int MSG_TROUVER_MEMBRES=333;
 
     @SuppressLint("HandlerLeak")
     public PresenteurAjouterFacture(ActivityAjouterFacture activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
@@ -65,19 +70,58 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 filEsclave = null;
+                vueAjouterFacture.fermerProgressBar();
                 if (msg.what == MSG_AJOUT_FACTURE_REUSSI) {
-                    vueAjouterFacture.fermerProgressBar();
+
                     redirigerVersListeFactures();
 
-                } else if (msg.what == MSG_ERREUR) {
-                    vueAjouterFacture.fermerProgressBar();
+                }
+                else if (msg.what == MSG_ERREUR) {
+
                     vueAjouterFacture.afficherMessageErreurAlertDialog(
                             activityAjouterFacture.getResources().getString(R.string.txt_message_erreur)
                             ,activityAjouterFacture.getResources().getString(R.string.titre_erreur_generique)
                     );
                 }
+                else if(msg.what == MSG_TROUVER_MEMBRES){
+                    nomsMembres=(String[]) msg.obj;
+                }
+                else if(msg.what == MSG_ERREUR_CNX){
+                    Toast.makeText(activityAjouterFacture, R.string.pas_de_connection_internet, Toast.LENGTH_LONG).show();
+                }
             }
         };
+        chargerListeUtilisateurs();
+    }
+
+    public void chargerListeUtilisateurs(){
+        filEsclave = new Thread(new Runnable() {
+            Message message;
+            @Override
+            public void run() {
+                try {
+                    List<Utilisateur> utilisateursGroupe= iGestionGroupes.trouverTousLesUtilisateurs(groupe);
+                    String[] membres=new String[utilisateursGroupe.size()];
+                    int i=0;
+                    for (Utilisateur utilisateur : utilisateursGroupe){
+                        membres[i]=utilisateur.getNom();
+                        i++;
+                    }
+                    message = handlerReponse.obtainMessage(MSG_TROUVER_MEMBRES);
+                    message.obj = membres;
+
+                }catch (SourceDonneeException e){
+                    message = handlerReponse.obtainMessage(MSG_ERREUR_CNX);
+                }
+                handlerReponse.sendMessage(message);
+            }
+
+        });
+        filEsclave.start();
+
+
+
+
     }
 
     /**
@@ -87,16 +131,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     @Override
     public String[] presenterListeUtilsateur() {
 
-
-
-        List<Utilisateur> utilisateursGroupe= iGestionGroupes.trouverTousLesUtilisateurs(groupe);
-        String[] membres=new String[utilisateursGroupe.size()];
-        int i=0;
-        for (Utilisateur utilisateur : utilisateursGroupe){
-            membres[i]=utilisateur.getNom();
-            i++;
-        }
-        return membres;
+        return nomsMembres;
     }
 
     /**
@@ -122,6 +157,8 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             } catch (NumberFormatException | DateTimeParseException e) {
                 msg = handlerReponse.obtainMessage(MSG_ERREUR);
 
+            } catch (SourceDonneeException e ){
+                msg = handlerReponse.obtainMessage(MSG_ERREUR_CNX);
             }
             handlerReponse.sendMessage( msg );
         });

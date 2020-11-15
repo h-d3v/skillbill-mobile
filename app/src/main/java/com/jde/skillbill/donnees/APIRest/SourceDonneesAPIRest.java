@@ -50,10 +50,12 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     private String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
     private String POINT_ENTREE_GROUPE = "groupes/";
     private String POINT_ENTREE_LOGIN ="login";
+    private static final int READ_TIME_OUT =8000;
+    private static final int CONNECT_TIME_OUT = 4000;
 
 
     @Override
-    public List<Facture> lireFacturesParGroupe(Groupe groupe) {
+    public List<Facture> lireFacturesParGroupe(Groupe groupe) throws SourceDonneeException {
         URL url = null;
         Utilisateur utilisateur = null;
         try {
@@ -64,6 +66,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             Gson gson = new Gson();
+            reglerTimeout(httpURLConnection);
             if (httpURLConnection.getResponseCode() == 200) {
                 InputStreamReader inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
 
@@ -94,14 +97,19 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 }
             }
 
-        } catch (IOException e) {
+
+        }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) {
+    public boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) throws SourceDonneeException {
             URL url = null;
             try {
                 url = new URL(URI_BASE+"Factures");
@@ -111,6 +119,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             HttpURLConnection httpURLConnection= null;
             try {
                 httpURLConnection = (HttpURLConnection) url.openConnection();
+                reglerTimeout(httpURLConnection);
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
                 httpURLConnection.setDoOutput(true);
@@ -133,7 +142,11 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                     if (inputStreamReader.toString().equals("true"))return true;
                 }
 
-            } catch (IOException e) {
+            }
+            catch (java.net.SocketTimeoutException e){
+                throw new SourceDonneeException("Connection non disponible");
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -142,7 +155,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     }
 
 
-    public boolean utilisateurExiste(String email) {
+    public boolean utilisateurExiste(String email) throws SourceDonneeException {
         URL url = null;
 
         try {
@@ -154,6 +167,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
 
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
+            reglerTimeout(httpURLConnection);
             httpURLConnection.setRequestMethod("HEAD");
             httpURLConnection.addRequestProperty("Accept-Encoding", "identity");
 
@@ -164,7 +178,11 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 return true;
             }
 
-        } catch (IOException e) {
+        }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -194,6 +212,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             }
         }//si la connection a l'api est impossible, on retourne un user null
         catch(ConnectException e) {
+
             Log.e("erreur connection api", "message:" + Objects.requireNonNull(e.getMessage()) + " \n cause: " + e.getCause());
         } //si l'email entrer est deja pris, on retourne un user invalide
         catch (IOException e) {
@@ -214,8 +233,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         }
         try {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
-            httpURLConnection.setConnectTimeout(4000);
-            httpURLConnection.setReadTimeout(8000);
+            reglerTimeout(httpURLConnection);
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
             httpURLConnection.setDoOutput(true);
@@ -254,7 +272,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     }
 
     @Override
-    public Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) {
+    public Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) throws SourceDonneeException {
         URL url = null;
 
 
@@ -267,6 +285,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         }
         try {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
+            reglerTimeout(httpURLConnection);
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
             httpURLConnection.setDoOutput(true);
@@ -284,6 +303,9 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             }
 
         }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
         catch (IOException e) {
                 e.printStackTrace();
             }
@@ -293,7 +315,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     }
 
     @Override
-    public List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur) {
+    public List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur) throws SourceDonneeException {
         URL url = null;
         try {
 
@@ -303,6 +325,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         }
         try {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
+            reglerTimeout(httpURLConnection);
             Gson gson = new Gson();
             if(httpURLConnection.getResponseCode()==200){
                 InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
@@ -314,15 +337,17 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 }
 
             }
-        } catch (IOException e) {
+        }   catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe)
-    {
+    public List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe) throws SourceDonneeException {
         URL url = null;
         try {
 
@@ -333,6 +358,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         List<Utilisateur> utilisateursMembres= new ArrayList<Utilisateur>();
         try{
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
+            reglerTimeout(httpURLConnection);
             Gson gson = new Gson();
             if(httpURLConnection.getResponseCode()==200){
                 InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
@@ -343,7 +369,11 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
                 }
             }
-        } catch (IOException e) {
+
+        }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -352,7 +382,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     }
 
     @Override
-    public boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur) {
+    public boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur) throws SourceDonneeException {
 
         URL url = null;
         try {
@@ -366,6 +396,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
+            reglerTimeout(httpURLConnection);
 
             if(httpURLConnection.getResponseCode()==200){
                 InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
@@ -378,7 +409,11 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
                 return "true".equals(stringBuilder.toString());
             }
-        } catch (IOException e) {
+        }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -414,5 +449,9 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         }
 
         return new UtilisateurRestAPI( nom, email, "", Monnaie.CAD, id);
+    }
+    private  static void reglerTimeout(HttpURLConnection httpURLConnection){
+        httpURLConnection.setReadTimeout(READ_TIME_OUT);
+        httpURLConnection.setConnectTimeout(CONNECT_TIME_OUT);
     }
 }

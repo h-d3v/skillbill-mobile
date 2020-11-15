@@ -5,6 +5,7 @@ import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 
 
 import java.time.LocalDate;
@@ -24,7 +25,7 @@ public class GestionFacture implements IGestionFacture {
     }
 
     @Override
-    public boolean creerFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) {
+    public boolean creerFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) throws SourceDonneeException {
         return iSourceDonnee.ajouterFacture(montantTotal, utilisateurPayeur, localDate, groupe , titre);
     }
 

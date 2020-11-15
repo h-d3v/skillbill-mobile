@@ -17,7 +17,7 @@ public interface IGestionFacture {
      * @param localDate la date de la facture
      * @return true si crée, false sinon
      */
-    boolean creerFactureAvecMultiplePayeurs(double montantTotal, Map<Utilisateur, Double> mantantPayeParUtilisateur, LocalDate localDate);
+    boolean creerFactureAvecMultiplePayeurs(double montantTotal, Map<Utilisateur, Double> mantantPayeParUtilisateur, LocalDate localDate)throws SourceDonneeException;
 
 
     /**
@@ -29,7 +29,7 @@ public interface IGestionFacture {
      * @param titre le nom de la facture
      * @return
      */
-    boolean creerFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre);
+    boolean creerFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre)throws SourceDonneeException;
 
     /**
      *
@@ -39,7 +39,7 @@ public interface IGestionFacture {
      * @return la facture ajoutée, null si pas ajouté
      */
 
-    Facture ajouterPhotoFacture(Facture facture, String uri, Bitmap bitmap);
+    Facture ajouterPhotoFacture(Facture facture, String uri, Bitmap bitmap)throws SourceDonneeException;
 
     /**
      *
@@ -48,6 +48,6 @@ public interface IGestionFacture {
      * @param bitmap photo en bitmap
      * @return la facture ajoutée, null si pas ajouté
      */
-    Facture modifierPhotoFacture(Facture facture, String uri, Bitmap bitmap);
+    Facture modifierPhotoFacture(Facture facture, String uri, Bitmap bitmap)throws SourceDonneeException;
 
 }

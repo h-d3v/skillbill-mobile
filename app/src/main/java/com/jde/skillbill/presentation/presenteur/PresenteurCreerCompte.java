@@ -6,9 +6,12 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 
+import android.widget.Toast;
+import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.presentation.IContratVPCreerCompte;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueCreerCompte;
@@ -29,6 +32,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
         static final int NOUVEAU_COMPTE = 0;
         static final int ERREUR = 1;
         static final int EMAIL_DEJA_PRIS = 2;
+        static final int ERREUR_CNX =3;
     };
 
 
@@ -53,6 +57,9 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
                 else if(msg.what==MESSAGE.EMAIL_DEJA_PRIS){
                     _vueCreerCompte.afficherEmailDejaPrit();
                 }
+                else if(msg.what==MESSAGE.ERREUR_CNX){
+                    Toast.makeText(_activite, R.string.pas_de_connection_internet , Toast.LENGTH_LONG ).show();
+                }
                 _vueCreerCompte.fermerProgressBar();
             }
         };
@@ -74,17 +81,21 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
         filEsclave = new Thread(() -> {
             Message msg=null;
             GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
+                try{
+                    Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
+                    if(utilisateurCreer==null){
+                        msg=handler.obtainMessage(MESSAGE.ERREUR);
+                    }
+                    else if(!utilisateurCreer.getCourriel().equals("-1")){
+                        msg=handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE,utilisateurCreer);
+                    }
+                    else if(utilisateurCreer.getCourriel().equals("-1")){
+                        msg=handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
+                    }
+                }catch (SourceDonneeException e){
+                    msg = handler.obtainMessage(MESSAGE.ERREUR_CNX);
+                }
 
-                Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
-                if(utilisateurCreer==null){
-                    msg=handler.obtainMessage(MESSAGE.ERREUR);
-                }
-                else if(!utilisateurCreer.getCourriel().equals("-1")){
-                    msg=handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE,utilisateurCreer);
-                }
-                else if(utilisateurCreer.getCourriel().equals("-1")){
-                    msg=handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
-                }
 
 
 
