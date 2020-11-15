@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.os.Handler;
 import android.os.Message;
 
+import android.util.Log;
 import android.widget.Toast;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -40,7 +41,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private final IGestionFacture iGestionFacture;
     private final IGestionUtilisateur iGestionUtilisateur;
     private final IGestionGroupes iGestionGroupes;
-    private static final int REQUETE_PRENDRE_PHOTO= 2;
+    private static final int REQUETE_PRENDRE_PHOTO= 267676576;
     private String[] nomsMembres;
 
     private Thread filEsclave = null;
@@ -188,7 +189,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             prendrePhotoIntent.putExtra(EXTRA_GROUPE_POSITION, groupe);
             activityAjouterFacture.startActivityForResult(prendrePhotoIntent, REQUETE_PRENDRE_PHOTO );
         }catch (ActivityNotFoundException e){
-            //TODO
+            Log.e("dlld", e.getMessage());
         }
     }
 }
