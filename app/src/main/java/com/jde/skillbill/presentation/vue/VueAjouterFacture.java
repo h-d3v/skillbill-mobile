@@ -25,14 +25,15 @@ import java.util.Objects;
 
 public class VueAjouterFacture extends Fragment implements IContratVPAjouterFacture.IVueAjouterFacture {
     IContratVPAjouterFacture.IPresenteurAjouterFacture presenteurAjouterFacture;
-    Button boutonAjouter, boutonAnnuler;
-    EditText editTextMontant;
-    EditText editTextTitre;
-    Spinner spinnerChoix;
-    Spinner spinnerChoixUtilisateursRedevables;
-    CalendarView calendarView;
-    EditText date;
-    ImageView imageFacture;
+    private Button boutonAjouter, boutonAnnuler;
+    private EditText editTextMontant;
+    private EditText editTextTitre;
+    private Spinner spinnerChoix;
+    private Spinner spinnerChoixUtilisateursRedevables;
+    private CalendarView calendarView;
+    private EditText date;
+    private ProgressBar progressBar;
+    private ImageView imageFacture;
     private ImageButton btnAjouterFacture;
 
 
@@ -46,7 +47,8 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
             presenteurAjouterFacture.prendrePhoto();
 
         });
-
+         progressBar = racine.findViewById(R.id.progressBarAjoutFacture);
+         progressBar.setVisibility(View.INVISIBLE);
          imageFacture = (ImageView) racine.findViewById(R.id.imageFact);
          editTextTitre=racine.findViewById(R.id.edit_t_nom_activie);
          boutonAjouter= racine.findViewById(R.id.btnAjouter);
@@ -248,6 +250,14 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         AlertDialog dialog = builder.create();
 
         dialog.show();
+    }
+    @Override
+    public void fermerProgressBar(){
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void ouvrirProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
     }
 
 

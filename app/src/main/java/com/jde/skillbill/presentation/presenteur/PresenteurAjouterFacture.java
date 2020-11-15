@@ -66,10 +66,11 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 super.handleMessage(msg);
                 filEsclave = null;
                 if (msg.what == MSG_AJOUT_FACTURE_REUSSI) {
+                    vueAjouterFacture.fermerProgressBar();
                     redirigerVersListeFactures();
 
                 } else if (msg.what == MSG_ERREUR) {
-
+                    vueAjouterFacture.fermerProgressBar();
                     vueAjouterFacture.afficherMessageErreurAlertDialog(
                             activityAjouterFacture.getResources().getString(R.string.txt_message_erreur)
                             ,activityAjouterFacture.getResources().getString(R.string.titre_erreur_generique)
@@ -103,7 +104,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
      */
     @Override
     public void ajouterFacture() {
-
+        vueAjouterFacture.ouvrirProgressBar();
         filEsclave= new Thread (()-> {
             Message msg;
 

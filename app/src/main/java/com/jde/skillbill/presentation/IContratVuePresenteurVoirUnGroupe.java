@@ -14,6 +14,9 @@ public interface IContratVuePresenteurVoirUnGroupe {
      interface IVueVoirUnGroupe{
         void setPresenteur(IPresenteurVoirUnGroupe iPresenteurVoirUnGroupe);
 
+         void fermerProgressBar();
+
+         void ouvrirProgressBar();
      }
 
 

@@ -1,21 +1,15 @@
 package com.jde.skillbill.presentation.vue;
 
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -42,11 +36,12 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
    private PresenteurVoirUnGroupe _presenteur;
    private TextView tvNomGroupe;
    //TODO afficher un message si il n'y a aucune facture dans le groupe
-    private TextView tvMsgFactures;
-    private TabLayout tabLayout;
+   private TextView tvMsgFactures;
+   private TabLayout tabLayout;
    private TextView detailMembres;
    private Button ajouterMembre;
    private View racine;
+   private ProgressBar progressBar;
 
     RecyclerView rvFactures;
     RvVoirFactureAdapter rvFacturesAdapter;
@@ -59,6 +54,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
         detailMembres = racine.findViewById(R.id.detailMembres);
         detailMembres.setVisibility(View.INVISIBLE);
         ajouterMembre.setVisibility(View.INVISIBLE);
+        progressBar = racine.findViewById(R.id.pbVoirUnGroupe);
         tvNomGroupe=racine.findViewById(R.id.tvNomGroupe);
         tabLayout=racine.findViewById(R.id.tabLayoutFactureMembres);
         tvMsgFactures=racine.findViewById(R.id.tvMsgFactures);
@@ -250,5 +246,13 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     };
+    @Override
+    public void fermerProgressBar(){
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void ouvrirProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
+    }
 
 }

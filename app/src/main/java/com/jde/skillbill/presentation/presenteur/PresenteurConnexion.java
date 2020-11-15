@@ -43,9 +43,11 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
                 filEsclave = null;
                 if(msg.what == MSG_TENTER_CONNECTION_REUSSI){
                     _vueConnexion.afficherMsgConnecter(_modele.getUtilisateurConnecte().getCourriel(), _modele.getUtilisateurConnecte().getNom());
+                    _vueConnexion.fermerProgressBar();
                     redirigerVersActiviteVoirLesGroupes();
                 }
                 else if(msg.what == MSG_ERREUR){
+                    _vueConnexion.fermerProgressBar();
                     _vueConnexion.afficherMsgErreur();
                 }
 
@@ -63,7 +65,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
     public void tenterConnexion(String email, String mdp){
         GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
         gestionUtilisateur.setSource(_dataSource);
-
+        _vueConnexion.ouvrirProgressBar();
         filEsclave= new Thread(() -> {
             Utilisateur utilisateurConnecter= gestionUtilisateur.tenterConnexion(email, mdp);
             Message msg = null;

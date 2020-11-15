@@ -28,5 +28,9 @@ public interface IContratVPAjouterFacture {
         void afficherMessageErreurAlertDialog(String message, String titre);
 
         String getTitreInput();
+
+        void fermerProgressBar();
+
+        void ouvrirProgressBar();
     }
 }

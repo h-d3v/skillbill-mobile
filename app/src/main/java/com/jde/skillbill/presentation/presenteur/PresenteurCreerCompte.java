@@ -53,6 +53,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
                 else if(msg.what==MESSAGE.EMAIL_DEJA_PRIS){
                     _vueCreerCompte.afficherEmailDejaPrit();
                 }
+                _vueCreerCompte.fermerProgressBar();
             }
         };
     }
@@ -69,6 +70,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
     //TODO la creation reele du compte si l'email n'est pas pris (persistance)
     @Override
     public void creerCompte() {
+        _vueCreerCompte.ouvrirProgressBar();
         filEsclave = new Thread(() -> {
             Message msg=null;
             GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);

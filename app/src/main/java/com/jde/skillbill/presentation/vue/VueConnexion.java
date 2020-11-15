@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import android.widget.ProgressBar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
@@ -27,6 +28,7 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
     private MaterialButton btnMdpOublie;
     private EditText etEmail;
     private EditText etMdp;
+    private ProgressBar progressBar;
 
     private boolean emailValide;
     private boolean mdpValide;
@@ -39,6 +41,9 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
         btnCnx=vue.findViewById(R.id.btnCnx);
         btnInscription=vue.findViewById(R.id.btnInscriptionCnx);
         btnMdpOublie=vue.findViewById(R.id.btnMdpOublie);
+        progressBar = vue.findViewById(R.id.progressBarConnexion);
+        fermerProgressBar();
+
 
         btnInscription.setOnClickListener(v -> _presenteur.allerInscription());
 
@@ -156,5 +161,14 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
         alertBuilder.setTitle("Connexion réussie!");
         alertBuilder.setMessage("Courriel: "+email+"  Nom: "+nom);
         alertBuilder.show();
+    }
+
+    @Override
+    public void fermerProgressBar(){
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void ouvrirProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
     }
 }

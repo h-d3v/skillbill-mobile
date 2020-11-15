@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ProgressBar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
@@ -43,15 +44,15 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
 
     private TextInputEditText tfNom;
     private TextInputLayout tlNom;
+    private ProgressBar progressBar;
 
-    private boolean mdpValide=false;
-    private boolean nomValide=false;
-    private boolean emailValide=false;
+    private boolean mdpValide = false;
+    private boolean nomValide = false;
+    private boolean emailValide = false;
     private AutoCompleteTextView editTextFilledExposedDropdown;
 
 
     /**
-     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -59,15 +60,17 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vue=inflater.inflate(R.layout.frag_register, container,false);
+        View vue = inflater.inflate(R.layout.frag_register, container, false);
 
-        btnRegister=vue.findViewById(R.id.btnRegister);
-        btnRetour=vue.findViewById(R.id.btnRetour);
-        tfNom=vue.findViewById(R.id.tfNom);
-        tlNom=vue.findViewById(R.id.tlNom);
-        tfEmail=vue.findViewById(R.id.tfEmail);
-        tfMdp=vue.findViewById(R.id.tfPass);
-        tfMdpVerif=vue.findViewById(R.id.tfMdpVerif);
+        btnRegister = vue.findViewById(R.id.btnRegister);
+        btnRetour = vue.findViewById(R.id.btnRetour);
+        tfNom = vue.findViewById(R.id.tfNom);
+        tlNom = vue.findViewById(R.id.tlNom);
+        tfEmail = vue.findViewById(R.id.tfEmail);
+        tfMdp = vue.findViewById(R.id.tfPass);
+        progressBar = vue.findViewById(R.id.progressBarRegister);
+        fermerProgressBar();
+        tfMdpVerif = vue.findViewById(R.id.tfMdpVerif);
         editTextFilledExposedDropdown = vue.findViewById(R.id.monnaies_dropdown);
 
 
@@ -92,21 +95,21 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!getNom().matches("[A-z\\s]+")) {
+                if (!getNom().matches("[A-z\\s]+")) {
                     btnRegister.setEnabled(false);
                     tfNom.setError("Le nom doit contenir uniquement des lettres.");
-                }
-                else{
-                   nomValide=true;
-                   if(tousLesChampsValides()){
-                       btnRegister.setEnabled(true);
-                   }
+                } else {
+                    nomValide = true;
+                    if (tousLesChampsValides()) {
+                        btnRegister.setEnabled(true);
+                    }
                 }
             }
         });
@@ -116,17 +119,18 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
-                if(!getEmail().matches("[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,4}")){
+                if (!getEmail().matches("[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,4}")) {
                     btnRegister.setEnabled(false);
                     tfEmail.setError("Veuillez entrer un email valide.");
-                }
-                else{
-                    emailValide=true;
+                } else {
+                    emailValide = true;
                     if (tousLesChampsValides()) {
                         btnRegister.setEnabled(true);
                     }
@@ -139,21 +143,21 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
-                if(!getPass().matches("[.\\S]+") || getPass().length()<8 ){
+                if (!getPass().matches("[.\\S]+") || getPass().length() < 8) {
                     btnRegister.setEnabled(false);
                     tfMdp.setError("Le mot de passe ne doit pas contenir d'espace et plus de 8 caractères.");
-                }
-                else if(!getPass().equals(getPassVerif())) {
+                } else if (!getPass().equals(getPassVerif())) {
                     btnRegister.setEnabled(false);
                     tfMdpVerif.setError("Le mot de passe ne correspond pas");
                     mdpValide = false;
-                }
-                else {
+                } else {
                     mdpValide = true;
                     if (tousLesChampsValides()) {
                         btnRegister.setEnabled(true);
@@ -168,20 +172,21 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!getPass().equals(getPassVerif())){
+                if (!getPass().equals(getPassVerif())) {
                     btnRegister.setEnabled(false);
                     tfMdpVerif.setError("Le mot de passe ne correspond pas");
-                    mdpValide=false;
-                }
-                else{
-                    mdpValide=true;
+                    mdpValide = false;
+                } else {
+                    mdpValide = true;
                     if (tousLesChampsValides()) {
                         btnRegister.setEnabled(true);
                     }
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -193,28 +198,26 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
 
         ArrayAdapter<String> adapterMonnaies = new ArrayAdapter<>(
                 Objects.requireNonNull(getContext()),
-                        R.layout.dropdown_menu_item,
-                        monnaiesString);
+                R.layout.dropdown_menu_item,
+                monnaiesString);
 
         editTextFilledExposedDropdown.setAdapter(adapterMonnaies);
 
         //on initialise la devise à CAD
-        editTextFilledExposedDropdown.setText(Monnaie.CAD.name(),false);
+        editTextFilledExposedDropdown.setText(Monnaie.CAD.name(), false);
 
         return vue;
     }
 
     /**
-     *
      * @param presenteurCreerCompte
      */
     @Override
     public void setPresenteur(PresenteurCreerCompte presenteurCreerCompte) {
-        _presenteur=presenteurCreerCompte;
+        _presenteur = presenteurCreerCompte;
     }
 
     /**
-     *
      * @return nom du user
      */
     @Override
@@ -223,7 +226,6 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     }
 
     /**
-     *
      * @return email du user
      */
     @Override
@@ -232,7 +234,6 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     }
 
     /**
-     *
      * @return pass du user
      */
     @Override
@@ -241,7 +242,6 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     }
 
     /**
-     *
      * @return pass du user
      */
     @Override
@@ -250,20 +250,18 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     }
 
     /**
-     *
      * @return true si tous les champs remplis par le user sont valides
      */
     @Override
-    public boolean tousLesChampsValides(){
+    public boolean tousLesChampsValides() {
         return emailValide && nomValide && mdpValide;
     }
 
     /**
-     *
      * @return monnaie choisie par le user
      */
     @Override
-    public Monnaie getMonnaieChoisie(){
+    public Monnaie getMonnaieChoisie() {
         return Monnaie.valueOf(editTextFilledExposedDropdown.getText().toString());
     }
 
@@ -271,34 +269,45 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
      * affiche un message comme quoi que l'email est deja prit
      */
     @Override
-    public void afficherEmailDejaPrit(){
-        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
-                alertBuilder.setTitle("Adresse e-mail deja utilisée");
-                alertBuilder.setMessage("Veuillez choisir un autre courriel ou connectez-vous à votre compte");
-                alertBuilder.show();
+    public void afficherEmailDejaPrit() {
+        MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+        alertBuilder.setTitle("Adresse e-mail deja utilisée");
+        alertBuilder.setMessage("Veuillez choisir un autre courriel ou connectez-vous à votre compte");
+        alertBuilder.show();
     }
 
     /**
      * Pour test seulement, devra etre enlever
-     * @param nom du compte creer
-     * @param email du compte creer
+     *
+     * @param nom     du compte creer
+     * @param email   du compte creer
      * @param monnaie du compte creer
      */
     @Override
-    public void afficherCompteCreer(String nom, String email, Monnaie monnaie){
-        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+    public void afficherCompteCreer(String nom, String email, Monnaie monnaie) {
+        MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
         alertBuilder.setTitle("Compte bien créer");
-        alertBuilder.setMessage("Votre adresse courriel: "+email);
+        alertBuilder.setMessage("Votre adresse courriel: " + email);
         alertBuilder.show();
     }
 
     /**
      * devras s'afficher si l'utilisateur ne peut se connecter à l'api
      */
-    public void afficherErreurConnection(){
-        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+    public void afficherErreurConnection() {
+        MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
         alertBuilder.setTitle("Erreur de connexion");
         alertBuilder.setMessage("Vérifiez que vous êtes bien connecté à Internet");
         alertBuilder.show();
+    }
+
+    @Override
+    public void fermerProgressBar() {
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void ouvrirProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
     }
 }

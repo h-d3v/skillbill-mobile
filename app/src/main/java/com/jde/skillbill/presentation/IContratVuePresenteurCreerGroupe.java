@@ -11,6 +11,9 @@ public interface IContratVuePresenteurCreerGroupe {
 
         String getNomGroupe();
 
+        void fermerProgressBar();
+
+        void ouvrirProgressBar();
     }
 
     interface PresenteurCreerGroupe {

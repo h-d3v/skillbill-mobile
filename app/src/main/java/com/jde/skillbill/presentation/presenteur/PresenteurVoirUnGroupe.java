@@ -78,16 +78,18 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
                 super.handleMessage(msg);
                 filEsclave = null;
                 if(msg.what == MSG_GET_MEMBRES){
+                //    vueVoirUnGroupe.fermerProgressBar();
                     groupeEncours.setUtilisateurs((List<Utilisateur>) msg.obj);
                     vueVoirUnGroupe.rafraichir();
                 }
                 if(msg.what == MSG_GET_FACTURES){
+                    vueVoirUnGroupe.fermerProgressBar();
                     facturesGroupe = (List<Facture>) msg.obj;
                     vueVoirUnGroupe.rafraichir();
                 }
                 if(msg.what== AJOUT_OK || msg.what==EMAIL_INCONNU|| msg.what==ERREUR_ACCES){
 
-
+                   // vueVoirUnGroupe.fermerProgressBar();
                     vueVoirUnGroupe.setVueAjouterMembres(msg.what);
                     if(msg.what==AJOUT_OK){
                         chargerMembres();
@@ -103,6 +105,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     }
 
     private void chargerMembres(){
+       // vueVoirUnGroupe.ouvrirProgressBar();
         filEsclave = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -154,6 +157,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
      */
     @Override
     public void ajouterUtilisateurAuGroupe(String courriel) {
+       // vueVoirUnGroupe.ouvrirProgressBar();
         filEsclave = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -196,6 +200,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
      * @return factures du groupes
      */
     public void chargerFacturesGroupe(){
+       // vueVoirUnGroupe.ouvrirProgressBar();
         filEsclave = new Thread(new Runnable() {
             @Override
             public void run() {

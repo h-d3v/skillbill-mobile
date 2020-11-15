@@ -67,7 +67,9 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
                 if(msg.what == MSG_GET_GROUPES){
                     modele.setSoldeParPosition(((Modele) msg.obj).getSoldeParPosition());
                     modele.setGroupesAbonnesUtilisateurConnecte((((Modele) msg.obj).getListGroupeAbonneUtilisateurConnecte()));
+                    vueVoirGroupes.fermerProgressBar();
                     vueVoirGroupes.rafraichir();
+
                 }
                 if(msg.what == MSG_GET_FACTURE){
 

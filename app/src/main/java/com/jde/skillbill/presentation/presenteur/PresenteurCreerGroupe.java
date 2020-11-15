@@ -42,7 +42,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
         this.vueCreerGroupe = vueCreerGroupe;
         this.activity = activity;
 
-        //TODO ajuster la monnaie pour quelle ne sois pas coder en dur
+
         if (modele.getUtilisateurConnecte() == null) {
             modele.setUtilisateurConnecte((Utilisateur) activity.getIntent().getSerializableExtra(EXTRA_ID_UTILISATEUR));
         }
@@ -54,9 +54,11 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
                 filEsclave = null;
                 if (msg.what == MSG_GROUPE_CREER_REUSSI) {
                     groupeCree = (Groupe) msg.obj;
+                    vueCreerGroupe.fermerProgressBar();
                     redirigerVersGroupeCreer();
 
                 } else if (msg.what == MSG_ERREUR) {
+                    vueCreerGroupe.fermerProgressBar();
                 }
             }
         };
@@ -69,7 +71,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
     @Override
     public void creerGroupe() {
         IGestionGroupes gestionGroupes = new GestionGroupes(new SourceDonneesAPIRest());
-
+        vueCreerGroupe.ouvrirProgressBar();
         filEsclave = new Thread(() -> {
             Groupe groupeACreer = gestionGroupes.creerGroupe(vueCreerGroupe.getNomGroupe(), modele.getUtilisateurConnecte(), Monnaie.CAD);
 
