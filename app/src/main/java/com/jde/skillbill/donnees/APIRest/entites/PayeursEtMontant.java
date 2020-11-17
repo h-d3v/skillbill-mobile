@@ -2,7 +2,9 @@ package com.jde.skillbill.donnees.APIRest.entites;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PayeursEtMontant{
+import java.io.Serializable;
+
+public class PayeursEtMontant implements Serializable {
     @SerializedName("UtilisateurId")
     private int idPayeur;
     @SerializedName("MontantPaye")

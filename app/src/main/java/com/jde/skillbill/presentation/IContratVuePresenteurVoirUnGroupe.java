@@ -10,6 +10,7 @@ public interface IContratVuePresenteurVoirUnGroupe {
          void envoyerCourriel(String courriel);
 
 
+         void commencerVoirDetailFacture(int position);
      }
      interface IVueVoirUnGroupe{
         void setPresenteur(IPresenteurVoirUnGroupe iPresenteurVoirUnGroupe);

@@ -67,6 +67,8 @@
     <string name="supprimer_facture">Supprimer la facture</string>
     <string name="nom_du_nouveau_groupe">Nom du nouveau groupe</string>
     <string name="pas_de_connection_internet">Erreur de connection à la source de données</string>
+    <string name="modifier">Modifier</string>
+    <string name="envoyer">Envoyer</string>
 
 
 </resources>

@@ -18,10 +18,13 @@ import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 
 import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
+import com.jde.skillbill.donnees.APIRest.entites.FactureRestAPI;
 import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirUnGroupe;
+import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
+import com.jde.skillbill.ui.activity.ActivityVoirFacture;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
@@ -37,6 +40,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     private static final int MSG_AJOUTER_MEMBRES = 7;
 
     private static final int MSG_PAS_DE_CNX = 99;
+    private static final String EXTRA_FACTURE = "com.jde.skillbill.facture_identifiant";
 
 
 
@@ -217,6 +221,15 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
 
         activityVoirUnGroupe.startActivity(Intent.createChooser(intent, activityVoirUnGroupe.getResources().getString(R.string.invitation_objet_courriel)));
        }
+
+    @Override
+    public void commencerVoirDetailFacture(int position) {
+        Intent intent = new Intent(activityVoirUnGroupe, ActivityVoirFacture.class);
+        intent.putExtra(EXTRA_GROUPE_POSITION,groupeEncours);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
+        intent.putExtra(EXTRA_FACTURE, facturesGroupe.get(position));
+        activityVoirUnGroupe.startActivity(intent);
+    }
 
     /**
      *

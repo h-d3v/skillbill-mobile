@@ -24,17 +24,17 @@ import java.util.List;
 import java.util.Objects;
 
 public class VueAjouterFacture extends Fragment implements IContratVPAjouterFacture.IVueAjouterFacture {
-    IContratVPAjouterFacture.IPresenteurAjouterFacture presenteurAjouterFacture;
-    private Button boutonAjouter, boutonAnnuler;
-    private EditText editTextMontant;
-    private EditText editTextTitre;
-    private Spinner spinnerChoix;
-    private Spinner spinnerChoixUtilisateursRedevables;
-    private CalendarView calendarView;
-    private EditText date;
-    private ProgressBar progressBar;
-    private ImageView imageFacture;
-    private ImageButton btnAjouterFacture;
+    private IContratVPAjouterFacture.IPresenteurAjouterFacture presenteurAjouterFacture;
+    protected Button boutonAjouter, boutonAnnuler;
+    protected EditText editTextMontant;
+    protected EditText editTextTitre;
+    protected Spinner spinnerChoix;
+    protected Spinner spinnerChoixUtilisateursRedevables;
+    protected CalendarView calendarView;
+    protected EditText date;
+    protected ProgressBar progressBar;
+    protected ImageView imageFacture;
+    protected ImageButton btnAjouterFacture;
 
 
     @Override

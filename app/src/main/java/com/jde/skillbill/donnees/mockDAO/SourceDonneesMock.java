@@ -15,7 +15,7 @@ import java.util.List;
 import java.time.LocalDate;
 import java.util.*;
 
-public class SourceDonneesMock implements ISourceDonnee{
+public abstract class SourceDonneesMock implements ISourceDonnee{
     public static HashMap<Utilisateur, List<Groupe>> utilisateurGroupeHashMap =new HashMap<>();
     public static  HashMap<Groupe, List<Utilisateur>> groupeUtilisateursHashmap = new HashMap<>();
     public static HashMap<Groupe, List<Facture>> groupeFactureHashMap= new HashMap<>();
@@ -92,6 +92,11 @@ public class SourceDonneesMock implements ISourceDonnee{
         }
 
         return false ;
+    }
+
+    @Override
+    public boolean modifierFacture(Facture facture) {
+        return false;
     }
 
     @Override

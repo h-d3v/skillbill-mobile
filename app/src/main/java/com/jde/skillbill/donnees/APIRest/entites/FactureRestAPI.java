@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +25,7 @@ public class FactureRestAPI extends Facture {
     @SerializedName("UtilisateurCreateurId")
     int idUtilisateurCreateur;
 
-    public FactureRestAPI(LocalDate dateFacture, Map<Utilisateur, Double> utilisateurDoubleMap, String nom) {
-        super(dateFacture, utilisateurDoubleMap, nom);
-    }
+
     public FactureRestAPI(String date, int idGroupe, double montantTotal, int idUtilisateurCreateur){
         this.date=date;
         this.idGroupe=idGroupe;

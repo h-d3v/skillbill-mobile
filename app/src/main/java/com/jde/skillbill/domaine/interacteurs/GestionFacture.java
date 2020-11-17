@@ -39,4 +39,9 @@ public class GestionFacture implements IGestionFacture {
     public Facture modifierPhotoFacture(Facture facture, String uri, Bitmap bitmap) {
         return null;
     }
+
+    @Override
+    public void modifierFacture(Facture facture) {
+        iSourceDonnee.modifierFacture(facture);
+    }
 }

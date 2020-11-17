@@ -76,6 +76,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
                     for(FactureRestAPI factureRestAPI :factureRestAPIS) {
                         HashMap<Utilisateur, Double> utilisateurMontantMap = new HashMap<>();
+                        factureRestAPI.setDateFacture(LocalDate.parse(factureRestAPI.getDate().substring(0,10)));
 
                         for(PayeursEtMontant payeursEtMontant : factureRestAPI.getPayeursEtMontantsListe()){
 
@@ -87,9 +88,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                         }
                         factureRestAPI.setMontantPayeParParUtilisateur(utilisateurMontantMap);
 
-                        for(Utilisateur utilisateur1 : factureRestAPI.getMontantPayeParParUtilisateur().keySet()){
-
-                        }
                     }
                     factureRestAPIS1.addAll(Arrays.asList(factureRestAPIS));
 
@@ -418,6 +416,11 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         }
 
 
+        return false;
+    }
+
+    @Override
+    public boolean modifierFacture(Facture facture) {
         return false;
     }
 

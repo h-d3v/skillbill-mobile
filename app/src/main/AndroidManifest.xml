@@ -29,6 +29,10 @@
         <activity android:name=".ui.activity.ActivityCreerCompte"
             android:parentActivityName=".ui.activity.ActivityConnexion">
         </activity>
+        <activity android:name=".ui.activity.ActivityVoirFacture"
+                  android:parentActivityName=".ui.activity.ActivityConnexion">
+        </activity>
+
         <activity android:name=".ui.activity.ActivityConnexion"
             android:parentActivityName=".ui.activity.SplashActivity">
         </activity>
