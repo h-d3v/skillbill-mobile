@@ -22,5 +22,5 @@ public interface ISourceDonnee {
     List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe)throws SourceDonneeException;
 
     boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur)throws SourceDonneeException;
-    boolean modifierFacture(Facture facture);
+    boolean modifierFacture(Facture facture) throws SourceDonneeException;
 }

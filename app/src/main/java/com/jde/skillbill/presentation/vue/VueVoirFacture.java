@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jde.skillbill.R;
@@ -15,8 +16,9 @@ import com.jde.skillbill.presentation.IContratVPVoirFacture;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirFacture;
 
 public class VueVoirFacture extends VueAjouterFacture implements IContratVPVoirFacture.VueVoirFacture {
-    Button boutonModifier, boutonAnnuler;
+    Button boutonModifier;
     PresenteurVoirFacture presenteurVoirFacture;
+    TextView textViewIamTiredOfThisShitOhDontAskWhyShowMeTheWayToTheNextWhiskeyBarOhDontAskWhy;
     boolean estEnCoursDeModification;
 
     @Override
@@ -28,20 +30,22 @@ public class VueVoirFacture extends VueAjouterFacture implements IContratVPVoirF
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vue = super.onCreateView(inflater, container, savedInstanceState);
-        boutonModifier= vue.findViewById(R.id.btnAjouter);
-        boutonModifier.setText(R.string.modifier);
-        boutonAnnuler = vue.findViewById(R.id.btnAnuller);
-        editTextMontant.setText(presenteurVoirFacture.trouverMontantFactureEnCours());
+        View vue = super.onCreateView(inflater,container,savedInstanceState);
+        boutonModifier = super.boutonAjouter;
+
+        super.editTextMontant.setText(presenteurVoirFacture.trouverMontantFactureEnCours());
         editTextTitre.setText(presenteurVoirFacture.trouverTitreFactureEnCours());
         date.setText(presenteurVoirFacture.trouverDateFactureEnCours());
         editTextTitre.setEnabled(false);
         date.setEnabled(false);
         editTextMontant.setEnabled(false);
+        calendarView.setVisibility(View.GONE);
+        spinnerChoixUtilisateursRedevables.setVisibility(View.GONE);
+        spinnerChoix.setVisibility(View.GONE);
 
         boutonAnnuler.setOnClickListener(view -> {
             if(!estEnCoursDeModification){
-                presenteurVoirFacture.redirigerVersListeFactures();
+                presenteurVoirFacture.envoyerRequeteModificationFacture();
             }else {
                 estEnCoursDeModification = false;
                 boutonModifier.setText(R.string.modifier);
@@ -56,7 +60,7 @@ public class VueVoirFacture extends VueAjouterFacture implements IContratVPVoirF
             public void onClick(View view) {
                 Toast.makeText(vue.getContext(),"dljklksdalkdsj", Toast.LENGTH_LONG);
                 if(estEnCoursDeModification){
-                    presenteurVoirFacture.modifierFactureEnCours();
+                    presenteurVoirFacture.envoyerRequeteModificationFacture();
                 }
                 else {
                     boutonModifier.setText(R.string.envoyer);

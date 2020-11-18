@@ -1,5 +1,6 @@
 package com.jde.skillbill.presentation.presenteur;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,6 +12,8 @@ import android.os.Message;
 
 import android.util.Log;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
@@ -23,6 +26,7 @@ import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueAjouterFacture;
 import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
+import com.jde.skillbill.ui.activity.ActivityVoirFacture;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.time.LocalDate;
@@ -30,7 +34,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPresenteurAjouterFacture {
-    ActivityAjouterFacture activityAjouterFacture;
+    Activity activityAjouterFacture;
     VueAjouterFacture vueAjouterFacture;
     Modele modele;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
@@ -52,7 +56,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private static final int MSG_TROUVER_MEMBRES=333;
 
     @SuppressLint("HandlerLeak")
-    public PresenteurAjouterFacture(ActivityAjouterFacture activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
+    public PresenteurAjouterFacture(AppCompatActivity activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
         this.activityAjouterFacture = activityAjouterFacture;
         this.vueAjouterFacture = vueAjouterFacture;
         this.modele = modele;

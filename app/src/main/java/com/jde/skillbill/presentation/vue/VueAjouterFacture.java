@@ -35,6 +35,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     protected ProgressBar progressBar;
     protected ImageView imageFacture;
     protected ImageButton btnAjouterFacture;
+    protected TextView tvToRemoveForTest;
 
 
     @Override
@@ -42,6 +43,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
                               ViewGroup container,
                               Bundle savedInstanceState) {
         View racine = inflater.inflate(R.layout.frag_ajouter_facture, container, false);
+        tvToRemoveForTest = racine.findViewById(R.id.titre_payeur_facture);
         btnAjouterFacture =racine.findViewById(R.id.btn_ajouter_facture_groupe_avec_photo);
         btnAjouterFacture.setOnClickListener(view -> {
             presenteurAjouterFacture.prendrePhoto();

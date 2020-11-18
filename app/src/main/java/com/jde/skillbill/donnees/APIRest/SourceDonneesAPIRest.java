@@ -52,6 +52,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     private String POINT_ENTREE_LOGIN ="login";
     private static final int READ_TIME_OUT =8000;
     private static final int CONNECT_TIME_OUT = 4000;
+    private String POINT_ENTREE_FACTURE="factures/";
 
 
     @Override
@@ -131,13 +132,19 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
                 factureRestAPI.setPayeursEtMontantsListe(payeursEtMontant);
                 String json = gson.toJson(factureRestAPI);
-                Log.e("json", json);
                 byte[] input = json.getBytes(StandardCharsets.UTF_8);
                 outputStream.write(input, 0,input.length);
 
                 if(httpURLConnection.getResponseCode()==200){
                     InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
-                    if (inputStreamReader.toString().equals("true"))return true;
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String sortie;
+                    while ((sortie = bufferedReader.readLine())!=null){
+                        stringBuilder.append(sortie);
+                    }
+
+                    return "true".equals(stringBuilder.toString());
                 }
 
             }
@@ -420,7 +427,54 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     }
 
     @Override
-    public boolean modifierFacture(Facture facture) {
+    public boolean modifierFacture(Facture facture) throws SourceDonneeException {
+        URL url = null;
+        try {
+
+            url = new URL(URI_BASE+POINT_ENTREE_FACTURE);
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI : ", e.toString());
+        }
+
+        HttpURLConnection httpURLConnection= null;
+        try {
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+            httpURLConnection.setRequestMethod("PUT");
+            reglerTimeout(httpURLConnection);
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            Gson gson = new GsonBuilder().create();
+            String json = gson.toJson(facture);
+            Log.e("json", json);
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
+            outputStream.write(input, 0,input.length);
+
+
+
+
+
+            if(httpURLConnection.getResponseCode()==200){
+                InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                String sortie;
+                while ((sortie = bufferedReader.readLine())!=null){
+                    stringBuilder.append(sortie);
+                }
+
+                return "true".equals(stringBuilder.toString());
+            }
+
+        }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 
