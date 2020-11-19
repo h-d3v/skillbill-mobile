@@ -13,6 +13,7 @@
             android:layout_height="match_parent" android:orientation="vertical">
 
 
+
         <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -54,6 +55,26 @@
                     android:text="Membres"
             />
         </com.google.android.material.tabs.TabLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:hint="devise de conversion des factures"
+            app:boxCornerRadiusBottomEnd="30dp"
+            app:boxCornerRadiusBottomStart="30dp"
+            app:boxCornerRadiusTopEnd="30dp"
+            app:boxCornerRadiusTopStart="30dp"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/monnaies_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvMsgFactures"

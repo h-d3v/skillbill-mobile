@@ -69,6 +69,7 @@
     <string name="pas_de_connection_internet">Erreur de connection à la source de données</string>
     <string name="modifier">Modifier</string>
     <string name="envoyer">Envoyer</string>
+    <string name="devise_du_groupe">devise du groupe</string>
 
 
 </resources>

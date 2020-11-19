@@ -73,8 +73,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
 
 
 
-    //TODO Faire les operations avec la source de donnees en fil esclave pour l'api
-    //TODO la creation reele du compte si l'email n'est pas pris (persistance)
+   //TODO, question PL pour la methode utilisateurExiste()
     @Override
     public void creerCompte() {
         _vueCreerCompte.ouvrirProgressBar();
@@ -84,26 +83,22 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
                 try{
                     Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
                     if(utilisateurCreer==null){
-                        msg=handler.obtainMessage(MESSAGE.ERREUR);
-                    }
-                    else if(!utilisateurCreer.getCourriel().equals("-1")){
-                        msg=handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE,utilisateurCreer);
-                    }
-                    else if(utilisateurCreer.getCourriel().equals("-1")){
                         msg=handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
+                    }
+                    else if(utilisateurCreer.getCourriel().equals(_vueCreerCompte.getEmail())) {
+                        msg = handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE, utilisateurCreer);
                     }
                 }catch (SourceDonneeException e){
                     msg = handler.obtainMessage(MESSAGE.ERREUR_CNX);
                 }
-
-
-
 
             handler.sendMessage(msg);
         });
         filEsclave.start();
 
     }
+
+
 
     @Override
     public void retourLogin() {

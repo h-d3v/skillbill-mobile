@@ -5,6 +5,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueCreerCompte;
 import com.jde.skillbill.ui.activity.ActivityCreerCompte;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.*;
 public class PresenteurCreerCompteTest {
 
     @Test
-    public void creerCompteCourrielExistant(){
+    public void creerCompteCourrielExistant() throws SourceDonneeException {
        final ActivityCreerCompte activityCreerCompte = mock(ActivityCreerCompte.class);
        final Modele modele = mock(Modele.class);
        final VueCreerCompte vueCreerCompte = mock(VueCreerCompte.class);
@@ -46,7 +47,7 @@ public class PresenteurCreerCompteTest {
     }
 
     @Test
-    public void creerCompteCourrielNONExistant(){
+    public void creerCompteCourrielNONExistant() throws SourceDonneeException {
         final ActivityCreerCompte activityCreerCompte = mock(ActivityCreerCompte.class);
         final Modele modele = mock(Modele.class);
         final VueCreerCompte vueCreerCompte = mock(VueCreerCompte.class);

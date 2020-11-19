@@ -42,11 +42,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
-    private String URI_BASE = "http://192.168.0.23:44302/api/";
+    private String URI_BASE = "http://192.168.1.32:51360/api/";
     private String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
     private String POINT_ENTREE_GROUPE = "groupes/";
     private String POINT_ENTREE_LOGIN ="login";
@@ -188,13 +187,16 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         return false;
     }
 
+
     @Override
-    public Utilisateur creerUtilisateur(Utilisateur utilisateur)  {
+    public Utilisateur creerUtilisateur(Utilisateur utilisateur) throws SourceDonneeException {
+        boolean existeDeja=utilisateurExiste(utilisateur.getCourriel());
+        if(existeDeja) return null;
         Utilisateur utilisateurRetour = null;
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\r\n    'Nom': '"+utilisateur.getNom()+"',\r\n    'Courriel': '"+utilisateur.getCourriel()+"',\r\n    'MotDePasse': '"+utilisateur.getMotPasse()+"'\r\n}");
+        RequestBody body = RequestBody.create(mediaType, "{\r\n    'Nom': '"+utilisateur.getNom()+"',\r\n    'Courriel': '"+utilisateur.getCourriel()+"',\r\n    'MotDePasse': '"+utilisateur.getMotPasse()+"'\r\n, 'Monnaie': '"+utilisateur.getMonnaieUsuelle().name()+"'\r\n}");
         Request request = new Request.Builder()
                 .url("http://192.168.1.32:51360/api/Register")
                 .method("POST", body)
@@ -203,19 +205,20 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             Response response = client.newCall(request).execute();
 
-
-            if(response.code()==200) {
+            if(response.code()==201) {
                 //peut seulement etre consommer une seule fois, regarder documentation okhttp
                 utilisateurRetour = decoderUtilisateur(Objects.requireNonNull(response.body()).byteStream());
             }
+            else if(response.code()==409){
+                return null;
+            }
         }//si la connection a l'api est impossible, on retourne un user null
         catch(ConnectException e) {
-
             Log.e("erreur connection api", "message:" + Objects.requireNonNull(e.getMessage()) + " \n cause: " + e.getCause());
+            throw new SourceDonneeException("Connexion non disponnible");
         } //si l'email entrer est deja pris, on retourne un user invalide
         catch (IOException e) {
-            utilisateurRetour=new Utilisateur("-1", "-1", "-1", Monnaie.CAD);
-            e.printStackTrace();
+            Log.e("IOException creerUtilisateur","Cause: "+e.getMessage()+"\n Message: "+e.getMessage());
         }
         return utilisateurRetour;
     }
@@ -434,6 +437,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         String email="";
         String nom="";
         int id=-1;
+        String monnaieAPI= "";
         while (jsonReader.hasNext()) {
             String key = jsonReader.nextName();
 
@@ -446,12 +450,15 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             else if (key.equals("Id")) {
                 id= jsonReader.nextInt();
             }
+            else if (key.equals("Monnaie")) {
+                monnaieAPI= jsonReader.nextString();
+            }
             else {
                 jsonReader.skipValue();
             }
         }
 
-        return new UtilisateurRestAPI( nom, email, "", Monnaie.CAD, id);
+        return new UtilisateurRestAPI( nom, email, "", Monnaie.valueOf(monnaieAPI), id);
     }
     private  static void reglerTimeout(HttpURLConnection httpURLConnection){
         httpURLConnection.setReadTimeout(READ_TIME_OUT);

@@ -22,11 +22,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.jde.skillbill.R;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.vue.recyclerview_adapters.RvVoirFactureAdapter;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -42,6 +46,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
    private Button ajouterMembre;
    private View racine;
    private ProgressBar progressBar;
+   private AutoCompleteTextView editTextFilledExposedDropdown;
 
     RecyclerView rvFactures;
     RvVoirFactureAdapter rvFacturesAdapter;
@@ -63,6 +68,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
         rvFactures.setAdapter(rvFacturesAdapter);
         rvFactures.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFactures.addItemDecoration(new DividerItemDecoration(rvFactures.getContext(), DividerItemDecoration.VERTICAL));
+        editTextFilledExposedDropdown = racine.findViewById(R.id.monnaies_dropdown);
 
         tvNomGroupe.setText(_presenteur.getNomGroupe());
 
@@ -115,6 +121,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
                  _presenteur.ajouterUtilisateurAuGroupe(champsCourriel.getText().toString());
 
             });
+
             builder.setNeutralButton(getString(R.string.Inviter), (dialogInterface, i) -> _presenteur.envoyerCourriel(champsCourriel.getText().toString()));
 
             builder.setNegativeButton(getString(R.string.Annuler), (dialogInterface, i) -> dialogInterface.dismiss());
@@ -150,6 +157,19 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
             });
             dialog.show();
         });
+
+        //Peupler la liste de monnaies, on va chercher toutes les valeurs de l'enum
+        List<String> monnaiesString = Stream.of(Monnaie.values()).map(Enum::name).collect(Collectors.toList());
+
+        ArrayAdapter<String> adapterMonnaies = new ArrayAdapter<>(
+                Objects.requireNonNull(getContext()),
+                R.layout.dropdown_menu_item,
+                monnaiesString);
+
+        editTextFilledExposedDropdown.setAdapter(adapterMonnaies);
+
+        //on initialise la devise à CAD
+        editTextFilledExposedDropdown.setText(Monnaie.CAD.name(), false);
         return racine;
     }
 
