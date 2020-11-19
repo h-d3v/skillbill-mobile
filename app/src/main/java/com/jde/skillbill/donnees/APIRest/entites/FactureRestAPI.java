@@ -7,6 +7,7 @@ import com.jde.skillbill.domaine.entites.Utilisateur;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ public class FactureRestAPI extends Facture {
     private String date;
     @SerializedName("Id")
     private int id;
+    @SerializedName("Photos")
+    private ArrayList<PhotoRestApi> photoesEncodeesBase64;
 
     @SerializedName("IdGroupe")
     int idGroupe;
@@ -31,6 +34,7 @@ public class FactureRestAPI extends Facture {
         this.idGroupe=idGroupe;
         super.setMontantTotal(montantTotal);
         this.idUtilisateurCreateur = idUtilisateurCreateur;
+        this.photoesEncodeesBase64= new ArrayList<>();
     }
 
     public List<PayeursEtMontant> getPayeursEtMontantsListe() {
@@ -63,8 +67,11 @@ public class FactureRestAPI extends Facture {
         this.id = id;
     }
 
+    public ArrayList<PhotoRestApi> getPhotoesEncodeesBase64() {
+        return photoesEncodeesBase64;
+    }
 
-
-
-
+    public void setPhotoesEncodeesBase64(ArrayList<PhotoRestApi> photoesEncodeesBase64) {
+        this.photoesEncodeesBase64 = photoesEncodeesBase64;
+    }
 }

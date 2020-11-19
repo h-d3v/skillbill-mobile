@@ -1,5 +1,7 @@
 package com.jde.skillbill.presentation;
 
+import android.graphics.Bitmap;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
@@ -26,6 +28,8 @@ public interface IContratVPAjouterFacture {
 
 
         void afficherMessageErreurAlertDialog(String message, String titre);
+
+        Bitmap getBitmapFacture();
 
         String getTitreInput();
 

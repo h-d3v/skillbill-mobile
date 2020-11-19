@@ -71,6 +71,9 @@
     <string name="envoyer">Envoyer</string>
     <string name="cancel">Annuler</string>
     <string name="action_retour">Retour</string>
+    <string name="pas_d_activite_photo_diponible">Nous ne pouvons trouver une application compatible pour prendre des
+        photos sur votre appareil
+    </string>
 
 
 </resources>

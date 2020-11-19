@@ -51,4 +51,6 @@ public interface IGestionFacture {
     Facture modifierPhotoFacture(Facture facture, String uri, Bitmap bitmap)throws SourceDonneeException;
 
     boolean modifierFacture(Facture facture) throws SourceDonneeException;
+
+    boolean creerFacture(Facture facture) throws SourceDonneeException;
 }

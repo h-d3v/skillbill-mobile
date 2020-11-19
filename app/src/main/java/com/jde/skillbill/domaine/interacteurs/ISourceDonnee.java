@@ -23,4 +23,6 @@ public interface ISourceDonnee {
 
     boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur)throws SourceDonneeException;
     boolean modifierFacture(Facture facture) throws SourceDonneeException;
+
+    boolean creerFacture(Facture facture) throws SourceDonneeException;
 }

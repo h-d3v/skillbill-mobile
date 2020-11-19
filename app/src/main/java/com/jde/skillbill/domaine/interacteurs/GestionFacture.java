@@ -45,4 +45,9 @@ public class GestionFacture implements IGestionFacture {
         iSourceDonnee.modifierFacture(facture);
         return false;
     }
+
+    @Override
+    public boolean creerFacture(Facture facture) throws SourceDonneeException {
+       return iSourceDonnee.creerFacture(facture);
+    }
 }
