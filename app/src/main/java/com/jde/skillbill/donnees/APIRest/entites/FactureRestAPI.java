@@ -18,8 +18,7 @@ public class FactureRestAPI extends Facture {
     private String date;
     @SerializedName("Id")
     private int id;
-    @SerializedName("MontantTotal")
-    double montantTotal;
+
     @SerializedName("IdGroupe")
     int idGroupe;
     @SerializedName("UtilisateurCreateurId")
@@ -27,9 +26,10 @@ public class FactureRestAPI extends Facture {
 
 
     public FactureRestAPI(String date, int idGroupe, double montantTotal, int idUtilisateurCreateur){
+        super();
         this.date=date;
         this.idGroupe=idGroupe;
-        this.montantTotal= montantTotal;
+        super.setMontantTotal(montantTotal);
         this.idUtilisateurCreateur = idUtilisateurCreateur;
     }
 
@@ -63,10 +63,8 @@ public class FactureRestAPI extends Facture {
         this.id = id;
     }
 
-    @Override
-    public double getMontantTotal(){
-        return montantTotal;
-    }
+
+
 
 
 }

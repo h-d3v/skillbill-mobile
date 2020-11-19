@@ -3,9 +3,11 @@ package com.jde.skillbill.presentation.presenteur;
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.jde.skillbill.domaine.entites.Facture;
+import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
@@ -17,6 +19,7 @@ import com.jde.skillbill.presentation.vue.VueVoirFacture;
 import com.jde.skillbill.ui.activity.ActivityVoirFacture;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 
 
 public class PresenteurVoirFacture extends PresenteurAjouterFacture implements IContratVPVoirFacture.PresenteurVoirFacture {
@@ -39,9 +42,11 @@ public class PresenteurVoirFacture extends PresenteurAjouterFacture implements I
         handler = new android.os.Handler() {
             @Override
             public void handleMessage(Message msg) {
+                super.handleMessage(msg);
                 threadEsclave=null;
                 if(msg.what==MSG_MODIF_FACTURE_FAIT){
-                    presenterListeUtilsateur();
+                    Log.e("presenteur voir facture", "it works");
+                   PresenteurVoirFacture.super.redirigerVersListeFactures();
                 }
                 if(msg.what == MSG_ERREUR){
                     Toast.makeText(PresenteurVoirFacture.super.activityAjouterFacture , "ERREUR", Toast.LENGTH_LONG );
@@ -82,6 +87,13 @@ public class PresenteurVoirFacture extends PresenteurAjouterFacture implements I
                     Facture factureAModifier = modele.getFactureEnCours();
                     factureAModifier.setLibelle(PresenteurVoirFacture.super.vueAjouterFacture.getTitreInput());
                     factureAModifier.setDateFacture(PresenteurVoirFacture.super.vueAjouterFacture.getDateFactureInput());
+                    factureAModifier.setMontantTotal(PresenteurVoirFacture.super.vueAjouterFacture.getMontantFactureInput());
+                    //TODO solution provisoire seul l'utilisateur connecté est pris en compte
+                    HashMap<Utilisateur, Double> montantsPayesParUtilisateur = new HashMap<>();
+                    montantsPayesParUtilisateur.put(modele.getUtilisateurConnecte(),PresenteurVoirFacture.super.vueAjouterFacture.getMontantFactureInput());
+                    factureAModifier.setMontantPayeParParUtilisateur(montantsPayesParUtilisateur);
+                    Log.e("presenteur voir facture", String.valueOf(montantsPayesParUtilisateur.get(modele.getUtilisateurConnecte())));
+                    Log.e("presenteur voir facture utilis ", montantsPayesParUtilisateur.keySet().toArray()[0].toString());
                     boolean estReussi = iGestionFacture.modifierFacture(factureAModifier);
 
                     if(estReussi) message = handler.obtainMessage(MSG_MODIF_FACTURE_FAIT);

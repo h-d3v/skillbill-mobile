@@ -14,6 +14,8 @@ public class Facture implements Serializable {
     private  Map<Utilisateur, Double> montantPayeParParUtilisateur;
     @SerializedName("Nom")
     private String libelle;
+    @SerializedName("MontantTotal")
+    private double montantTotal;
 
     //Constructeur de test
     public Facture(LocalDate dateFacture, Map<Utilisateur, Double> utilisateurDoubleMap, String nom){
@@ -57,11 +59,19 @@ public class Facture implements Serializable {
         return libelle;
     }
 
-    public double getMontantTotal(){
+    public double calculerMontantTotalParUtilisateur(){
         double somme=0;
         for(Utilisateur utilisateur : montantPayeParParUtilisateur.keySet()){
-            somme+=montantPayeParParUtilisateur.get(montantPayeParParUtilisateur);
+            somme+=montantPayeParParUtilisateur.get(utilisateur);
         }
         return somme;
+    }
+
+    public double getMontantTotal() {
+        return montantTotal;
+    }
+
+    public void setMontantTotal(double montantTotal) {
+        this.montantTotal = montantTotal;
     }
 }

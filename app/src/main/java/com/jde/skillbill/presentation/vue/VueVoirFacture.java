@@ -18,7 +18,6 @@ import com.jde.skillbill.presentation.presenteur.PresenteurVoirFacture;
 public class VueVoirFacture extends VueAjouterFacture implements IContratVPVoirFacture.VueVoirFacture {
     Button boutonModifier;
     PresenteurVoirFacture presenteurVoirFacture;
-    TextView textViewIamTiredOfThisShitOhDontAskWhyShowMeTheWayToTheNextWhiskeyBarOhDontAskWhy;
     boolean estEnCoursDeModification;
 
     @Override
@@ -33,42 +32,29 @@ public class VueVoirFacture extends VueAjouterFacture implements IContratVPVoirF
         View vue = super.onCreateView(inflater,container,savedInstanceState);
         boutonModifier = super.boutonAjouter;
 
-        super.editTextMontant.setText(presenteurVoirFacture.trouverMontantFactureEnCours());
-        editTextTitre.setText(presenteurVoirFacture.trouverTitreFactureEnCours());
-        date.setText(presenteurVoirFacture.trouverDateFactureEnCours());
-        editTextTitre.setEnabled(false);
-        date.setEnabled(false);
-        editTextMontant.setEnabled(false);
-        calendarView.setVisibility(View.GONE);
-        spinnerChoixUtilisateursRedevables.setVisibility(View.GONE);
-        spinnerChoix.setVisibility(View.GONE);
+
+        toggleVueModifierOuVoir(false);
 
         boutonAnnuler.setOnClickListener(view -> {
             if(!estEnCoursDeModification){
-                presenteurVoirFacture.envoyerRequeteModificationFacture();
+                presenteurVoirFacture.redirigerVersListeFactures();
             }else {
-                estEnCoursDeModification = false;
-                boutonModifier.setText(R.string.modifier);
-                editTextTitre.setEnabled(false);
-                editTextMontant.setEnabled(false);
-                date.setEnabled(false);
+                estEnCoursDeModification=!estEnCoursDeModification;
+                toggleVueModifierOuVoir(estEnCoursDeModification);
             }
         });
 
         boutonModifier.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(vue.getContext(),"dljklksdalkdsj", Toast.LENGTH_LONG);
+
                 if(estEnCoursDeModification){
                     presenteurVoirFacture.envoyerRequeteModificationFacture();
                 }
                 else {
-                    boutonModifier.setText(R.string.envoyer);
-                    estEnCoursDeModification = true;
-                    editTextMontant.setEnabled(true);
-                    editTextTitre.setEnabled(true);
-                    date.setEnabled(true);
-                    boutonAnnuler.setText(R.string.action_annuler);
+                    estEnCoursDeModification=!estEnCoursDeModification;
+                    toggleVueModifierOuVoir(estEnCoursDeModification);
+
                 }
 
 
@@ -76,5 +62,31 @@ public class VueVoirFacture extends VueAjouterFacture implements IContratVPVoirF
         });
 
         return vue;
+    }
+
+    private void toggleVueModifierOuVoir(boolean estEnCoursDeModification){
+        if(estEnCoursDeModification){
+            boutonModifier.setText(R.string.envoyer);
+            estEnCoursDeModification = true;
+            editTextMontant.setEnabled(true);
+            editTextTitre.setEnabled(true);
+            date.setEnabled(true);
+            boutonAnnuler.setText(R.string.action_annuler);
+            spinnerChoixUtilisateursRedevables.setVisibility(View.VISIBLE);
+            spinnerChoix.setVisibility(View.VISIBLE);
+        }
+        else{
+            estEnCoursDeModification = false;
+            boutonModifier.setText(R.string.modifier);
+            editTextTitre.setEnabled(false);
+            editTextMontant.setEnabled(false);
+            date.setEnabled(false);
+            boutonAnnuler.setText(R.string.action_retour);
+            spinnerChoixUtilisateursRedevables.setVisibility(View.GONE);
+            spinnerChoix.setVisibility(View.GONE);
+            super.editTextMontant.setText(presenteurVoirFacture.trouverMontantFactureEnCours());
+            super.editTextTitre.setText(presenteurVoirFacture.trouverTitreFactureEnCours());
+            super.date.setText(presenteurVoirFacture.trouverDateFactureEnCours());
+        }
     }
 }

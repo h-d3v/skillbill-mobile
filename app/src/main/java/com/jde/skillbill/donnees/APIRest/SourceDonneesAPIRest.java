@@ -1,7 +1,6 @@
 package com.jde.skillbill.donnees.APIRest;
 
 import android.util.JsonReader;
-import android.util.JsonWriter;
 import android.util.Log;
 
 
@@ -18,8 +17,7 @@ import com.jde.skillbill.donnees.APIRest.entites.GroupeRestApi;
 import com.jde.skillbill.donnees.APIRest.entites.PayeursEtMontant;
 import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,8 +25,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.*;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -42,17 +38,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
-    private String URI_BASE = "http://192.168.0.23:44302/api/";
-    private String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
-    private String POINT_ENTREE_GROUPE = "groupes/";
-    private String POINT_ENTREE_LOGIN ="login";
+    private final String URI_BASE = "http://192.168.0.23:44302/api/";
+    private final String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
+    private final String POINT_ENTREE_GROUPE = "groupes/";
+    private final String POINT_ENTREE_LOGIN ="login";
     private static final int READ_TIME_OUT =8000;
     private static final int CONNECT_TIME_OUT = 4000;
-    private String POINT_ENTREE_FACTURE="factures/";
+    private final String POINT_ENTREE_FACTURE="factures/";
 
 
     @Override
@@ -125,7 +120,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 Gson gson = new GsonBuilder().create();
-                FactureRestAPI factureRestAPI = new FactureRestAPI(localDate.toString(), ((GroupeRestApi)groupe).getId(), montantTotal, ((UtilisateurRestAPI) utilisateurPayeur).getId());
+                FactureRestAPI factureRestAPI = new FactureRestAPI(localDate.toString(), ((GroupeRestApi)groupe).getId(),montantTotal ,((UtilisateurRestAPI) utilisateurPayeur).getId());
                 factureRestAPI.setLibelle(titre);
                 List<PayeursEtMontant> payeursEtMontant  = new ArrayList<>();
                 payeursEtMontant.add( new PayeursEtMontant(((UtilisateurRestAPI)utilisateurPayeur).getId() ,montantTotal));
@@ -445,16 +440,20 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
             OutputStream outputStream = httpURLConnection.getOutputStream();
+            List<PayeursEtMontant> payeursEtMontant  = new ArrayList<>();
+            for(Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()){
+                payeursEtMontant.add(new PayeursEtMontant(((UtilisateurRestAPI) utilisateur).getId(), facture.getMontantPayeParParUtilisateur().get(utilisateur)));
+            }
+
+
+            ((FactureRestAPI) facture).setPayeursEtMontantsListe(payeursEtMontant);
+            ((FactureRestAPI) facture).setMontantTotal(facture.getMontantTotal());
             Gson gson = new GsonBuilder().create();
             String json = gson.toJson(facture);
             Log.e("json", json);
+
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
-
-
-
-
-
             if(httpURLConnection.getResponseCode()==200){
                 InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
