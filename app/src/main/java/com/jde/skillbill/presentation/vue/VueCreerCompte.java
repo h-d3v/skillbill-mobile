@@ -76,19 +76,9 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
 
         btnRegister.setEnabled(false);
 
-        btnRetour.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _presenteur.retourLogin();
-            }
-        });
+        btnRetour.setOnClickListener(v -> _presenteur.retourLogin());
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _presenteur.creerCompte();
-            }
-        });
+        btnRegister.setOnClickListener(v -> _presenteur.creerCompte());
 
         //verification du nom
         tfNom.addTextChangedListener(new TextWatcher() {
