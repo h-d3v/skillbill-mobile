@@ -2,6 +2,7 @@ package com.jde.skillbill.presentation.presenteur;
 
 import android.annotation.SuppressLint;
 import com.jde.skillbill.domaine.entites.Facture;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.interacteurs.GestionFacture;
 import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
@@ -56,5 +57,6 @@ public class PresenteurVoirFacture extends PresenteurAjouterFacture implements I
     public String trouverDateFactureEnCours() {
         return modele.getFactureEnCours().getDateFacture().toString();
     }
+
 }
 

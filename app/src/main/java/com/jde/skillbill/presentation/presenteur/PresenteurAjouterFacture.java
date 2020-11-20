@@ -2,9 +2,9 @@ package com.jde.skillbill.presentation.presenteur;
 
 import android.content.ActivityNotFoundException;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.provider.MediaStore;
 import android.os.Handler;
 import android.os.Message;
@@ -145,7 +145,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             Message msg;
 
             try {
-                double montant = vueAjouterFacture.getMontantFactureInput();
+                double montant = vueAjouterFacture.getMontantFactureCADInput();
                 LocalDate date = vueAjouterFacture.getDateFactureInput();
                 String titre = vueAjouterFacture.getTitreInput();
                 if (titre == null) {
@@ -190,5 +190,12 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         }catch (ActivityNotFoundException e){
             Log.e("dlld", e.getMessage());
         }
+    }
+
+    @Override
+    public Monnaie getMonnaieUserConnecte(){
+        SharedPreferences sharedPref = activityAjouterFacture.getSharedPreferences("SKILLBILL_USER_PREF", Context.MODE_PRIVATE);
+        String strMonnaieUser = sharedPref.getString("monnaieUser", "CAD");
+        return Monnaie.valueOf(strMonnaieUser);
     }
 }

@@ -3,7 +3,9 @@ package com.jde.skillbill.presentation.presenteur;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +36,7 @@ import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
 
+import static android.provider.Settings.System.getString;
 
 
 public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.IPresenteurVoirGroupe {
@@ -163,9 +166,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         return modele.getSoldeParPosition()[position];
     }
 
-
-
-
     @Override
     public String getNomGroupe(int position) {
         if (BuildConfig.DEBUG && position < 0) {
@@ -194,7 +194,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     public void commencerPrendrePhotoFacture(int position){
         //TODO remove
     }
-
 
 
 

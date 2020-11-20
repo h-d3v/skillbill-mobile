@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.jde.skillbill.R;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVPVoirUnGroupe;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirUnGroupe;
 
@@ -40,13 +41,12 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
         tvMontant =holder.itemView.findViewById(R.id.tvMontant);
 
         btnNomActivite.setText(_presenteur.getFacturesGroupe().get(position).getLibelle());
-        btnNomActivite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                _presenteur.commencerVoirDetailFacture(position);
-            }
-        });
-        tvMontant.setText(((Double) _presenteur.getMontantFacturePayerParUser(position)).toString());
+        btnNomActivite.setOnClickListener(view -> _presenteur.commencerVoirDetailFacture(position));
+
+        Monnaie monnaieUser= _presenteur.getMonnaieUserConnecte();
+        Double montantFacturePayer=_presenteur.getMontantFacturePayerParUser(position);
+        montantFacturePayer*=monnaieUser.getTauxCad();
+        tvMontant.setText(( montantFacturePayer).toString()+" "+monnaieUser.getSymbol());
     }
 
     @Override

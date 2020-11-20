@@ -1,5 +1,7 @@
 package com.jde.skillbill.presentation;
 
+import com.jde.skillbill.domaine.entites.Monnaie;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
@@ -14,6 +16,8 @@ public interface IContratVPAjouterFacture {
         void prendrePhoto();
 
         void redirigerVersListeFactures();
+
+        Monnaie getMonnaieUserConnecte();
     }
 
     interface IVueAjouterFacture{
@@ -22,7 +26,7 @@ public interface IContratVPAjouterFacture {
 
         LocalDate getDateFactureInput() throws NullPointerException, DateTimeException;
 
-        double getMontantFactureInput();
+        double getMontantFactureCADInput();
 
 
         void afficherMessageErreurAlertDialog(String message, String titre);
@@ -32,5 +36,6 @@ public interface IContratVPAjouterFacture {
         void fermerProgressBar();
 
         void ouvrirProgressBar();
+
     }
 }

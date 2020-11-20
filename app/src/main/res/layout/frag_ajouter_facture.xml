@@ -69,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/txt_input_montant"
                 android:inputType="numberDecimal" android:importantForAutofill="no"
+                android:hint="@string/montant"
                 android:labelFor="@id/txt_titre_montant"/>
         <TextView
                 android:text="@string/titre_payeur"

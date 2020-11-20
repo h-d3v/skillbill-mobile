@@ -1,7 +1,9 @@
 package com.jde.skillbill.presentation.presenteur;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 
@@ -296,5 +298,10 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         return groupeEncours.getNomGroupe();
     }
 
+    public Monnaie getMonnaieUserConnecte(){
+        SharedPreferences sharedPref = activityVoirUnGroupe.getSharedPreferences("SKILLBILL_USER_PREF", Context.MODE_PRIVATE);
+        String strMonnaieUser = sharedPref.getString("monnaieUser", "CAD");
+        return Monnaie.valueOf(strMonnaieUser);
+    }
 
 }

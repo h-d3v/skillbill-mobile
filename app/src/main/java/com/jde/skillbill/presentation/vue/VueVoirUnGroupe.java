@@ -46,7 +46,6 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
    private Button ajouterMembre;
    private View racine;
    private ProgressBar progressBar;
-   private AutoCompleteTextView editTextFilledExposedDropdown;
 
     RecyclerView rvFactures;
     RvVoirFactureAdapter rvFacturesAdapter;
@@ -68,7 +67,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
         rvFactures.setAdapter(rvFacturesAdapter);
         rvFactures.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFactures.addItemDecoration(new DividerItemDecoration(rvFactures.getContext(), DividerItemDecoration.VERTICAL));
-        editTextFilledExposedDropdown = racine.findViewById(R.id.monnaies_dropdown);
+
 
         tvNomGroupe.setText(_presenteur.getNomGroupe());
 
@@ -158,18 +157,6 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
             dialog.show();
         });
 
-        //Peupler la liste de monnaies, on va chercher toutes les valeurs de l'enum
-        List<String> monnaiesString = Stream.of(Monnaie.values()).map(Enum::name).collect(Collectors.toList());
-
-        ArrayAdapter<String> adapterMonnaies = new ArrayAdapter<>(
-                Objects.requireNonNull(getContext()),
-                R.layout.dropdown_menu_item,
-                monnaiesString);
-
-        editTextFilledExposedDropdown.setAdapter(adapterMonnaies);
-
-        //on initialise la devise à CAD
-        editTextFilledExposedDropdown.setText(Monnaie.CAD.name(), false);
         return racine;
     }
 

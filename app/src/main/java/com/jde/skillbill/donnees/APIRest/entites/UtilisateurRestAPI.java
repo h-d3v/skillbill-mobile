@@ -14,7 +14,6 @@ public class UtilisateurRestAPI extends Utilisateur {
     public UtilisateurRestAPI(String nom, String courriel, String motPasse, Monnaie monnaie, int id) {
         super(nom, courriel, motPasse, monnaie);
         this.id = id;
-
     }
 
     public UtilisateurRestAPI(int idPayeur) {

@@ -1,7 +1,7 @@
 package com.jde.skillbill.donnees.APIRest;
 
 import android.util.JsonReader;
-import android.util.JsonWriter;
+
 import android.util.Log;
 
 
@@ -27,8 +27,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.*;
-import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -249,6 +247,8 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
             if(httpURLConnection.getResponseCode()==200){
               InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+              //todo faire en sorte que la monnaie en string qui provient de l'api se convertisse en l'enum monnaie lors de la creation du user
+                // cela devra se faire dans la classe utilisateurAPI
               utilisateur = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
 
               if(utilisateur==null || utilisateur.getId()==0) return null;

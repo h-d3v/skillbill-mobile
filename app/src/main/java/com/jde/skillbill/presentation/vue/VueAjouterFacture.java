@@ -15,6 +15,7 @@ import android.widget.*;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jde.skillbill.R;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 
 import java.time.LocalDate;
@@ -35,6 +36,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     protected ProgressBar progressBar;
     protected ImageView imageFacture;
     protected ImageButton btnAjouterFacture;
+    private TextView tvTitreMontant;
 
 
     @Override
@@ -117,6 +119,9 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
              }
          });
 
+        tvTitreMontant=racine.findViewById(R.id.txt_titre_montant);
+        Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
+        tvTitreMontant.setText("Montant en " +monnaieUser.name()+"-"+monnaieUser.getSymbol());
         return racine;
     }
 
@@ -143,16 +148,18 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
 
     /**
      *
-     * @return le montant de la facture
+     * @return le montant de la facture dans la devise de l'utilisateur
      * @throws NullPointerException
      * @throws NumberFormatException
      */
     @Override
-    public double getMontantFactureInput() throws NullPointerException, NumberFormatException {
+    public double getMontantFactureCADInput() throws NullPointerException, NumberFormatException {
+        Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
         if(Double.parseDouble( editTextMontant.getText().toString())<=0){
             throw new NumberFormatException();
         }
-        return Double.parseDouble( editTextMontant.getText().toString());
+        double monatantDevise=Double.parseDouble( editTextMontant.getText().toString());
+        return monatantDevise*monnaieUser.getTauxDevise();
     }
 
     /**
