@@ -188,6 +188,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
     @Override
     public Utilisateur creerUtilisateur(Utilisateur utilisateur) throws SourceDonneeException {
+        //todo appeler la methode dans le presenteur, pour verifier l'existance de l'utilisateur
         boolean existeDeja=utilisateurExiste(utilisateur.getCourriel());
         if(existeDeja) return null;
         Utilisateur utilisateurRetour = null;
@@ -247,8 +248,8 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
             if(httpURLConnection.getResponseCode()==200){
               InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
-              //todo faire en sorte que la monnaie en string qui provient de l'api se convertisse en l'enum monnaie lors de la creation du user
-                // cela devra se faire dans la classe utilisateurAPI
+
+
               utilisateur = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
 
               if(utilisateur==null || utilisateur.getId()==0) return null;

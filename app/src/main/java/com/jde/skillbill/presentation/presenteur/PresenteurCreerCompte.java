@@ -69,18 +69,17 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
         _dataSource = dataSource;
     }
 
+    
 
-
-
-
-   //TODO, question PL pour la methode utilisateurExiste()
     @Override
     public void creerCompte() {
         _vueCreerCompte.ouvrirProgressBar();
         filEsclave = new Thread(() -> {
             Message msg=null;
             GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
+
                 try{
+                    //todo, appeler methode utilisateurExiste(), si existe, on envoie le msg, si non on continu
                     Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
                     if(utilisateurCreer==null){
                         msg=handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
