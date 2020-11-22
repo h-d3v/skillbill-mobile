@@ -6,6 +6,7 @@ import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 public interface IGestionFacture {
@@ -53,4 +54,8 @@ public interface IGestionFacture {
     boolean modifierFacture(Facture facture) throws SourceDonneeException;
 
     boolean creerFacture(Facture facture) throws SourceDonneeException;
+
+    List<byte[]> chargerPhotoFacture(Facture factureEnCours) throws SourceDonneeException;
+
+    Facture rechargerFacture(Facture facture) throws SourceDonneeException;
 }

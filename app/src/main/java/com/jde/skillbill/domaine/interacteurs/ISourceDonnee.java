@@ -25,4 +25,8 @@ public interface ISourceDonnee {
     boolean modifierFacture(Facture facture) throws SourceDonneeException;
 
     boolean creerFacture(Facture facture) throws SourceDonneeException;
+
+    List<byte[]> chargerPhotos(Facture factureEnCours) throws SourceDonneeException;
+
+    Facture rechargerFacture(Facture facture) throws SourceDonneeException;
 }

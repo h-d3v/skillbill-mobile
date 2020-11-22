@@ -1,14 +1,14 @@
 package com.jde.skillbill.ui.activity;
 
-import android.content.Intent;
+
 import android.os.Bundle;
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import com.jde.skillbill.R;
-import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
+
 import com.jde.skillbill.donnees.APIRest.SourceDonneesAPIRest;
-import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
+
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirGroupes;
 import com.jde.skillbill.presentation.vue.VueVoirGroupes;
@@ -35,6 +35,7 @@ public class ActivityVoirGroupes extends AppCompatActivity {
         fragmentTransaction.add(R.id.layout_voir_groupe, vueVoirGroupes);
         fragmentTransaction.commit();
     }
+
 
 
 }

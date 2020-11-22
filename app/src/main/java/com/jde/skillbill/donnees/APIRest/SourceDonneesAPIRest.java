@@ -41,6 +41,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     private final String URI_BASE = "http://192.168.0.23:44302/api/";
     private final String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
     private final String POINT_ENTREE_GROUPE = "groupes/";
+    private final String POINT_ENTREE_PHOTO = "photos/";
     private final String POINT_ENTREE_LOGIN ="login";
     private static final int READ_TIME_OUT =8000;
     private static final int CONNECT_TIME_OUT = 4000;
@@ -507,7 +508,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 factureRestAPI.setPayeursEtMontantsListe(payeursEtMontant);
                 if(!Objects.requireNonNull(facture.getPhotos()).isEmpty()){
                     for(byte[] bytes : facture.getPhotos()){
-                        factureRestAPI.getPhotoesEncodeesBase64().add(new PhotoRestApi( Base64.encodeToString(bytes, Base64.DEFAULT)));
+                        factureRestAPI.getPhotosRestAPI().add(new PhotoRestApi( Base64.encodeToString(bytes, Base64.DEFAULT)));
                     }
                 }
                 facture = factureRestAPI;
@@ -543,6 +544,109 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
 
         return false;
+    }
+
+
+    public FactureRestAPI rechargerFacture(Facture facture) throws SourceDonneeException{
+        URL url= null;
+        FactureRestAPI factureRestAPI;
+        try {
+            factureRestAPI = (FactureRestAPI) facture;
+
+        }catch (ClassCastException e){
+            Log.e("Source donnée API Rest :", e.getStackTrace().toString());
+            throw new SourceDonneeException("entité invalide pour la source de donnée");
+        }
+        try {
+            url = new URL(URI_BASE+POINT_ENTREE_FACTURE+factureRestAPI.getId());
+        }catch (MalformedURLException e ){
+            Log.e("SOurceDonneAPI: ", e.toString());
+        }
+        HttpURLConnection httpURLConnection= null;
+        try {
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            reglerTimeout(httpURLConnection);
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+
+            if(httpURLConnection.getResponseCode()==200) {
+                Gson gson = new Gson();
+                InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                factureRestAPI = gson.fromJson(inputStreamReader, FactureRestAPI.class);
+                factureRestAPI.setPhotos(new ArrayList<>());
+                for (PhotoRestApi photoRestApi : factureRestAPI.getPhotosRestAPI()){
+                   String base64Photo = photoRestApi.getPhotoEncodee();
+                   factureRestAPI.getPhotos().add(Base64.decode(base64Photo.toString(), Base64.DEFAULT));
+                }
+                Log.e("JSON recharger facture ", gson.toJson(factureRestAPI));
+            }
+
+
+        }
+        catch (java.net.SocketTimeoutException e ){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e ){
+            e.printStackTrace();
+        }
+
+        return factureRestAPI;
+
+    }
+
+    @Override
+    public List<byte[]> chargerPhotos(Facture factureEnCours) throws SourceDonneeException {
+        URL url=null;
+        List<PhotoRestApi> photoRestApiList=null;
+        List<byte[]> photosBytes = new ArrayList<>();
+        try{
+             photoRestApiList =  ((FactureRestAPI)factureEnCours).getPhotosRestAPI();
+        }catch (ClassCastException e){
+            Log.e("Source donnée API Rest :", e.getStackTrace().toString());
+            throw new SourceDonneeException("entité invalide pour la source de donnée");
+        }
+        if(photoRestApiList==null || photoRestApiList.size()==0){
+            return photosBytes;
+        }
+        else {
+            for(PhotoRestApi photoRestApi : photoRestApiList){
+                try {
+                    url = new URL(URI_BASE+POINT_ENTREE_FACTURE+POINT_ENTREE_PHOTO+photoRestApi.getId());
+                }catch (MalformedURLException e ){
+                    Log.e("SOurceDonneAPI: ", e.toString());
+                }
+
+                HttpURLConnection httpURLConnection= null;
+                try {
+                    httpURLConnection = (HttpURLConnection) url.openConnection();
+                    reglerTimeout(httpURLConnection);
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+
+                    if(httpURLConnection.getResponseCode()==200) {
+                        InputStreamReader inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        String sortie;
+                        while ((sortie = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(sortie);
+                        }
+                        byte[] photoByte = Base64.decode(stringBuilder.toString(), Base64.DEFAULT);
+                        photosBytes.add(photoByte);
+                    }
+                }
+                catch (java.net.SocketTimeoutException e ){
+                    throw new SourceDonneeException("Connection non disponible");
+                }
+
+                catch (IOException e ){
+                    e.printStackTrace();
+                    }
+                }
+
+            }
+
+        return photosBytes;
     }
 
 

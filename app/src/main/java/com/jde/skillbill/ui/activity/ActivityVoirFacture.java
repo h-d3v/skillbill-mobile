@@ -31,9 +31,7 @@ public class ActivityVoirFacture extends AppCompatActivity {
         Modele modele = new Modele();
         ISourceDonnee sourceDonnee = new SourceDonneesAPIRest();
         PresenteurVoirFacture presenteurVoirFacture = new PresenteurVoirFacture(this, vueVoirFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
-
         vueVoirFacture.setPresenteur((IContratVPVoirFacture.PresenteurVoirFacture) presenteurVoirFacture);
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.layout_ajouter_facture, vueVoirFacture);
         fragmentTransaction.commit();

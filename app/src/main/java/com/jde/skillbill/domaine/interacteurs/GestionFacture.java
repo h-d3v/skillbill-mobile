@@ -9,6 +9,7 @@ import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 public class GestionFacture implements IGestionFacture {
@@ -42,12 +43,24 @@ public class GestionFacture implements IGestionFacture {
 
     @Override
     public boolean modifierFacture(Facture facture) throws SourceDonneeException {
-        iSourceDonnee.modifierFacture(facture);
-        return false;
+        return iSourceDonnee.modifierFacture(facture);
+
     }
 
     @Override
     public boolean creerFacture(Facture facture) throws SourceDonneeException {
        return iSourceDonnee.creerFacture(facture);
     }
+
+    @Override
+    public List<byte[]> chargerPhotoFacture(Facture factureEnCours) throws SourceDonneeException {
+        return iSourceDonnee.chargerPhotos(factureEnCours);
+    }
+
+    @Override
+    public Facture rechargerFacture(Facture facture) throws SourceDonneeException {
+        return iSourceDonnee.rechargerFacture(facture);
+    }
+
+
 }

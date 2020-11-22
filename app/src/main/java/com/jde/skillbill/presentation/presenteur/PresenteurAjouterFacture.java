@@ -32,15 +32,15 @@ import com.jde.skillbill.ui.activity.ActivityVoirFacture;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.io.ByteArrayOutputStream;
-import java.time.LocalDate;
+
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 
 public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPresenteurAjouterFacture {
-    Activity activityAjouterFacture;
-    VueAjouterFacture vueAjouterFacture;
-    Modele modele;
+    protected Activity activityAjouterFacture;
+    protected VueAjouterFacture vueAjouterFacture;
+    protected Modele modele;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
     private static final String IMAGE ="com.jde.skillbill.BitmapImage";
@@ -50,15 +50,15 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private static final int REQUETE_PRENDRE_PHOTO= 2;
     private String[] nomsMembres;
 
-    private Thread filEsclave = null;
-    private final Handler handlerReponse;
+    protected Thread filEsclave;
+    protected final Handler handlerReponse;
     private static final int MSG_AJOUT_FACTURE_REUSSI = 0;
     private static final int MSG_ERREUR = 1;
     private static final int MSG_ERREUR_CNX = 4;
     private static final int MSG_TROUVER_MEMBRES=333;
 
     @SuppressLint("HandlerLeak")
-    public PresenteurAjouterFacture(AppCompatActivity activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
+    public PresenteurAjouterFacture( AppCompatActivity activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
         this.activityAjouterFacture = activityAjouterFacture;
         this.vueAjouterFacture = vueAjouterFacture;
         this.modele = modele;
@@ -68,9 +68,6 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         this.iGestionGroupes = gestionGroupes;
 
         modele.setGroupeEnCours( (Groupe) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_GROUPE_POSITION));
-
-
-
 
         handlerReponse = new Handler() {
             @Override
