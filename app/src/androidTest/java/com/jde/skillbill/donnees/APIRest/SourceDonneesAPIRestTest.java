@@ -3,6 +3,7 @@ package com.jde.skillbill.donnees.APIRest;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.jde.skillbill.domaine.entites.Monnaie;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.donnees.APIRest.entites.GroupeRestApi;
 import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 
@@ -32,7 +33,7 @@ public class SourceDonneesAPIRestTest {
 
 
     @Test
-    public void testCreeGroupeParUtilisateur()  {
+    public void testCreeGroupeParUtilisateur() throws SourceDonneeException {
         try{
 
             when(httpURLConnection.getResponseCode()).thenReturn(200);

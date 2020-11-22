@@ -1,5 +1,6 @@
 package com.jde.skillbill.presentation.presenteur;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,9 +10,13 @@ import android.provider.MediaStore;
 import android.os.Handler;
 import android.os.Message;
 
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import com.jde.skillbill.R;
+import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
@@ -23,21 +28,22 @@ import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueAjouterFacture;
 import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
+import com.jde.skillbill.ui.activity.ActivityVoirFacture;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
 import java.util.List;
 
 public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPresenteurAjouterFacture {
-    ActivityAjouterFacture activityAjouterFacture;
+    Activity activityAjouterFacture;
     VueAjouterFacture vueAjouterFacture;
     Modele modele;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
     private static final String IMAGE ="com.jde.skillbill.BitmapImage";
-    private final Utilisateur utilisateurConnecte;
-    private final Groupe groupe;
     private final IGestionFacture iGestionFacture;
     private final IGestionUtilisateur iGestionUtilisateur;
     private final IGestionGroupes iGestionGroupes;
@@ -52,16 +58,16 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private static final int MSG_TROUVER_MEMBRES=333;
 
     @SuppressLint("HandlerLeak")
-    public PresenteurAjouterFacture(ActivityAjouterFacture activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
+    public PresenteurAjouterFacture(AppCompatActivity activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
         this.activityAjouterFacture = activityAjouterFacture;
         this.vueAjouterFacture = vueAjouterFacture;
         this.modele = modele;
-        utilisateurConnecte=(Utilisateur) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_ID_UTILISATEUR);
+        modele.setUtilisateurConnecte ((Utilisateur) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_ID_UTILISATEUR));
         this.iGestionFacture = gestionFacture;
         this.iGestionUtilisateur = gestionUtilisateur;
         this.iGestionGroupes = gestionGroupes;
-        modele.setUtilisateurConnecte(utilisateurConnecte);
-        groupe=(Groupe) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_GROUPE_POSITION);
+
+        modele.setGroupeEnCours( (Groupe) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_GROUPE_POSITION));
 
 
 
@@ -101,7 +107,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             @Override
             public void run() {
                 try {
-                    List<Utilisateur> utilisateursGroupe= iGestionGroupes.trouverTousLesUtilisateurs(groupe);
+                    List<Utilisateur> utilisateursGroupe= iGestionGroupes.trouverTousLesUtilisateurs(modele.getGroupeEnCours());
                     String[] membres=new String[utilisateursGroupe.size()];
                     int i=0;
                     for (Utilisateur utilisateur : utilisateursGroupe){
@@ -150,9 +156,30 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 String titre = vueAjouterFacture.getTitreInput();
                 if (titre == null) {
                     titre = activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut) + " " + date.toString();
+                Facture factureAAjouter = new Facture();
+                factureAAjouter.setMontantTotal( vueAjouterFacture.getMontantFactureInput());
+                factureAAjouter.setDateFacture(vueAjouterFacture.getDateFactureInput());
+                factureAAjouter.setLibelle( vueAjouterFacture.getTitreInput());
+                factureAAjouter.setGroupe(modele.getGroupeEnCours());
+                factureAAjouter.setUtilisateurCreateur(modele.getUtilisateurConnecte());
+                HashMap<Utilisateur, Double> hashMap = new HashMap<>();//TODO provisoire ajoute seulement l'utilisateur connecte a la facture
+                hashMap.put(modele.getUtilisateurConnecte(), vueAjouterFacture.getMontantFactureInput());
+                factureAAjouter.setMontantPayeParParUtilisateur(hashMap);
+
+                if ( factureAAjouter.getLibelle() == null) {
+                    factureAAjouter.setLibelle(activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut) + " " + factureAAjouter.getDateFacture().toString());
                 }
 
-                boolean factureAjoutee = iGestionFacture.creerFacture(montant, utilisateurConnecte, date, groupe, titre);
+                if(vueAjouterFacture.getBitmapFacture()!=null){
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    vueAjouterFacture.getBitmapFacture().compress(Bitmap.CompressFormat.PNG,100, byteArrayOutputStream);
+                    byte[] bytes = byteArrayOutputStream.toByteArray();
+                    factureAAjouter.getPhotos().add(bytes);
+
+
+                }
+
+                boolean factureAjoutee = iGestionFacture.creerFacture(factureAAjouter);
                 msg = handlerReponse.obtainMessage(MSG_AJOUT_FACTURE_REUSSI, factureAjoutee);
 
             } catch (NumberFormatException | DateTimeParseException e) {
@@ -173,7 +200,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     @Override
     public void redirigerVersListeFactures(){
         Intent intent = new Intent(activityAjouterFacture, ActivityVoirUnGroupe.class);
-        intent.putExtra(EXTRA_GROUPE_POSITION, groupe);
+        intent.putExtra(EXTRA_GROUPE_POSITION, modele.getGroupeEnCours());
         intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
 
         activityAjouterFacture.startActivity(intent);
@@ -188,7 +215,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         try { //TODO verifier que l'appareil est capable de prendre des photos
             activityAjouterFacture.startActivityForResult(prendrePhotoIntent, REQUETE_PRENDRE_PHOTO );
         }catch (ActivityNotFoundException e){
-            Log.e("dlld", e.getMessage());
+            Toast.makeText(activityAjouterFacture, R.string.pas_d_activite_photo_diponible, Toast.LENGTH_LONG).show();
         }
     }
 

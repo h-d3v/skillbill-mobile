@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -37,6 +38,8 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     protected ImageView imageFacture;
     protected ImageButton btnAjouterFacture;
     private TextView tvTitreMontant;
+    protected TextView tvToRemoveForTest;
+    protected ImageView imageView;
 
 
     @Override
@@ -44,6 +47,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
                               ViewGroup container,
                               Bundle savedInstanceState) {
         View racine = inflater.inflate(R.layout.frag_ajouter_facture, container, false);
+        tvToRemoveForTest = racine.findViewById(R.id.titre_payeur_facture);
         btnAjouterFacture =racine.findViewById(R.id.btn_ajouter_facture_groupe_avec_photo);
         btnAjouterFacture.setOnClickListener(view -> {
             presenteurAjouterFacture.prendrePhoto();
@@ -57,6 +61,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
          boutonAjouter.setOnClickListener(view -> {
              presenteurAjouterFacture.ajouterFacture();
          });
+         imageView = racine.findViewById (R.id.imageFact);
 
          boutonAnnuler= racine.findViewById(R.id.btnAnuller);
          boutonAnnuler.setOnClickListener(view -> {
@@ -174,6 +179,17 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         alertBuilder.setMessage(message);
         alertBuilder.show();
     }
+
+    @Override
+    public Bitmap getBitmapFacture(){
+        Bitmap bitmap = null;
+        if(imageFacture.getDrawable() instanceof BitmapDrawable){
+            bitmap = ((BitmapDrawable) imageFacture.getDrawable()).getBitmap();
+        }
+
+        return bitmap;
+    }
+
 
     /**
      *

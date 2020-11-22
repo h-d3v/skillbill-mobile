@@ -1,7 +1,7 @@
 package com.jde.skillbill.donnees.APIRest;
 
+import android.util.Base64;
 import android.util.JsonReader;
-
 import android.util.Log;
 
 
@@ -13,13 +13,8 @@ import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
-import com.jde.skillbill.donnees.APIRest.entites.FactureRestAPI;
-import com.jde.skillbill.donnees.APIRest.entites.GroupeRestApi;
-import com.jde.skillbill.donnees.APIRest.entites.PayeursEtMontant;
-import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
+import com.jde.skillbill.donnees.APIRest.entites.*;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,12 +38,13 @@ import okhttp3.Response;
 
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
-    private String URI_BASE = "http://192.168.1.32:51360/api/";
+    private String URI_BASE = "http://192.168.0.23:44302/api/";
     private String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
     private String POINT_ENTREE_GROUPE = "groupes/";
     private String POINT_ENTREE_LOGIN ="login";
     private static final int READ_TIME_OUT =8000;
     private static final int CONNECT_TIME_OUT = 4000;
+    private final String POINT_ENTREE_FACTURE="factures/";
 
 
     @Override
@@ -121,20 +117,26 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 httpURLConnection.setDoInput(true);
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 Gson gson = new GsonBuilder().create();
-                FactureRestAPI factureRestAPI = new FactureRestAPI(localDate.toString(), ((GroupeRestApi)groupe).getId(), montantTotal, ((UtilisateurRestAPI) utilisateurPayeur).getId());
+                FactureRestAPI factureRestAPI = new FactureRestAPI(localDate.toString(), ((GroupeRestApi)groupe).getId(),montantTotal ,((UtilisateurRestAPI) utilisateurPayeur).getId());
                 factureRestAPI.setLibelle(titre);
                 List<PayeursEtMontant> payeursEtMontant  = new ArrayList<>();
                 payeursEtMontant.add( new PayeursEtMontant(((UtilisateurRestAPI)utilisateurPayeur).getId() ,montantTotal));
 
                 factureRestAPI.setPayeursEtMontantsListe(payeursEtMontant);
                 String json = gson.toJson(factureRestAPI);
-                Log.e("json", json);
                 byte[] input = json.getBytes(StandardCharsets.UTF_8);
                 outputStream.write(input, 0,input.length);
 
                 if(httpURLConnection.getResponseCode()==200){
                     InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
-                    if (inputStreamReader.toString().equals("true"))return true;
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String sortie;
+                    while ((sortie = bufferedReader.readLine())!=null){
+                        stringBuilder.append(sortie);
+                    }
+
+                    return "true".equals(stringBuilder.toString());
                 }
 
             }
@@ -213,6 +215,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             }
         }//si la connection a l'api est impossible, on retourne un user null
         catch(ConnectException e) {
+
             Log.e("erreur connection api", "message:" + Objects.requireNonNull(e.getMessage()) + " \n cause: " + e.getCause());
             throw new SourceDonneeException("Connexion non disponnible");
         } //si l'email entrer est deja pris, on retourne un user invalide
@@ -248,8 +251,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
             if(httpURLConnection.getResponseCode()==200){
               InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
-
-
               utilisateur = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
 
               if(utilisateur==null || utilisateur.getId()==0) return null;
@@ -424,7 +425,129 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     }
 
     @Override
-    public boolean modifierFacture(Facture facture) {
+    public boolean modifierFacture(Facture facture) throws SourceDonneeException {
+        URL url = null;
+        try {
+
+            url = new URL(URI_BASE+POINT_ENTREE_FACTURE);
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI : ", e.toString());
+        }
+
+        HttpURLConnection httpURLConnection= null;
+        try {
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+            httpURLConnection.setRequestMethod("PUT");
+            reglerTimeout(httpURLConnection);
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            List<PayeursEtMontant> payeursEtMontant  = new ArrayList<>();
+            for(Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()){
+                payeursEtMontant.add(new PayeursEtMontant(((UtilisateurRestAPI) utilisateur).getId(), facture.getMontantPayeParParUtilisateur().get(utilisateur)));
+            }
+
+
+            ((FactureRestAPI) facture).setPayeursEtMontantsListe(payeursEtMontant);
+            ((FactureRestAPI) facture).setMontantTotal(facture.getMontantTotal());
+            Gson gson = new GsonBuilder().create();
+            String json = gson.toJson(facture);
+            Log.e("json", json);
+
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
+            outputStream.write(input, 0,input.length);
+            if(httpURLConnection.getResponseCode()==200){
+                InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                String sortie;
+                while ((sortie = bufferedReader.readLine())!=null){
+                    stringBuilder.append(sortie);
+                }
+
+                return "true".equals(stringBuilder.toString());
+            }
+
+        }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean creerFacture(Facture facture) throws SourceDonneeException {
+        URL url = null;
+        try {
+            url = new URL(URI_BASE+"Factures");
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI: ", e.toString());
+        }
+        HttpURLConnection httpURLConnection= null;
+        try {
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            reglerTimeout(httpURLConnection);
+            httpURLConnection.setRequestMethod("POST");
+            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+            Gson gson = new GsonBuilder().create();
+
+            List<PayeursEtMontant> payeursEtMontant  = new ArrayList<>();
+            for(Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()){
+                payeursEtMontant.add(new PayeursEtMontant(((UtilisateurRestAPI) utilisateur).getId(), facture.getMontantPayeParParUtilisateur().get(utilisateur)));
+            }
+
+            if(!(facture instanceof FactureRestAPI)){
+                FactureRestAPI factureRestAPI = new FactureRestAPI(facture.getDateFacture().toString(),
+                        ((GroupeRestApi)facture.getGroupe()).getId(),
+                        facture.getMontantTotal(),
+                        ((UtilisateurRestAPI)facture.getUtilisateurCreateur()).getId());
+                factureRestAPI.setLibelle(facture.getLibelle());
+                factureRestAPI.setPayeursEtMontantsListe(payeursEtMontant);
+                if(!Objects.requireNonNull(facture.getPhotos()).isEmpty()){
+                    for(byte[] bytes : facture.getPhotos()){
+                        factureRestAPI.getPhotoesEncodeesBase64().add(new PhotoRestApi( Base64.encodeToString(bytes, Base64.DEFAULT)));
+                    }
+                }
+                facture = factureRestAPI;
+            }
+            else {
+                ((FactureRestAPI)facture).setPayeursEtMontantsListe(payeursEtMontant);
+            }
+
+            String json = gson.toJson(facture);
+            Log.e("json", json);
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
+            outputStream.write(input, 0,input.length);
+
+            if(httpURLConnection.getResponseCode()==200){
+                InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                String sortie;
+                while ((sortie = bufferedReader.readLine())!=null){
+                    stringBuilder.append(sortie);
+                }
+
+                return "true".equals(stringBuilder.toString());
+            }
+
+        }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         return false;
     }
 

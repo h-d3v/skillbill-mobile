@@ -1,5 +1,6 @@
 package com.jde.skillbill.donnees.APIRest.entites;
 
+import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
@@ -31,5 +32,11 @@ public class UtilisateurRestAPI extends Utilisateur {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.valueOf(id);
     }
 }

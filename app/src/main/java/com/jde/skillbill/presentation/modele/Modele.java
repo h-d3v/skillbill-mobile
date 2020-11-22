@@ -15,6 +15,7 @@ public class Modele {
     Utilisateur utilisateurConnecte;
     List<Groupe> groupesAbonnes;
     Facture factureEnCours;
+    Groupe groupeEnCours;
 
     public Utilisateur getUtilisateurConnecte() {
         return utilisateurConnecte;
@@ -50,5 +51,13 @@ public class Modele {
 
     public Facture getFactureEnCours() {
         return factureEnCours;
+    }
+
+    public void setGroupeEnCours(Groupe groupe) {
+        groupeEnCours=groupe;
+    }
+
+    public Groupe getGroupeEnCours() {
+        return groupeEnCours;
     }
 }

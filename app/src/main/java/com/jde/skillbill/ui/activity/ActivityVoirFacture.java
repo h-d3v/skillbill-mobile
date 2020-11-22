@@ -1,5 +1,6 @@
 package com.jde.skillbill.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,29 +13,28 @@ import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.donnees.APIRest.SourceDonneesAPIRest;
-import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 import com.jde.skillbill.presentation.IContratVPVoirFacture;
 import com.jde.skillbill.presentation.modele.Modele;
-import com.jde.skillbill.presentation.presenteur.PresenteurAjouterFacture;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirFacture;
-import com.jde.skillbill.presentation.vue.VueAjouterFacture;
 import com.jde.skillbill.presentation.vue.VueVoirFacture;
 
-public class ActivityVoirFacture extends ActivityAjouterFacture {
+public class ActivityVoirFacture extends AppCompatActivity {
 
     private static final int REQUETE_PRENDRE_PHOTO= 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_ajouter_facture);
-        VueVoirFacture vueVoirFacture= new VueVoirFacture();
-        Modele modele= new Modele();
+        VueVoirFacture vueVoirFacture = new VueVoirFacture();
+        Modele modele = new Modele();
         ISourceDonnee sourceDonnee = new SourceDonneesAPIRest();
-        PresenteurVoirFacture presenteurVoirFacture= new PresenteurVoirFacture(this, vueVoirFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
+        PresenteurVoirFacture presenteurVoirFacture = new PresenteurVoirFacture(this, vueVoirFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
 
-        vueVoirFacture.setPresenteur( (IContratVPVoirFacture.PresenteurVoirFacture) presenteurVoirFacture);
+        vueVoirFacture.setPresenteur((IContratVPVoirFacture.PresenteurVoirFacture) presenteurVoirFacture);
 
-        FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.layout_ajouter_facture, vueVoirFacture);
         fragmentTransaction.commit();
 
