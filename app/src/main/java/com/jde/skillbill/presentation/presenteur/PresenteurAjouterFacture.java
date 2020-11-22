@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.os.Handler;
 import android.os.Message;
@@ -157,13 +158,13 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 if (titre == null) {
                     titre = activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut) + " " + date.toString();
                 Facture factureAAjouter = new Facture();
-                factureAAjouter.setMontantTotal( vueAjouterFacture.getMontantFactureInput());
+                factureAAjouter.setMontantTotal( vueAjouterFacture.getMontantFactureCADInput());
                 factureAAjouter.setDateFacture(vueAjouterFacture.getDateFactureInput());
                 factureAAjouter.setLibelle( vueAjouterFacture.getTitreInput());
                 factureAAjouter.setGroupe(modele.getGroupeEnCours());
                 factureAAjouter.setUtilisateurCreateur(modele.getUtilisateurConnecte());
                 HashMap<Utilisateur, Double> hashMap = new HashMap<>();//TODO provisoire ajoute seulement l'utilisateur connecte a la facture
-                hashMap.put(modele.getUtilisateurConnecte(), vueAjouterFacture.getMontantFactureInput());
+                hashMap.put(modele.getUtilisateurConnecte(), vueAjouterFacture.getMontantFactureCADInput());
                 factureAAjouter.setMontantPayeParParUtilisateur(hashMap);
 
                 if ( factureAAjouter.getLibelle() == null) {
