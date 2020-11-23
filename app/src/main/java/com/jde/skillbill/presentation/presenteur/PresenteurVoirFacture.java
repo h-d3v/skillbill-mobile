@@ -7,10 +7,6 @@ import android.util.Log;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.jde.skillbill.domaine.entites.Facture;
-import com.jde.skillbill.domaine.entites.Monnaie;
-import com.jde.skillbill.domaine.interacteurs.GestionFacture;
-import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
-import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
@@ -62,9 +58,6 @@ public class PresenteurVoirFacture extends PresenteurAjouterFacture implements I
         };
     }
 
-
-
-
     @Override
     public String trouverMontantFactureEnCours() {
 
@@ -91,10 +84,10 @@ public class PresenteurVoirFacture extends PresenteurAjouterFacture implements I
                     Facture factureAModifier = modele.getFactureEnCours();
                     factureAModifier.setLibelle(PresenteurVoirFacture.super.vueAjouterFacture.getTitreInput());
                     factureAModifier.setDateFacture(PresenteurVoirFacture.super.vueAjouterFacture.getDateFactureInput());
-                    factureAModifier.setMontantTotal(PresenteurVoirFacture.super.vueAjouterFacture.getMontantFactureInput());
+                    factureAModifier.setMontantTotal(PresenteurVoirFacture.super.vueAjouterFacture.getMontantFactureCADInput());
                     //TODO solution provisoire seul l'utilisateur connecté est pris en compte
                     HashMap<Utilisateur, Double> montantsPayesParUtilisateur = new HashMap<>();
-                    montantsPayesParUtilisateur.put(modele.getUtilisateurConnecte(),PresenteurVoirFacture.super.vueAjouterFacture.getMontantFactureInput());
+                    montantsPayesParUtilisateur.put(modele.getUtilisateurConnecte(),PresenteurVoirFacture.super.vueAjouterFacture.getMontantFactureCADInput());
                     factureAModifier.setMontantPayeParParUtilisateur(montantsPayesParUtilisateur);
                     Log.e("presenteur voir facture", String.valueOf(montantsPayesParUtilisateur.get(modele.getUtilisateurConnecte())));
                     Log.e("presenteur voir facture utilis ", montantsPayesParUtilisateur.keySet().toArray()[0].toString());

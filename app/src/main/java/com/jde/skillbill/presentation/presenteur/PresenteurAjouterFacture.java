@@ -148,8 +148,8 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     @Override
     public void ajouterFacture() {
         vueAjouterFacture.ouvrirProgressBar();
-        filEsclave= new Thread (()-> {
-            Message msg;
+        filEsclave = new Thread(() -> {
+            Message msg = null;
 
             try {
                 double montant = vueAjouterFacture.getMontantFactureCADInput();
@@ -157,39 +157,41 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 String titre = vueAjouterFacture.getTitreInput();
                 if (titre == null) {
                     titre = activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut) + " " + date.toString();
-                Facture factureAAjouter = new Facture();
-                factureAAjouter.setMontantTotal( vueAjouterFacture.getMontantFactureCADInput());
-                factureAAjouter.setDateFacture(vueAjouterFacture.getDateFactureInput());
-                factureAAjouter.setLibelle( vueAjouterFacture.getTitreInput());
-                factureAAjouter.setGroupe(modele.getGroupeEnCours());
-                factureAAjouter.setUtilisateurCreateur(modele.getUtilisateurConnecte());
-                HashMap<Utilisateur, Double> hashMap = new HashMap<>();//TODO provisoire ajoute seulement l'utilisateur connecte a la facture
-                hashMap.put(modele.getUtilisateurConnecte(), vueAjouterFacture.getMontantFactureCADInput());
-                factureAAjouter.setMontantPayeParParUtilisateur(hashMap);
+                    Facture factureAAjouter = new Facture();
+                    factureAAjouter.setMontantTotal(vueAjouterFacture.getMontantFactureCADInput());
+                    factureAAjouter.setDateFacture(vueAjouterFacture.getDateFactureInput());
+                    factureAAjouter.setLibelle(vueAjouterFacture.getTitreInput());
+                    factureAAjouter.setGroupe(modele.getGroupeEnCours());
+                    factureAAjouter.setUtilisateurCreateur(modele.getUtilisateurConnecte());
+                    HashMap<Utilisateur, Double> hashMap = new HashMap<>();//TODO provisoire ajoute seulement l'utilisateur connecte a la facture
+                    hashMap.put(modele.getUtilisateurConnecte(), vueAjouterFacture.getMontantFactureCADInput());
+                    factureAAjouter.setMontantPayeParParUtilisateur(hashMap);
 
-                if ( factureAAjouter.getLibelle() == null) {
-                    factureAAjouter.setLibelle(activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut) + " " + factureAAjouter.getDateFacture().toString());
+                    if (factureAAjouter.getLibelle() == null) {
+                        factureAAjouter.setLibelle(activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut) + " " + factureAAjouter.getDateFacture().toString());
+                    }
+
+                    if (vueAjouterFacture.getBitmapFacture() != null) {
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        vueAjouterFacture.getBitmapFacture().compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                        byte[] bytes = byteArrayOutputStream.toByteArray();
+                        factureAAjouter.getPhotos().add(bytes);
+
+
+                    }
+
+                    boolean factureAjoutee = iGestionFacture.creerFacture(factureAAjouter);
+                    msg = handlerReponse.obtainMessage(MSG_AJOUT_FACTURE_REUSSI, factureAjoutee);
+
+
+                }}catch(NumberFormatException | DateTimeParseException e){
+                    msg = handlerReponse.obtainMessage(MSG_ERREUR);
+
+                } catch(SourceDonneeException e ){
+                    msg = handlerReponse.obtainMessage(MSG_ERREUR_CNX);
                 }
-
-                if(vueAjouterFacture.getBitmapFacture()!=null){
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    vueAjouterFacture.getBitmapFacture().compress(Bitmap.CompressFormat.PNG,100, byteArrayOutputStream);
-                    byte[] bytes = byteArrayOutputStream.toByteArray();
-                    factureAAjouter.getPhotos().add(bytes);
-
-
-                }
-
-                boolean factureAjoutee = iGestionFacture.creerFacture(factureAAjouter);
-                msg = handlerReponse.obtainMessage(MSG_AJOUT_FACTURE_REUSSI, factureAjoutee);
-
-            } catch (NumberFormatException | DateTimeParseException e) {
-                msg = handlerReponse.obtainMessage(MSG_ERREUR);
-
-            } catch (SourceDonneeException e ){
-                msg = handlerReponse.obtainMessage(MSG_ERREUR_CNX);
-            }
-            handlerReponse.sendMessage( msg );
+                handlerReponse.sendMessage(msg);
+            
         });
         filEsclave.start();
     }
