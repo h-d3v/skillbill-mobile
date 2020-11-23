@@ -134,5 +134,5 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         _activite.finish();
 
     }
-
+    
 }

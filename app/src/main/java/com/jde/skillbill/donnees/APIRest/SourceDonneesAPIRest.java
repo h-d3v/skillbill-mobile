@@ -38,7 +38,7 @@ import okhttp3.Response;
 
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
-    private String URI_BASE = "http://192.168.0.23:44302/api/";
+    private String URI_BASE = "http://192.168.1.32:51360/api/";
     private String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
     private String POINT_ENTREE_GROUPE = "groupes/";
     private String POINT_ENTREE_LOGIN ="login";
