@@ -133,8 +133,6 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         //Pour eviter de retourner au login
         _activite.finish();
 
-
     }
-
 
 }
