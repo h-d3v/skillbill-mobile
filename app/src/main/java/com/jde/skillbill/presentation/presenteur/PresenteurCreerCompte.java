@@ -6,9 +6,12 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 
+import android.widget.Toast;
+import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.presentation.IContratVPCreerCompte;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueCreerCompte;
@@ -29,6 +32,7 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
         static final int NOUVEAU_COMPTE = 0;
         static final int ERREUR = 1;
         static final int EMAIL_DEJA_PRIS = 2;
+        static final int ERREUR_CNX =3;
     };
 
 
@@ -53,6 +57,10 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
                 else if(msg.what==MESSAGE.EMAIL_DEJA_PRIS){
                     _vueCreerCompte.afficherEmailDejaPrit();
                 }
+                else if(msg.what==MESSAGE.ERREUR_CNX){
+                    Toast.makeText(_activite, R.string.pas_de_connection_internet , Toast.LENGTH_LONG ).show();
+                }
+                _vueCreerCompte.fermerProgressBar();
             }
         };
     }
@@ -61,36 +69,35 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
         _dataSource = dataSource;
     }
 
+    
 
-
-
-
-    //TODO Faire les operations avec la source de donnees en fil esclave pour l'api
-    //TODO la creation reele du compte si l'email n'est pas pris (persistance)
     @Override
     public void creerCompte() {
+        _vueCreerCompte.ouvrirProgressBar();
         filEsclave = new Thread(() -> {
             Message msg=null;
             GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
 
-                Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
-                if(utilisateurCreer==null){
-                    msg=handler.obtainMessage(MESSAGE.ERREUR);
+                try{
+                    //todo, appeler methode utilisateurExiste(), si existe, on envoie le msg, si non on continu
+                    Utilisateur utilisateurCreer = gestionUtilisateur.creerUtilisateur(_vueCreerCompte.getNom(), _vueCreerCompte.getEmail(), _vueCreerCompte.getPass(), _vueCreerCompte.getMonnaieChoisie());
+                    if(utilisateurCreer==null){
+                        msg=handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
+                    }
+                    else if(utilisateurCreer.getCourriel().equals(_vueCreerCompte.getEmail())) {
+                        msg = handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE, utilisateurCreer);
+                    }
+                }catch (SourceDonneeException e){
+                    msg = handler.obtainMessage(MESSAGE.ERREUR_CNX);
                 }
-                else if(!utilisateurCreer.getCourriel().equals("-1")){
-                    msg=handler.obtainMessage(MESSAGE.NOUVEAU_COMPTE,utilisateurCreer);
-                }
-                else if(utilisateurCreer.getCourriel().equals("-1")){
-                    msg=handler.obtainMessage(MESSAGE.EMAIL_DEJA_PRIS);
-                }
-
-
 
             handler.sendMessage(msg);
         });
         filEsclave.start();
 
     }
+
+
 
     @Override
     public void retourLogin() {

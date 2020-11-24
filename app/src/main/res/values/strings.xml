@@ -6,7 +6,7 @@
     <string name="action_enregistrer">Enregistrer</string>
     <string name="titre_nom_Groupe">Nom du nouveau groupe</string>
     <string name="textview_nom_groupe_a_creer">Entrez le nom du groupe</string>
-    <string name="action_annuler">Retour</string>
+    <string name="action_annuler">Annuler</string>
 
     <!-- Strings pour le solde de l'utilisateur dans un groupe -->
     <string name="solde_utilisateur_nul">Bravo ! Tous les comptes sont réglés</string>
@@ -66,6 +66,18 @@
     <string name="email_deja_dans_groupe">Vous avez dejà ajouté cet utilisateur </string>
     <string name="supprimer_facture">Supprimer la facture</string>
     <string name="nom_du_nouveau_groupe">Nom du nouveau groupe</string>
+    <string name="pas_de_connection_internet">Erreur de connection à la source de données</string>
+    <string name="modifier">Modifier</string>
+    <string name="envoyer">Envoyer</string>
+    <string name="devise_du_groupe">devise du groupe</string>
+    <string name="preference_user">USER_PREFS</string>
+    <string name="montant">Montant ...</string>
+    <string name="mot_de_passe">mot de passe</string>
+    <string name="cancel">Annuler</string>
+    <string name="action_retour">Retour</string>
+    <string name="pas_d_activite_photo_diponible">Nous ne pouvons trouver une application compatible pour prendre des
+        photos sur votre appareil
+    </string>
 
 
 </resources>

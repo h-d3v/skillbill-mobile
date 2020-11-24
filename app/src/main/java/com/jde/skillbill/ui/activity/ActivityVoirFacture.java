@@ -1,37 +1,41 @@
 package com.jde.skillbill.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import com.jde.skillbill.R;
+import com.jde.skillbill.domaine.interacteurs.GestionFacture;
 import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
-import com.jde.skillbill.domaine.interacteurs.GestionFacture;
 import com.jde.skillbill.donnees.APIRest.SourceDonneesAPIRest;
-import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
+import com.jde.skillbill.presentation.IContratVPVoirFacture;
 import com.jde.skillbill.presentation.modele.Modele;
-import com.jde.skillbill.presentation.presenteur.PresenteurAjouterFacture;
-import com.jde.skillbill.presentation.vue.VueAjouterFacture;
+import com.jde.skillbill.presentation.presenteur.PresenteurVoirFacture;
+import com.jde.skillbill.presentation.vue.VueVoirFacture;
 
-public class ActivityAjouterFacture extends AppCompatActivity {
+public class ActivityVoirFacture extends AppCompatActivity {
+
     private static final int REQUETE_PRENDRE_PHOTO= 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_ajouter_facture);
-        VueAjouterFacture vueAjouterFacture= new VueAjouterFacture();
-        Modele modele= new Modele();
+        VueVoirFacture vueVoirFacture = new VueVoirFacture();
+        Modele modele = new Modele();
         ISourceDonnee sourceDonnee = new SourceDonneesAPIRest();
-        PresenteurAjouterFacture presenteurAjouterFacture= new PresenteurAjouterFacture(this, vueAjouterFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
-        vueAjouterFacture.setPresenteur(presenteurAjouterFacture);
+        PresenteurVoirFacture presenteurVoirFacture = new PresenteurVoirFacture(this, vueVoirFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
 
-        FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.layout_ajouter_facture, vueAjouterFacture);
+        vueVoirFacture.setPresenteur((IContratVPVoirFacture.PresenteurVoirFacture) presenteurVoirFacture);
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.layout_ajouter_facture, vueVoirFacture);
         fragmentTransaction.commit();
 
     }

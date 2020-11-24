@@ -15,7 +15,7 @@ import java.util.List;
 import java.time.LocalDate;
 import java.util.*;
 
-public class SourceDonneesMock implements ISourceDonnee{
+public abstract class SourceDonneesMock implements ISourceDonnee{
     public static HashMap<Utilisateur, List<Groupe>> utilisateurGroupeHashMap =new HashMap<>();
     public static  HashMap<Groupe, List<Utilisateur>> groupeUtilisateursHashmap = new HashMap<>();
     public static HashMap<Groupe, List<Facture>> groupeFactureHashMap= new HashMap<>();
@@ -95,6 +95,11 @@ public class SourceDonneesMock implements ISourceDonnee{
     }
 
     @Override
+    public boolean modifierFacture(Facture facture) {
+        return false;
+    }
+
+    @Override
     public List<Facture> lireFacturesParGroupe(Groupe groupe) {
         return groupeFactureHashMap.get(groupe);
     }
@@ -122,19 +127,18 @@ public class SourceDonneesMock implements ISourceDonnee{
         return estReussi;
     }
 
-
-
-
     @Override
-    public Utilisateur lireUtilisateur(String email) {
-
-            Utilisateur utilisateurALire=null;
-            for (Utilisateur utilisateur:_utilisateurs) {
-                int result=utilisateur.getCourriel().compareTo(email);
-                if (result==0) utilisateurALire=utilisateur;
-            }
-            return utilisateurALire;
+    public boolean utilisateurExiste(String email) {
+        Utilisateur utilisateurALire=null;
+        for (Utilisateur utilisateur:_utilisateurs) {
+            int result=utilisateur.getCourriel().compareTo(email);
+            if (result==0) utilisateurALire=utilisateur;
         }
+        return utilisateurALire!=null;
+    }
+
+
+
 
         //Retourne l'utilisateur tel que recu, pas de persistace pour l'instant
         @Override

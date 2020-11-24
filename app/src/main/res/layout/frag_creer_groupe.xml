@@ -70,7 +70,9 @@
             android:shadowColor="@color/colorPrimary"
             />
     </com.google.android.material.textfield.TextInputLayout>
-
+    <ProgressBar android:layout_width="match_parent" android:layout_height="127dp"
+                 android:layout_margin="120dp" android:layout_marginHorizontal="120dp"
+                 android:id="@+id/progressBarAjoutGroupe"/>
 
 
 </LinearLayout>

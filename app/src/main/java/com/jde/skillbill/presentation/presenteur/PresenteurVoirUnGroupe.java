@@ -1,11 +1,14 @@
 package com.jde.skillbill.presentation.presenteur;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
+import android.util.Log;
+import android.widget.Toast;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -16,9 +19,14 @@ import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
+import com.jde.skillbill.donnees.APIRest.entites.FactureRestAPI;
+import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirUnGroupe;
+import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
+import com.jde.skillbill.ui.activity.ActivityVoirFacture;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
@@ -32,6 +40,10 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     private static final int MSG_GET_FACTURES = 5;
     private static final int MSG_SUPPRIMER_FACTURE = 6;
     private static final int MSG_AJOUTER_MEMBRES = 7;
+
+    private static final int MSG_PAS_DE_CNX = 99;
+    private static final String EXTRA_FACTURE = "com.jde.skillbill.facture_identifiant";
+
 
 
     private Modele modele;
@@ -77,12 +89,27 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
                 super.handleMessage(msg);
                 filEsclave = null;
                 if(msg.what == MSG_GET_MEMBRES){
+                //    vueVoirUnGroupe.fermerProgressBar();
                     groupeEncours.setUtilisateurs((List<Utilisateur>) msg.obj);
                     vueVoirUnGroupe.rafraichir();
                 }
+                if(msg.what == MSG_PAS_DE_CNX){
+                    Toast.makeText(activityVoirUnGroupe, R.string.pas_de_connection_internet , Toast.LENGTH_LONG ).show();
+                }
+
                 if(msg.what == MSG_GET_FACTURES){
+                    vueVoirUnGroupe.fermerProgressBar();
                     facturesGroupe = (List<Facture>) msg.obj;
                     vueVoirUnGroupe.rafraichir();
+                }
+                if(msg.what== AJOUT_OK || msg.what==EMAIL_INCONNU|| msg.what==ERREUR_ACCES){
+
+                   // vueVoirUnGroupe.fermerProgressBar();
+                    vueVoirUnGroupe.setVueAjouterMembres(msg.what);
+                    if(msg.what==AJOUT_OK){
+                        chargerMembres();
+                        vueVoirUnGroupe.rafraichir();
+                    }
                 }
             }
         };
@@ -93,12 +120,21 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     }
 
     private void chargerMembres(){
+       // vueVoirUnGroupe.ouvrirProgressBar();
+
         filEsclave = new Thread(new Runnable() {
+            Message message;
             @Override
             public void run() {
-                Message message = handler.obtainMessage(MSG_GET_MEMBRES);
-                message.obj = gestionGroupes.trouverTousLesUtilisateurs(groupeEncours);
-                handler.sendMessage(message);
+                try{
+                    message = handler.obtainMessage(MSG_GET_MEMBRES);
+                    message.obj = gestionGroupes.trouverTousLesUtilisateurs(groupeEncours);
+                    handler.sendMessage(message);
+                }catch (SourceDonneeException e){
+                    message= handler.obtainMessage(MSG_PAS_DE_CNX);
+                    handler.sendMessage(message);
+                }
+
             }
         });
         filEsclave.start();
@@ -114,14 +150,16 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     public String getMembresGroupe() {
 
 
-        if(groupeEncours.getUtilisateurs()==null || groupeEncours.getUtilisateurs().size()<1) return null;
+        if(groupeEncours.getUtilisateurs()==null || groupeEncours.getUtilisateurs().size()<=1) return null;
         String noms="";
-        for(Utilisateur utilisateur : groupeEncours.getUtilisateurs() ){
-            if(!utilisateur.equals(modele.getUtilisateurConnecte())){
+
+        for( Utilisateur utilisateur : groupeEncours.getUtilisateurs() ){
+            if(utilisateur.getNom().equals(modele.getUtilisateurConnecte().getNom())) continue;
                 noms+=utilisateur.getNom();
                 noms+=", ";
-            }
+
         }
+        if(noms.isEmpty()||noms.length()<=2) return null;
         noms=noms.substring(0, noms.length()-2)+".";
         return noms;
     }
@@ -139,15 +177,36 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
     /**
      *
      * @param courriel de l'utilisateur a ajouter
-     * @return int du message, pour le handler
      */
     @Override
-    public int ajouterUtilisateurAuGroupe(String courriel) {
-        if(gestionUtilisateur.utilisateurExiste(courriel)){
-            if(gestionGroupes.ajouterMembre(groupeEncours, new Utilisateur("",courriel, "", Monnaie.CAD))) {
-                return AJOUT_OK;
-            } else return ERREUR_ACCES;
-        } else return EMAIL_INCONNU ;
+    public void ajouterUtilisateurAuGroupe(String courriel) {
+       // vueVoirUnGroupe.ouvrirProgressBar();
+        filEsclave = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message message;
+                try{
+                    if(gestionUtilisateur.utilisateurExiste(courriel)){
+                        if(gestionGroupes.ajouterMembre(groupeEncours, new Utilisateur("",courriel, "", Monnaie.CAD))) {
+                            message = handler.obtainMessage(AJOUT_OK);
+                            handler.sendMessage(message);
+                        } else{
+                            message = handler.obtainMessage(ERREUR_ACCES);
+                            handler.sendMessage(message);
+                        }
+                    } else{
+                        message = handler.obtainMessage(EMAIL_INCONNU);
+                        handler.sendMessage(message);
+                    }
+                }catch (SourceDonneeException e ){
+                    message = handler.obtainMessage(MSG_PAS_DE_CNX);
+                    handler.sendMessage(message);
+                }
+
+            }
+        });
+        filEsclave.start();
+
     }
 
     /**
@@ -165,17 +224,33 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         activityVoirUnGroupe.startActivity(Intent.createChooser(intent, activityVoirUnGroupe.getResources().getString(R.string.invitation_objet_courriel)));
        }
 
+    @Override
+    public void commencerVoirDetailFacture(int position) {
+        Intent intent = new Intent(activityVoirUnGroupe, ActivityVoirFacture.class);
+        intent.putExtra(EXTRA_GROUPE_POSITION,groupeEncours);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
+        intent.putExtra(EXTRA_FACTURE, facturesGroupe.get(position));
+        activityVoirUnGroupe.startActivity(intent);
+    }
+
     /**
      *
      * @return factures du groupes
      */
     public void chargerFacturesGroupe(){
+       // vueVoirUnGroupe.ouvrirProgressBar();
         filEsclave = new Thread(new Runnable() {
+            Message message;
             @Override
             public void run() {
-              List<Facture> factures =  gestionGroupes.trouverToutesLesFactures(groupeEncours);
-              Message message = handler.obtainMessage(MSG_GET_FACTURES);
-              message.obj=factures;
+              try {
+                  List<Facture> factures =  gestionGroupes.trouverToutesLesFactures(groupeEncours);
+                  message = handler.obtainMessage(MSG_GET_FACTURES);
+                  message.obj=factures;
+              }catch (SourceDonneeException e){
+                  message = handler.obtainMessage(MSG_PAS_DE_CNX);
+              }
+
               handler.sendMessage(message);
             }
         });
@@ -223,5 +298,10 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         return groupeEncours.getNomGroupe();
     }
 
+    public Monnaie getMonnaieUserConnecte(){
+        SharedPreferences sharedPref = activityVoirUnGroupe.getSharedPreferences("SKILLBILL_USER_PREF", Context.MODE_PRIVATE);
+        String strMonnaieUser = sharedPref.getString("monnaieUser", "CAD");
+        return Monnaie.valueOf(strMonnaieUser);
+    }
 
 }

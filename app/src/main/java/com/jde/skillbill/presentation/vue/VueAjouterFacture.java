@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.*;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.jde.skillbill.R;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 
 import java.time.LocalDate;
@@ -24,16 +26,20 @@ import java.util.List;
 import java.util.Objects;
 
 public class VueAjouterFacture extends Fragment implements IContratVPAjouterFacture.IVueAjouterFacture {
-    IContratVPAjouterFacture.IPresenteurAjouterFacture presenteurAjouterFacture;
-    Button boutonAjouter, boutonAnnuler;
-    EditText editTextMontant;
-    EditText editTextTitre;
-    Spinner spinnerChoix;
-    Spinner spinnerChoixUtilisateursRedevables;
-    CalendarView calendarView;
-    EditText date;
-    ImageView imageFacture;
-    private ImageButton btnAjouterFacture;
+    private IContratVPAjouterFacture.IPresenteurAjouterFacture presenteurAjouterFacture;
+    protected Button boutonAjouter, boutonAnnuler;
+    protected EditText editTextMontant;
+    protected EditText editTextTitre;
+    protected Spinner spinnerChoix;
+    protected Spinner spinnerChoixUtilisateursRedevables;
+    protected CalendarView calendarView;
+    protected EditText date;
+    protected ProgressBar progressBar;
+    protected ImageView imageFacture;
+    protected ImageButton btnAjouterFacture;
+    private TextView tvTitreMontant;
+    protected TextView tvToRemoveForTest;
+    protected ImageView imageView;
 
 
     @Override
@@ -41,18 +47,21 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
                               ViewGroup container,
                               Bundle savedInstanceState) {
         View racine = inflater.inflate(R.layout.frag_ajouter_facture, container, false);
+        tvToRemoveForTest = racine.findViewById(R.id.titre_payeur_facture);
         btnAjouterFacture =racine.findViewById(R.id.btn_ajouter_facture_groupe_avec_photo);
         btnAjouterFacture.setOnClickListener(view -> {
             presenteurAjouterFacture.prendrePhoto();
 
         });
-
+         progressBar = racine.findViewById(R.id.progressBarAjoutFacture);
+         progressBar.setVisibility(View.INVISIBLE);
          imageFacture = (ImageView) racine.findViewById(R.id.imageFact);
          editTextTitre=racine.findViewById(R.id.edit_t_nom_activie);
          boutonAjouter= racine.findViewById(R.id.btnAjouter);
          boutonAjouter.setOnClickListener(view -> {
              presenteurAjouterFacture.ajouterFacture();
          });
+         imageView = racine.findViewById (R.id.imageFact);
 
          boutonAnnuler= racine.findViewById(R.id.btnAnuller);
          boutonAnnuler.setOnClickListener(view -> {
@@ -115,6 +124,9 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
              }
          });
 
+        tvTitreMontant=racine.findViewById(R.id.txt_titre_montant);
+        Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
+        tvTitreMontant.setText("Montant en " +monnaieUser.name()+"-"+monnaieUser.getSymbol());
         return racine;
     }
 
@@ -141,16 +153,18 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
 
     /**
      *
-     * @return le montant de la facture
+     * @return le montant de la facture dans la devise de l'utilisateur
      * @throws NullPointerException
      * @throws NumberFormatException
      */
     @Override
-    public double getMontantFactureInput() throws NullPointerException, NumberFormatException {
+    public double getMontantFactureCADInput() throws NullPointerException, NumberFormatException {
+        Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
         if(Double.parseDouble( editTextMontant.getText().toString())<=0){
             throw new NumberFormatException();
         }
-        return Double.parseDouble( editTextMontant.getText().toString());
+        double monatantDevise=Double.parseDouble( editTextMontant.getText().toString());
+        return monatantDevise*monnaieUser.getTauxDevise();
     }
 
     /**
@@ -165,6 +179,17 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         alertBuilder.setMessage(message);
         alertBuilder.show();
     }
+
+    @Override
+    public Bitmap getBitmapFacture(){
+        Bitmap bitmap = null;
+        if(imageFacture.getDrawable() instanceof BitmapDrawable){
+            bitmap = ((BitmapDrawable) imageFacture.getDrawable()).getBitmap();
+        }
+
+        return bitmap;
+    }
+
 
     /**
      *
@@ -248,6 +273,14 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         AlertDialog dialog = builder.create();
 
         dialog.show();
+    }
+    @Override
+    public void fermerProgressBar(){
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void ouvrirProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
     }
 
 

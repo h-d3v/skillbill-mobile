@@ -3,14 +3,18 @@ package com.jde.skillbill.presentation.presenteur;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -21,6 +25,7 @@ import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirGroupes;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirGroupes;
@@ -31,6 +36,7 @@ import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
 
+import static android.provider.Settings.System.getString;
 
 
 public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.IPresenteurVoirGroupe {
@@ -44,6 +50,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     private ISourceDonnee sourceDonnee;
     private static final int MSG_GET_GROUPES=1;
     private static final int MSG_GET_FACTURE=3;
+    private static final int MSG_ERREUR_CONNECTION=4;
     private static final int REQUETE_PRENDRE_PHOTO= 2;
 
 
@@ -63,13 +70,19 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 filEsclave = null;
+                vueVoirGroupes.fermerProgressBar();
                 if(msg.what == MSG_GET_GROUPES){
                     modele.setSoldeParPosition(((Modele) msg.obj).getSoldeParPosition());
                     modele.setGroupesAbonnesUtilisateurConnecte((((Modele) msg.obj).getListGroupeAbonneUtilisateurConnecte()));
+
                     vueVoirGroupes.rafraichir();
+
                 }
                 if(msg.what == MSG_GET_FACTURE){
 
+                }
+                if(msg.what == MSG_ERREUR_CONNECTION){
+                    Toast.makeText(activity, R.string.pas_de_connection_internet, Toast.LENGTH_LONG);
                 }
 
             }
@@ -86,39 +99,45 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         filEsclave = new Thread(new Runnable() {
             @Override
             public void run() {
+                Message msg;
+                try{
+                    List<Groupe> groupes= gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte());
+                    modele.setGroupesAbonnesUtilisateurConnecte(groupes);
 
-                List<Groupe> groupes= gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte());
-                modele.setGroupesAbonnesUtilisateurConnecte(groupes);
 
-                if(groupes!=null){
-                    int position= 0;
-                    int taille = groupes.size();
-                    String[] textes = new String[taille];
-                    while (position<taille){
+                    if(groupes!=null){
+                        int position= 0;
+                        int taille = groupes.size();
+                        String[] textes = new String[taille];
+                        while (position<taille){
 
-                        try {
-                            double solde = gestionGroupe.getSoldeParUtilisateurEtGroupe(modele.getUtilisateurConnecte(), modele.getListGroupeAbonneUtilisateurConnecte().get(position));
-                            if (solde == 0) {
-                                textes[position] = activity.getResources().getString(R.string.solde_utilisateur_nul);
+                            try {
+                                double solde = gestionGroupe.getSoldeParUtilisateurEtGroupe(modele.getUtilisateurConnecte(), modele.getListGroupeAbonneUtilisateurConnecte().get(position));
+                                if (solde == 0) {
+                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_nul);
 
-                            } else if (solde < 0) {
-                                textes[position] = activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde);
-                            } else {
-                                textes[position] = activity.getResources().getString(R.string.solde_utilisateur_crediteur) + " " + solde;
+                                } else if (solde < 0) {
+                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde);
+                                } else {
+                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_crediteur) + " " + solde;
+                                }
+
+                            } catch (NullPointerException e) { //TODO vraie exception
+                                textes[position] =  activity.getResources().getString(R.string.pas_de_facture_dans_le_groupe);
+
                             }
-
-                        } catch (NullPointerException e) { //TODO vraie exception
-                            textes[position] =  activity.getResources().getString(R.string.pas_de_facture_dans_le_groupe);
+                            position++;
 
                         }
-                        position++;
 
+                        modele.setSoldeParPosition(textes);
                     }
 
-                    modele.setSoldeParPosition(textes);
+                    msg = handler.obtainMessage(MSG_GET_GROUPES, modele);
+                }catch (SourceDonneeException e ){
+                    msg = handler.obtainMessage(MSG_ERREUR_CONNECTION);
                 }
 
-                Message msg = handler.obtainMessage(MSG_GET_GROUPES, modele);
                 handler.sendMessage(msg);
 
             }
@@ -146,9 +165,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         if(modele==null || modele.getSoldeParPosition()==null || modele.getSoldeParPosition().length ==0 || position>= modele.getSoldeParPosition().length) return "";
         return modele.getSoldeParPosition()[position];
     }
-
-
-
 
     @Override
     public String getNomGroupe(int position) {
@@ -178,7 +194,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     public void commencerPrendrePhotoFacture(int position){
         //TODO remove
     }
-
 
 
 

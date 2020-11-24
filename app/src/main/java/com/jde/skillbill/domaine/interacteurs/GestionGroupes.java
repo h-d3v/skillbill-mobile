@@ -1,7 +1,10 @@
 package com.jde.skillbill.domaine.interacteurs;
 
+import android.util.Log;
 import com.jde.skillbill.domaine.entites.*;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
+import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 
 import java.util.List;
 
@@ -20,7 +23,7 @@ public class GestionGroupes implements IGestionGroupes {
      * @return le groupe crée
      */
     @Override
-    public Groupe creerGroupe(String nom, Utilisateur utilisateurCreateur, Monnaie monnaieAUtiliserDansLeGroupe) {
+    public Groupe creerGroupe(String nom, Utilisateur utilisateurCreateur, Monnaie monnaieAUtiliserDansLeGroupe) throws SourceDonneeException {
         Groupe groupe= new Groupe(nom, utilisateurCreateur, monnaieAUtiliserDansLeGroupe);
         Groupe groupeCree =  sourceDonnee.creerGroupeParUtilisateur(utilisateurCreateur,groupe);
          return groupeCree;
@@ -32,7 +35,7 @@ public class GestionGroupes implements IGestionGroupes {
      * @return le membre ajouté, null si deja dans le groupe
      */
     @Override
-    public boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur) {
+    public boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur) throws SourceDonneeException {
 
         return sourceDonnee.ajouterMembre(groupe, utilisateur);
     }
@@ -53,7 +56,7 @@ public class GestionGroupes implements IGestionGroupes {
      * @return toutes les factures du groupe
      */
     @Override
-    public List<Facture> trouverToutesLesFactures(Groupe groupe) {
+    public List<Facture> trouverToutesLesFactures(Groupe groupe) throws SourceDonneeException {
 
         return sourceDonnee.lireFacturesParGroupe(groupe);
     }
@@ -65,7 +68,7 @@ public class GestionGroupes implements IGestionGroupes {
      * @return tous les utilisateurs du groupe
      */
     @Override
-    public List<Utilisateur> trouverTousLesUtilisateurs(Groupe groupe) {
+    public List<Utilisateur> trouverTousLesUtilisateurs(Groupe groupe) throws SourceDonneeException {
         return sourceDonnee.lireUTilisateurParGroupe(groupe);
     }
 
@@ -78,7 +81,7 @@ public class GestionGroupes implements IGestionGroupes {
      */
 
     @Override
-    public double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConcerne, Groupe groupe) {
+    public double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConcerne, Groupe groupe) throws SourceDonneeException {
 
         List<Facture> factures = sourceDonnee.lireFacturesParGroupe(groupe);
         if (factures == null || factures.size() == 0) {
@@ -93,6 +96,7 @@ public class GestionGroupes implements IGestionGroupes {
 
             nbrUtilisateurSurLaFacture = 0;
             for (Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()) {
+               // Log.e(String.valueOf(((UtilisateurRestAPI)utilisateur).getId()), String.valueOf(facture.getMontantPayeParParUtilisateur().get(utilisateur)));
                 total += facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 nbrUtilisateurSurLaFacture++;
                 if (utilisateur.equals(utilisateurConcerne)) {

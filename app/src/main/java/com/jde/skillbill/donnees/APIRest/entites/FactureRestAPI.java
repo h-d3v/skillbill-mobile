@@ -1,10 +1,14 @@
 package com.jde.skillbill.donnees.APIRest.entites;
 
+
 import com.google.gson.annotations.SerializedName;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,21 +19,22 @@ public class FactureRestAPI extends Facture {
     private String date;
     @SerializedName("Id")
     private int id;
-    @SerializedName("MontantTotal")
-    double montantTotal;
+    @SerializedName("Photos")
+    private ArrayList<PhotoRestApi> photoesEncodeesBase64;
+
     @SerializedName("IdGroupe")
     int idGroupe;
     @SerializedName("UtilisateurCreateurId")
     int idUtilisateurCreateur;
 
-    public FactureRestAPI(LocalDate dateFacture, Map<Utilisateur, Double> utilisateurDoubleMap, String nom) {
-        super(dateFacture, utilisateurDoubleMap, nom);
-    }
+
     public FactureRestAPI(String date, int idGroupe, double montantTotal, int idUtilisateurCreateur){
+        super();
         this.date=date;
         this.idGroupe=idGroupe;
-        this.montantTotal= montantTotal;
+        super.setMontantTotal(montantTotal);
         this.idUtilisateurCreateur = idUtilisateurCreateur;
+        this.photoesEncodeesBase64= new ArrayList<>();
     }
 
     public List<PayeursEtMontant> getPayeursEtMontantsListe() {
@@ -38,6 +43,12 @@ public class FactureRestAPI extends Facture {
 
     public void setPayeursEtMontantsListe(List<PayeursEtMontant> payeursEtMontantsListe) {
         this.payeursEtMontantsListe = payeursEtMontantsListe;
+        HashMap<Utilisateur, Double> utilisateurMontantMap = new HashMap<>();
+
+            for (PayeursEtMontant payeursEtMontant :payeursEtMontantsListe) {
+                utilisateurMontantMap.put(new UtilisateurRestAPI(payeursEtMontant.getIdPayeur()), payeursEtMontant.getMontantPaye());
+            }
+            super.setMontantPayeParParUtilisateur(utilisateurMontantMap);
     }
 
     public String getDate() {
@@ -56,10 +67,11 @@ public class FactureRestAPI extends Facture {
         this.id = id;
     }
 
-    @Override
-    public double getMontantTotal(){
-        return montantTotal;
+    public ArrayList<PhotoRestApi> getPhotoesEncodeesBase64() {
+        return photoesEncodeesBase64;
     }
 
-
+    public void setPhotoesEncodeesBase64(ArrayList<PhotoRestApi> photoesEncodeesBase64) {
+        this.photoesEncodeesBase64 = photoesEncodeesBase64;
+    }
 }

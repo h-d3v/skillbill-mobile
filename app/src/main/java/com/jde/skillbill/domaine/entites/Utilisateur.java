@@ -1,6 +1,7 @@
 package com.jde.skillbill.domaine.entites;
 
 import com.google.gson.annotations.SerializedName;
+import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -24,6 +25,7 @@ public class Utilisateur implements Serializable {
         this.motPasse=motPasse;
         this.monnaieUsuelle=monnaie;
     }
+    public Utilisateur(){};
 
     public String getNom() {
         return nom;
@@ -76,13 +78,23 @@ public class Utilisateur implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
+
         if (o == null || getClass() != o.getClass()) return false;
+
+        if(o instanceof UtilisateurRestAPI){
+
+            UtilisateurRestAPI that = (UtilisateurRestAPI) o;
+            o = (UtilisateurRestAPI) o;
+            return ((UtilisateurRestAPI) o).getId()==that.getId();
+        }
+
         Utilisateur that = (Utilisateur) o;
         return courriel.equals(that.courriel);
     }
 
     @Override
     public int hashCode() {
+
         return Objects.hash(courriel);
     }
 }

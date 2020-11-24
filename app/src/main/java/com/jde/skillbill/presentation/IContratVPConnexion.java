@@ -14,6 +14,10 @@ public interface IContratVPConnexion {
         String getEmail();
         boolean tousLesChampsValides();
         void setPresenteur(PresenteurConnexion presenteur);
+
+        void fermerProgressBar();
+
+        void ouvrirProgressBar();
     }
 
 }

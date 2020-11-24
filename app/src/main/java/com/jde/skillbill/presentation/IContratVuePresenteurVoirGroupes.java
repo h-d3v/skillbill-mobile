@@ -12,6 +12,10 @@ public interface IContratVuePresenteurVoirGroupes {
 
 
         void rafraichir();
+
+        void ouvrirProgressBar();
+
+        void fermerProgressBar();
     }
 
     interface IPresenteurVoirGroupe{

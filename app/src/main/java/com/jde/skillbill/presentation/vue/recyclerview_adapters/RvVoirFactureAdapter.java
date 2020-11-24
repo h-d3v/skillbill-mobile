@@ -1,8 +1,8 @@
 package com.jde.skillbill.presentation.vue.recyclerview_adapters;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -10,13 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.jde.skillbill.R;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVPVoirUnGroupe;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirUnGroupe;
 
 public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContratVPVoirUnGroupe.IAdapterVoirUneFacture {
     PresenteurVoirUnGroupe _presenteur;
-    TextView tvNomActivite;
+    MaterialButton btnNomActivite;
     TextView tvMontant;
 
     public RvVoirFactureAdapter(PresenteurVoirUnGroupe presenteur){
@@ -35,11 +37,16 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        tvNomActivite =holder.itemView.findViewById(R.id.nomActivite);
+        btnNomActivite =holder.itemView.findViewById(R.id.nomActivite);
         tvMontant =holder.itemView.findViewById(R.id.tvMontant);
 
-        tvNomActivite.setText(_presenteur.getFacturesGroupe().get(position).getLibelle());
-        tvMontant.setText(((Double) _presenteur.getMontantFacturePayerParUser(position)).toString());
+        btnNomActivite.setText(_presenteur.getFacturesGroupe().get(position).getLibelle());
+        btnNomActivite.setOnClickListener(view -> _presenteur.commencerVoirDetailFacture(position));
+
+        Monnaie monnaieUser= _presenteur.getMonnaieUserConnecte();
+        Double montantFacturePayer=_presenteur.getMontantFacturePayerParUser(position);
+        montantFacturePayer*=monnaieUser.getTauxCad();
+        tvMontant.setText(( montantFacturePayer).toString()+" "+monnaieUser.getSymbol());
     }
 
     @Override

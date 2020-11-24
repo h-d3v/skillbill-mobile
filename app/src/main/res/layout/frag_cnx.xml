@@ -102,7 +102,8 @@
             android:layout_marginEnd="30dp"
             android:autofillHints=""
             android:backgroundTint="@android:color/transparent"
-            android:hint="mot de passe"
+            android:hint="@string/mot_de_passe"
+            app:endIconMode="password_toggle"
             android:inputType="textPassword"
             android:padding="15dp"
             android:textColor="#FFFFFF"
@@ -121,6 +122,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
 
+            <ProgressBar
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="148dp"
+                    android:layout_height="104dp"
+                    android:id="@+id/progressBarConnexion" android:layout_toStartOf="@+id/btnCnx"
+                    android:layout_marginEnd="20dp" android:layout_alignParentStart="true"
+                    android:layout_marginStart="133dp"/>
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnCnx"
                 android:layout_width="wrap_content"

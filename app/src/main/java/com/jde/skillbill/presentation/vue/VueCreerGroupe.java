@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import com.jde.skillbill.R;
@@ -21,6 +22,7 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
     private TextView texteEntre;
     private Button boutonEnregistrer;
     private Button boutonAnnuler;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView (LayoutInflater inflater,
@@ -28,6 +30,9 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
                               Bundle savedInstanceState) {
         View racine = inflater.inflate(R.layout.frag_creer_groupe, container, false);
         texteEntre=racine.findViewById(R.id.textViewNomGroupeEntree);
+        progressBar= racine.findViewById(R.id.progressBarAjoutGroupe);
+        fermerProgressBar();
+
         boutonEnregistrer=racine.findViewById(R.id.btnEnregistrer);
         boutonEnregistrer.setOnClickListener(view -> presenteurCreerGroupe.creerGroupe());
         boutonAnnuler = racine.findViewById(R.id.btnAnuller);
@@ -69,6 +74,14 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
     @Override
     public String getNomGroupe() {
         return texteEntre.getText().toString();
+    }
+    @Override
+    public void fermerProgressBar(){
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void ouvrirProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
     }
 
 

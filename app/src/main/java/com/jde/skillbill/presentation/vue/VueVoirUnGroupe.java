@@ -1,21 +1,15 @@
 package com.jde.skillbill.presentation.vue;
 
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -28,11 +22,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.jde.skillbill.R;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.vue.recyclerview_adapters.RvVoirFactureAdapter;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 
@@ -42,10 +40,12 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
    private PresenteurVoirUnGroupe _presenteur;
    private TextView tvNomGroupe;
    //TODO afficher un message si il n'y a aucune facture dans le groupe
-    private TextView tvMsgFactures;
-    private TabLayout tabLayout;
+   private TextView tvMsgFactures;
+   private TabLayout tabLayout;
    private TextView detailMembres;
    private Button ajouterMembre;
+   private View racine;
+   private ProgressBar progressBar;
 
     RecyclerView rvFactures;
     RvVoirFactureAdapter rvFacturesAdapter;
@@ -53,11 +53,12 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View racine = inflater.inflate(R.layout.frag_voir_un_groupe, container, false);
+        racine = inflater.inflate(R.layout.frag_voir_un_groupe, container, false);
         ajouterMembre = racine.findViewById(R.id.btnAjouter);
         detailMembres = racine.findViewById(R.id.detailMembres);
         detailMembres.setVisibility(View.INVISIBLE);
         ajouterMembre.setVisibility(View.INVISIBLE);
+        progressBar = racine.findViewById(R.id.pbVoirUnGroupe);
         tvNomGroupe=racine.findViewById(R.id.tvNomGroupe);
         tabLayout=racine.findViewById(R.id.tabLayoutFactureMembres);
         tvMsgFactures=racine.findViewById(R.id.tvMsgFactures);
@@ -66,6 +67,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
         rvFactures.setAdapter(rvFacturesAdapter);
         rvFactures.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFactures.addItemDecoration(new DividerItemDecoration(rvFactures.getContext(), DividerItemDecoration.VERTICAL));
+
 
         tvNomGroupe.setText(_presenteur.getNomGroupe());
 
@@ -115,15 +117,10 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
 
             builder.setPositiveButton(getString(R.string.ajouter), (dialogInterface, i) -> {
 
-                int code = _presenteur.ajouterUtilisateurAuGroupe(champsCourriel.getText().toString());
-                if(_presenteur.AJOUT_OK==code){
-                    detailMembres.setText(getString(R.string.membres_dans_le_groupe)+_presenteur.getMembresGroupe());
-                }else if(_presenteur.EMAIL_INCONNU==code){
-                    Toast.makeText(racine.getContext(), getString(R.string.email_inconnu), Toast.LENGTH_LONG).show();
-                }else if(_presenteur.ERREUR_ACCES==code){
-                    Toast.makeText(racine.getContext(), getString(R.string.email_deja_dans_groupe), Toast.LENGTH_LONG).show();
-                }
+                 _presenteur.ajouterUtilisateurAuGroupe(champsCourriel.getText().toString());
+
             });
+
             builder.setNeutralButton(getString(R.string.Inviter), (dialogInterface, i) -> _presenteur.envoyerCourriel(champsCourriel.getText().toString()));
 
             builder.setNegativeButton(getString(R.string.Annuler), (dialogInterface, i) -> dialogInterface.dismiss());
@@ -159,6 +156,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
             });
             dialog.show();
         });
+
         return racine;
     }
 
@@ -170,6 +168,18 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
 
     public void setPresenteur(IContratVuePresenteurVoirUnGroupe.IPresenteurVoirUnGroupe presenteur) {
         _presenteur = (PresenteurVoirUnGroupe) presenteur;
+    }
+
+    public void setVueAjouterMembres(int code){
+
+        if(_presenteur.AJOUT_OK==code){
+            detailMembres.setText(getString(R.string.membres_dans_le_groupe)+_presenteur.getMembresGroupe());
+        }else if(_presenteur.EMAIL_INCONNU==code){
+            Toast.makeText(racine.getContext(), getString(R.string.email_inconnu), Toast.LENGTH_LONG).show();
+        }else if(_presenteur.ERREUR_ACCES==code){
+            Toast.makeText(racine.getContext(), getString(R.string.email_deja_dans_groupe), Toast.LENGTH_LONG).show();
+        }
+
     }
 
    // @Override
@@ -243,5 +253,13 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     };
+    @Override
+    public void fermerProgressBar(){
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void ouvrirProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
+    }
 
 }

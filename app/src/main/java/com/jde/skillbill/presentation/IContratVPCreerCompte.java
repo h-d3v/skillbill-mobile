@@ -17,6 +17,10 @@ public interface IContratVPCreerCompte {
         boolean tousLesChampsValides();
         void afficherCompteCreer(String nom, String email, Monnaie monnaie);
         void afficherEmailDejaPrit();
+
+        void fermerProgressBar();
+
+        void ouvrirProgressBar();
     }
 
     interface PresenteurCreerCompte{

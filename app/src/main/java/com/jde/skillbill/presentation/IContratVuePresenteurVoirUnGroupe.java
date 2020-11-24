@@ -5,15 +5,19 @@ public interface IContratVuePresenteurVoirUnGroupe {
      interface IPresenteurVoirUnGroupe{
          String getMembresGroupe();
 
-         int ajouterUtilisateurAuGroupe(String courriel);
+         void ajouterUtilisateurAuGroupe(String courriel);
 
          void envoyerCourriel(String courriel);
 
 
+         void commencerVoirDetailFacture(int position);
      }
      interface IVueVoirUnGroupe{
         void setPresenteur(IPresenteurVoirUnGroupe iPresenteurVoirUnGroupe);
 
+         void fermerProgressBar();
+
+         void ouvrirProgressBar();
      }
 
 

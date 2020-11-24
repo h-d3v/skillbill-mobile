@@ -4,7 +4,7 @@ import com.jde.skillbill.domaine.entites.*;
 
 import java.util.List;
 
-public interface IGestionGroupes {
+public interface IGestionGroupes  {
     /**
      *
      * @param nom
@@ -12,7 +12,7 @@ public interface IGestionGroupes {
      * @param monnaieAUtiliserDansLeGroupe
      * @return le groupe crée
      */
-    Groupe creerGroupe(String nom, Utilisateur utilisateurCreateur, Monnaie monnaieAUtiliserDansLeGroupe);
+    Groupe creerGroupe(String nom, Utilisateur utilisateurCreateur, Monnaie monnaieAUtiliserDansLeGroupe)throws SourceDonneeException;
 
     /**
      *
@@ -20,7 +20,7 @@ public interface IGestionGroupes {
      * @param utilisateur
      * @return le membre ajouté
      */
-    boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur);
+    boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur)throws SourceDonneeException;
 
 
 
@@ -30,14 +30,14 @@ public interface IGestionGroupes {
      * @param facture
      * @return la facture ajoutéee
      */
-    Facture ajouterFacture(Groupe groupe, Facture facture);
+    Facture ajouterFacture(Groupe groupe, Facture facture)throws SourceDonneeException;
 
     /**
      *
      * @param groupe
      * @return toutes les factures du groupe
      */
-    List<Facture> trouverToutesLesFactures(Groupe groupe);
+    List<Facture> trouverToutesLesFactures(Groupe groupe)throws SourceDonneeException;
 
 
 
@@ -46,12 +46,12 @@ public interface IGestionGroupes {
      * @param groupe
      * @return tous les utilisateurs du groupe
      */
-    List<Utilisateur> trouverTousLesUtilisateurs(Groupe groupe);
+    List<Utilisateur> trouverTousLesUtilisateurs(Groupe groupe)throws SourceDonneeException;
 
 
 
 
 
 
-    double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConnecte, Groupe groupe);
+    double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConnecte, Groupe groupe)throws SourceDonneeException;
 }

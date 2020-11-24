@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
@@ -8,69 +8,81 @@
     android:background="@drawable/login_bg"
     android:id="@+id/frag_voir_un_groupe"
     >
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
+
+        <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvNomGroupe"
+                    style="@style/Widget.MaterialComponents.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="50sp"
+                    android:autoSizeMinTextSize="20sp"
+                    android:autoSizeTextType="uniform"
+                    android:autoText="false"
+                    android:maxHeight="90dp"
+                    android:maxLines="2"
+                    android:textAlignment="center"
+                    android:textSize="50sp"
+                    app:autoSizeMaxTextSize="50sp"
+                    app:autoSizeMinTextSize="20sp"
+                    app:autoSizeTextType="uniform"
+                    tools:text="test"/>
+        </androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.tabs.TabLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabIndicatorColor="#1DE9B6"
+                app:tabTextColor="@color/colorPrimary"
+                android:id="@+id/tabLayoutFactureMembres">
+            <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabFactures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Factures"/>
+
+            <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabMembres"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Membres"
+            />
+        </com.google.android.material.tabs.TabLayout>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvNomGroupe"
-            style="@style/Widget.MaterialComponents.TextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoSizeMaxTextSize="50sp"
-            android:autoSizeMinTextSize="20sp"
-            android:autoSizeTextType="uniform"
-            android:autoText="false"
-            android:maxHeight="90dp"
-            android:maxLines="2"
-            android:textAlignment="center"
-            android:textSize="50sp"
-            app:autoSizeMaxTextSize="50sp"
-            app:autoSizeMinTextSize="20sp"
-            app:autoSizeTextType="uniform"
-            tools:text="test" />
-    </androidx.appcompat.widget.Toolbar>
-    <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicatorColor="#1DE9B6"
-            app:tabTextColor="@color/colorPrimary"
-        android:id="@+id/tabLayoutFactureMembres">
-        <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabFactures"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Factures"/>
+                android:id="@+id/tvMsgFactures"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:textAlignment="center"
+                android:textSize="50sp"/>
 
-        <com.google.android.material.tabs.TabItem
-                android:id="@+id/tabMembres"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Membres"
-        />
-    </com.google.android.material.tabs.TabLayout>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/detailMembres"/>
+        <Button
+                android:text="@string/action_ajouter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/btnAjouter"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:textColor="@color/colorPrimary"/>
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvMsgFactures"
-        style="@style/Widget.MaterialComponents.TextView"
-        android:layout_width="match_parent"
-        android:layout_height="79dp"
-        android:textAlignment="center"
-        android:textSize="50sp" />
-
-    <TextView
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvFactures"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </LinearLayout>
+    <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/detailMembres"/>
-    <Button
-            android:text="@string/action_ajouter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/btnAjouter"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:textColor="@color/colorPrimary"/>
+            android:layout_height="108dp"
+            android:id="@+id/pbVoirUnGroupe" android:layout_marginVertical="300dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFactures"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+</FrameLayout>

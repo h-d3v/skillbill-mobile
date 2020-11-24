@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -26,6 +27,7 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
     Button buttonCommencerActivityAjouterFacture;
     Button buttonSoldeGroupe;
     TextView tvPasDeGroupes;
+    ProgressBar progressBar;
 
     @Override
     public View onCreateView (LayoutInflater inflater,
@@ -35,11 +37,12 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         buttonCommencerActiviteCreerGroupe=racine.findViewById(R.id.floatingActionButtonAjouterGroupe);
         buttonCommencerActivityAjouterFacture=racine.findViewById(R.id.btn_ajouter_facture_groupe);
         buttonSoldeGroupe=racine.findViewById(R.id.btn_detail_solde);
+        progressBar = racine.findViewById(R.id.progressBarVG);
         tvPasDeGroupes= racine.findViewById(R.id.tvMessagePasDeGroupes);
         tvPasDeGroupes.setVisibility(View.INVISIBLE);
         rvMesGroupes=racine.findViewById(R.id.rvMesGroupes);
         rvVoirGroupesAdapter=new RVVoirGroupesAdapter(presenteurVoirGroupes);
-        if(rvVoirGroupesAdapter.getItemCount()==0){
+        if(rvVoirGroupesAdapter.getItemCount()==0 && progressBar.getVisibility()==View.INVISIBLE){
             tvPasDeGroupes.setVisibility(View.VISIBLE);
         }
         rvMesGroupes.setAdapter(rvVoirGroupesAdapter);
@@ -65,6 +68,15 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         if(rvVoirGroupesAdapter.getItemCount()>0){
             tvPasDeGroupes.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void fermerProgressBar(){
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void ouvrirProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
     }
 
 

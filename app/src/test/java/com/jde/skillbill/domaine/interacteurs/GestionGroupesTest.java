@@ -4,6 +4,7 @@ import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,12 +37,12 @@ public class GestionGroupesTest {
 
 
     @Test
-    public void TestcreerGroupeReussi() {
+    public void TestcreerGroupeReussi()throws SourceDonneeException {
         when(iSourceDonnee.creerGroupeParUtilisateur(utilisateurCobaye,groupeCobaye)).thenReturn(groupeCobaye);
         assertEquals(gestionGroupes.creerGroupe("le nom",utilisateurCobaye, Monnaie.CAD),groupeCobaye);
     }
     @Test
-    public void TestcreerGroupeEchoue() {
+    public void TestcreerGroupeEchoue()throws SourceDonneeException {
         when(iSourceDonnee.creerGroupeParUtilisateur(utilisateurCobaye,groupeCobaye)).thenReturn(new Groupe("safasasddsa", null, null));
         assertEquals(gestionGroupes.creerGroupe("le nom",utilisateurCobaye, Monnaie.CAD),null);
     }
@@ -50,20 +51,20 @@ public class GestionGroupesTest {
 
 
     @Test
-    public void TestajouterMembreReussi() {
+    public void TestajouterMembreReussi()throws SourceDonneeException {
         when(iSourceDonnee.ajouterMembre(groupeCobaye,utilisateurCobaye)).thenReturn(true);
         assertTrue(gestionGroupes.ajouterMembre(groupeCobaye, utilisateurCobaye));
     }
 
     @Test
-    public void TestajouterMembreEchoue() {
+    public void TestajouterMembreEchoue()throws SourceDonneeException {
         when(iSourceDonnee.ajouterMembre(groupeCobaye,utilisateurCobaye)).thenReturn(false);
         assertFalse(gestionGroupes.ajouterMembre(groupeCobaye, utilisateurCobaye));
     }
 
 
     @Test
-    public void trouverToutesLesFactures() {
+    public void trouverToutesLesFactures()throws SourceDonneeException {
         List<Facture> factures = new ArrayList<>();
         when(iSourceDonnee.lireFacturesParGroupe(groupeCobaye)).thenReturn(factures);
         assertEquals(factures, gestionGroupes.trouverToutesLesFactures(groupeCobaye));
@@ -71,14 +72,14 @@ public class GestionGroupesTest {
 
 
     @Test
-    public void trouverTousLesUtilisateurs() {
+    public void trouverTousLesUtilisateurs()throws SourceDonneeException {
         List<Utilisateur> utilisateurs = new ArrayList<>();
         when(iSourceDonnee.lireUTilisateurParGroupe(groupeCobaye)).thenReturn(utilisateurs);
         assertEquals(utilisateurs, gestionGroupes.trouverTousLesUtilisateurs(groupeCobaye));
     }
 
     @Test
-    public void getSoldeParUtilisateurEtGroupeTestPasDeFactureDansLeGroupe() {
+    public void getSoldeParUtilisateurEtGroupeTestPasDeFactureDansLeGroupe()throws SourceDonneeException {
         when(iSourceDonnee.lireFacturesParGroupe(groupeCobaye)).thenReturn(null);
         //given(gestionGroupes.getSoldeParUtilisateurEtGroupe(utilisateurCobaye,groupeCobaye)).willThrow(new NullPointerException("Pas de factures"));
         Exception e = null;
@@ -93,7 +94,7 @@ public class GestionGroupesTest {
         }
 
     @Test
-    public void getSoldeParUtilisateurEtGroupeTestAvecFactureDansLeGroupe() {
+    public void getSoldeParUtilisateurEtGroupeTestAvecFactureDansLeGroupe() throws SourceDonneeException{
         Facture facture = new Facture();
         List<Facture> factures = new ArrayList<>();
         Utilisateur utilisateur1 = new Utilisateur("","1","4",Monnaie.CAD);
