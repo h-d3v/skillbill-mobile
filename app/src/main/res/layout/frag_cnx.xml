@@ -26,7 +26,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
+        <include
+            android:id="@+id/toolbar_nav"
+            layout="@layout/toolbar_nav"/>
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="0dp"
@@ -40,7 +42,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/skill_b_logo"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            android:contentDescription="@string/app_logo" />
 
         <TextView
             android:id="@+id/textView"
