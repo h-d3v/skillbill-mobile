@@ -78,6 +78,8 @@
     <string name="pas_d_activite_photo_diponible">Nous ne pouvons trouver une application compatible pour prendre des
         photos sur votre appareil
     </string>
+    <string name="open_drawer">Open Drawer</string>
+    <string name="close_drawer">Close drawer</string>
 
 
 </resources>

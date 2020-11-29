@@ -10,6 +10,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
@@ -134,5 +138,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         _activite.finish();
 
     }
-    
+
+
+
 }

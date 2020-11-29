@@ -19,13 +19,14 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name=".ui.activity.SplashActivity">
+            android:name=".ui.activity.ActivityConnexion">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.activity.ActivityCreerCompte"
             android:parentActivityName=".ui.activity.ActivityConnexion">
         </activity>
@@ -33,9 +34,9 @@
                   android:parentActivityName=".ui.activity.ActivityConnexion">
         </activity>
 
-        <activity android:name=".ui.activity.ActivityConnexion"
+        <!--activity android:name=".ui.activity.ActivityConnexion"
             android:parentActivityName=".ui.activity.SplashActivity">
-        </activity>
+        </activity-->
         <activity
             android:parentActivityName=".ui.activity.ActivityVoirGroupes"
             android:name=".ui.activity.ActivityAjouterFacture">
