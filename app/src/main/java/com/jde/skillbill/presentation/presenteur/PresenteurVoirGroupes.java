@@ -31,6 +31,7 @@ import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirGroupes;
 import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
 import com.jde.skillbill.ui.activity.ActivityCreerGroupe;
+import com.jde.skillbill.ui.activity.ActivityModifProfil;
 import com.jde.skillbill.ui.activity.ActivityVoirGroupes;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
@@ -178,6 +179,13 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     public void commencerAjouterFactureActivite(int position) {
         Intent intent = new Intent(activity, ActivityAjouterFacture.class);
         intent.putExtra(EXTRA_GROUPE_POSITION, modele.getListGroupeAbonneUtilisateurConnecte().get(position));
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
+        activity.startActivity(intent);
+    }
+
+    @Override
+    public void redirigerModifCompte() {
+        Intent intent = new Intent(activity, ActivityModifProfil.class);
         intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
         activity.startActivity(intent);
     }

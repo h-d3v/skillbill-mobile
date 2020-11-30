@@ -23,6 +23,7 @@
         android:layout_marginTop="5dp"
         android:fontFamily="@font/oswald"
         android:text="Nom du compte"
+        android:id="@+id/nom_compte_drawer"
         android:textSize="25sp" />
 
 </LinearLayout>

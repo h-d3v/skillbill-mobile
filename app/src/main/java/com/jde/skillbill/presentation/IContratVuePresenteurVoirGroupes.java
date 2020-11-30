@@ -33,6 +33,8 @@ public interface IContratVuePresenteurVoirGroupes {
 
         void commencerAjouterFactureActivite(int position);
 
+        void redirigerModifCompte();
+
         void commencerPrendrePhotoFacture(int position);
     }
 }

@@ -15,7 +15,7 @@ import com.jde.skillbill.presentation.vue.VueVoirGroupes;
 
 public class ActivityVoirGroupes extends AppCompatActivity {
     PresenteurVoirGroupes presenteurVoirGroupes;
-
+    private VueVoirGroupes vueVoirGroupes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +27,7 @@ public class ActivityVoirGroupes extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         setContentView(R.layout.activite_voir_groupes);
-        VueVoirGroupes vueVoirGroupes= new VueVoirGroupes();
+        vueVoirGroupes= new VueVoirGroupes();
         Modele modele= new Modele();
         presenteurVoirGroupes = new PresenteurVoirGroupes(modele,vueVoirGroupes, this, new SourceDonneesAPIRest());
         vueVoirGroupes.setPresenteur(presenteurVoirGroupes);
@@ -36,5 +36,15 @@ public class ActivityVoirGroupes extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        if(vueVoirGroupes.isDrawerOpen()){
+            vueVoirGroupes.closeDrawer();
+        }
+        else{
+            super.onBackPressed();
+        }
+
+    }
 
 }

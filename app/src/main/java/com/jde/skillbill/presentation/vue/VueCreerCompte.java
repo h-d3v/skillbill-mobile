@@ -187,7 +187,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
         List<String> monnaiesString = Stream.of(Monnaie.values()).map(Enum::name).collect(Collectors.toList());
 
         ArrayAdapter<String> adapterMonnaies = new ArrayAdapter<>(
-                Objects.requireNonNull(getContext()),
+                requireContext(),
                 R.layout.dropdown_menu_item,
                 monnaiesString);
 
@@ -260,7 +260,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
      */
     @Override
     public void afficherEmailDejaPrit() {
-        MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+        MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(this.requireContext());
         alertBuilder.setTitle("Adresse e-mail deja utilisée");
         alertBuilder.setMessage("Veuillez choisir un autre courriel ou connectez-vous à votre compte");
         alertBuilder.show();
@@ -275,7 +275,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
      */
     @Override
     public void afficherCompteCreer(String nom, String email, Monnaie monnaie) {
-        MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+        MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(this.requireContext());
         alertBuilder.setTitle("Compte bien créer");
         alertBuilder.setMessage("Votre adresse courriel: " + email);
         alertBuilder.show();
@@ -285,7 +285,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
      * devras s'afficher si l'utilisateur ne peut se connecter à l'api
      */
     public void afficherErreurConnection() {
-        MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+        MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(this.requireContext());
         alertBuilder.setTitle("Erreur de connexion");
         alertBuilder.setMessage("Vérifiez que vous êtes bien connecté à Internet");
         alertBuilder.show();

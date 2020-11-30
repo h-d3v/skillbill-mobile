@@ -11,8 +11,6 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
 
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Utilisateur;

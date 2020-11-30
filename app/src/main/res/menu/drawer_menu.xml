@@ -1,24 +1,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+<group android:checkableBehavior="single">
+    <item android:title="Compte">
+            <menu>
+                <item  android:id="@+id/nav_profil"
+                    android:title="Profil"/>
+                <item
+                    android:id="@+id/nav_logout"
+                    android:title="Déconnexion" />
+            </menu>
+        </item>
+    </group>
 
+    <group android:menuCategory="secondary">
         <item
+            android:id="@+id/nav_suggestions"
 
-            android:id="@+id/nav_first_fragment"
-
-            android:title="First" />
-
-        <item
-
-            android:id="@+id/nav_second_fragment"
-
-            android:title="Second" />
-
-        <item
-            android:id="@+id/nav_third_fragment"
-
-
-            android:title="ThirdOptionnn" />
+            android:title="Faire une suggestion" />
 
     </group>
 

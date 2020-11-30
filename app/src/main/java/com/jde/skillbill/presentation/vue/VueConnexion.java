@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -29,7 +30,7 @@ import com.jde.skillbill.presentation.presenteur.PresenteurConnexion;
 
 import java.util.Objects;
 
-public class VueConnexion extends Fragment implements IContratVPConnexion.IVueConnexion, NavigationView.OnNavigationItemSelectedListener {
+public class VueConnexion extends Fragment implements IContratVPConnexion.IVueConnexion {
     private PresenteurConnexion _presenteur;
     private FloatingActionButton btnCnx;
     private MaterialButton btnInscription;
@@ -39,9 +40,6 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
     private ProgressBar progressBar;
     private boolean emailValide;
     private boolean mdpValide;
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-    private DrawerLayout drawerLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,9 +51,6 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
         btnInscription=vue.findViewById(R.id.btnInscriptionCnx);
         btnMdpOublie=vue.findViewById(R.id.btnMdpOublie);
         progressBar = vue.findViewById(R.id.progressBarConnexion);
-        drawerLayout=vue.findViewById(R.id.drawer_layout_cnx);
-        navigationView=vue.findViewById(R.id.navigation_view_cnx);
-        toolbar=vue.findViewById(R.id.tb_cnx);
         fermerProgressBar();
 
 
@@ -112,27 +107,10 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
                 }
             }
         });
-        //code pour rendre focntionnel le navigation drawer et le lier avec le toolbar
-        navigationView.bringToFront();
-        toolbar.setNavigationIcon(R.drawable.round_menu_black_18dp);
-        ActionBarDrawerToggle toggle= new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
-        toggle.setDrawerSlideAnimationEnabled(true);
-        toggle.setHomeAsUpIndicator(R.drawable.round_menu_black_18dp);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        navigationView.setNavigationItemSelectedListener(this);
 
         return vue;
     }
 
-    public boolean isDrawerOpen(){
-        return drawerLayout.isDrawerOpen(GravityCompat.START);
-    }
-
-    public void closeDrawer(){
-        drawerLayout.closeDrawer(GravityCompat.START);
-    }
 
     /**
      *
@@ -203,11 +181,7 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return true;
-        //3:19 video https://www.youtube.com/watch?v=lt6xbth-yQo
-    }
+
 
 
 }
