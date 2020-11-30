@@ -32,6 +32,7 @@ public class PresenteurModifProfil implements IContratVPModifProfil.PresenteurMo
 
     @SuppressLint("HandlerLeak")
     public PresenteurModifProfil(Activity activite, Modele modele, VueModifProfil vue, ISourceDonnee sourceDonnee){
+
         _modele = modele;
         _vue=vue;
         _activite=activite;
@@ -56,12 +57,35 @@ public class PresenteurModifProfil implements IContratVPModifProfil.PresenteurMo
                 }
             }
         };
+
     }
 
 
     @Override
     public boolean modifierProfil(String nom, String email, String mdp, Monnaie monnaie) {
         return false;
+    }
+
+    @Override
+    public void remplirInfosUser() {
+        _vue.setEmailUser(_modele.getUtilisateurConnecte().getCourriel());
+        _vue.setNomUser(_modele.getUtilisateurConnecte().getNom());
+        _vue.setMonnaieUser(_modele.getUtilisateurConnecte().getMonnaieUsuelle().toString());
+    }
+
+    @Override
+    public String getEmailUserConnecte() {
+        return _modele.getUtilisateurConnecte().getCourriel();
+    }
+
+    @Override
+    public String getNomUserConnecte() {
+        return _modele.getUtilisateurConnecte().getNom();
+    }
+
+    @Override
+    public Monnaie getNomMonnaieConnecte() {
+        return _modele.getUtilisateurConnecte().getMonnaieUsuelle();
     }
 
 }

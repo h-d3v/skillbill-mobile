@@ -2,23 +2,13 @@ package com.jde.skillbill.presentation.presenteur;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-import android.provider.MediaStore;
-import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
-import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;

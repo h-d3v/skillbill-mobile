@@ -63,6 +63,9 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
         //on initialise la devise à CAD
         tfNewMonnaie.setText(Monnaie.CAD.name(), false);
 
+        setNomUser(_presenteur.getNomUserConnecte());
+        setEmailUser(_presenteur.getEmailUserConnecte());
+        setMonnaieUser(_presenteur.getNomMonnaieConnecte().toString());
         return racine;
     }
 
@@ -88,16 +91,16 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
 
     @Override
     public void setNomUser(String nom) {
-
+        tfNewNom.setText(nom);
     }
 
     @Override
     public void setMonnaieUser(String monnaieStr) {
-
+        tfNewMonnaie.setText(monnaieStr, false);
     }
 
     @Override
-    public void setEmailUser(String nom) {
-
+    public void setEmailUser(String email) {
+        tfNewCourriel.setText(email);
     }
 }

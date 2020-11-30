@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+
             android:clickable="true"
             android:layout_width="104dp"
             android:layout_height="110dp"

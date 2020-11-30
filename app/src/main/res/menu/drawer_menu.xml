@@ -3,9 +3,14 @@
 <group android:checkableBehavior="single">
     <item android:title="Compte">
             <menu>
-                <item  android:id="@+id/nav_profil"
+                <item
+                    android:icon="@drawable/baseline_face_black_18dp"
+                    android:iconTint="@color/colorPrimary"
+                    android:id="@+id/nav_profil"
                     android:title="Profil"/>
                 <item
+                    android:icon="@drawable/round_exit_to_app_black_18dp"
+                    android:iconTint="@color/colorPrimary"
                     android:id="@+id/nav_logout"
                     android:title="Déconnexion" />
             </menu>

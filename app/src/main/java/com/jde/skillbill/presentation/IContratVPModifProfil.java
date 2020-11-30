@@ -19,5 +19,9 @@ public interface IContratVPModifProfil {
 
     interface PresenteurModifProfil {
         boolean modifierProfil(String nom, String email, String mdp, Monnaie monnaie);
+        void remplirInfosUser();
+        String getEmailUserConnecte();
+        String getNomUserConnecte();
+        Monnaie  getNomMonnaieConnecte();
     }
 }

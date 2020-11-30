@@ -110,10 +110,6 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         this.presenteurVoirGroupes=presenteurVoirGroupes;
     }
 
-    @Override
-    public void setNomUserDrawer(String nomUser){
-        tvNomUserDrawer.setText(nomUser);
-    }
 
     @Override
     public void rafraichir() {
