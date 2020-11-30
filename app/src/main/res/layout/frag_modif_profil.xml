@@ -11,7 +11,7 @@
         android:id="@+id/linearLayout3"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="26dp"
+        android:layout_marginBottom="72dp"
         android:background="@drawable/gradient_bg_toolbar"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/tlModifNom"
@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:clickable="true"
             android:layout_width="104dp"
             android:layout_height="110dp"
             android:layout_marginStart="5dp"
@@ -115,7 +116,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tlModifEmail"
         app:startIconDrawable="@drawable/round_vpn_key_white_18dp"
-        app:startIconTint="@color/colorAccent">
+        app:startIconTint="@color/colorAccent"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfModifMdp"

@@ -30,6 +30,7 @@ import com.jde.skillbill.presentation.IContratVuePresenteurVoirGroupes;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirGroupes;
 import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
+import com.jde.skillbill.ui.activity.ActivityConnexion;
 import com.jde.skillbill.ui.activity.ActivityCreerGroupe;
 import com.jde.skillbill.ui.activity.ActivityModifProfil;
 import com.jde.skillbill.ui.activity.ActivityVoirGroupes;
@@ -44,6 +45,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     private Modele modele;
     private VueVoirGroupes vueVoirGroupes;
     private Activity activity;
+
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
     private Handler handler;
@@ -88,8 +90,8 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
 
             }
         };
-        chargerGroupes();
 
+        chargerGroupes();
     }
 
 
@@ -203,6 +205,16 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         //TODO remove
     }
 
+    @Override
+    public String getNomUserConnecte(){
+        return modele.getUtilisateurConnecte().getNom();
+    }
 
+    @Override
+    public void deconnexion(){
+        Intent intent = new Intent(activity, ActivityConnexion.class);
+        activity.startActivity(intent);
+        this.activity.finish();
+    }
 
 }

@@ -19,11 +19,8 @@ public class ActivityModifProfil extends AppCompatActivity {
     @Override
     final protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activite_connexion);
+        setContentView(R.layout.activite_modif_profil);
         Modele modele = new Modele();
-
-
-
         VueModifProfil vue=new VueModifProfil();
         _presenteur=new PresenteurModifProfil(this,modele, vue, new SourceDonneesAPIRest());
         vue.setPresenteur(_presenteur);

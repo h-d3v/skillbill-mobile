@@ -1,6 +1,7 @@
 package com.jde.skillbill.presentation.vue;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,13 +30,13 @@ import com.jde.skillbill.presentation.vue.recyclerview_adapters.RVVoirGroupesAda
 public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoirGroupes.IVueVoirGroupes, NavigationView.OnNavigationItemSelectedListener {
 
     private PresenteurVoirGroupes presenteurVoirGroupes;
-
     FloatingActionButton buttonCommencerActiviteCreerGroupe;
     RecyclerView rvMesGroupes;
     RVVoirGroupesAdapter rvVoirGroupesAdapter;
     Button buttonCommencerActivityAjouterFacture;
     Button buttonSoldeGroupe;
     TextView tvPasDeGroupes;
+    TextView tvNomUserDrawer;
     ProgressBar progressBar;
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -46,9 +47,12 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
                               ViewGroup container,
                               Bundle savedInstanceState) {
         View racine = inflater.inflate(R.layout.frag_voir_groupes, container, false);
-        drawerLayout=racine.findViewById(R.id.drawer_layout_cnx);
-        navigationView=racine.findViewById(R.id.navigation_view_cnx);
-        toolbar=racine.findViewById(R.id.tb_cnx);
+        drawerLayout=racine.findViewById(R.id.drawer_layout_voir_gp);
+        toolbar=racine.findViewById(R.id.tb_voir_gp);
+        NavigationView navigationView = racine.findViewById(R.id.navigation_view_voir_gp);
+        tvNomUserDrawer = navigationView.getHeaderView(0).findViewById(R.id.nom_compte_drawer);
+
+        Log.i("to string header", navigationView.getHeaderView(0).toString());
         buttonCommencerActiviteCreerGroupe=racine.findViewById(R.id.floatingActionButtonAjouterGroupe);
         buttonCommencerActivityAjouterFacture=racine.findViewById(R.id.btn_ajouter_facture_groupe);
         buttonSoldeGroupe=racine.findViewById(R.id.btn_detail_solde);
@@ -68,22 +72,47 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         buttonCommencerActiviteCreerGroupe.setOnClickListener(view -> presenteurVoirGroupes.commencerCreerGroupeActivite());
 
         //code pour rendre focntionnel le navigation drawer et le lier avec le toolbar
-        navigationView.bringToFront();
-        toolbar.setNavigationIcon(R.drawable.round_menu_black_18dp);
+
+
         ActionBarDrawerToggle toggle= new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
         toggle.setDrawerSlideAnimationEnabled(true);
         toggle.setHomeAsUpIndicator(R.drawable.round_menu_black_18dp);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
+        navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
-
+        tvNomUserDrawer.setText(presenteurVoirGroupes.getNomUserConnecte());
         return racine;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.nav_suggestions:
+                Toast.makeText(getContext(), "Écrivez nous à suggest@skillbill.ca", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.nav_profil:
+                presenteurVoirGroupes.redirigerModifCompte();
+                break;
+
+            case R.id.nav_logout:
+                presenteurVoirGroupes.deconnexion();
+                break;
+        }
+        return true;
+
+        //video expliquant comment faire le nav drawer https://www.youtube.com/watch?v=lt6xbth-yQo
     }
 
     @Override
     public void setPresenteur(PresenteurVoirGroupes presenteurVoirGroupes){
         this.presenteurVoirGroupes=presenteurVoirGroupes;
+    }
+
+    @Override
+    public void setNomUserDrawer(String nomUser){
+        tvNomUserDrawer.setText(nomUser);
     }
 
     @Override
@@ -103,31 +132,11 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         progressBar.setVisibility(View.VISIBLE);
     }
 
-
     public boolean isDrawerOpen(){
         return drawerLayout.isDrawerOpen(GravityCompat.START);
     }
 
     public void closeDrawer(){
         drawerLayout.closeDrawer(GravityCompat.START);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()){
-            case R.id.nav_suggestions:
-                Toast.makeText(getContext(), "Écrivez nous à suggest@skillbill.ca", Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.nav_profil:
-                presenteurVoirGroupes.redirigerModifCompte();
-                break;
-
-            case R.id.nav_logout:
-                break;
-        }
-        return true;
-
-        //video expliquant comment faire le nav drawer https://www.youtube.com/watch?v=lt6xbth-yQo
     }
 }

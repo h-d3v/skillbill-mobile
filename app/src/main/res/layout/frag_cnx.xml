@@ -1,26 +1,11 @@
 <!-- ui inspiré de https://www.monstertechnocodes.com/2019/06/1-sign-in-sign-up-ui-2019-the-best-ui-design-using-android-studio-full-tutorial-with-source-code-->
-<androidx.drawerlayout.widget.DrawerLayout
+
+
+<androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout_cnx"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view_cnx"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:clipToPadding="false"
-        app:menu="@menu/drawer_menu"
-        app:headerLayout="@layout/header_drawer"
-        />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
         <ImageView
             android:id="@+id/imageView"
@@ -207,8 +192,6 @@
             </RelativeLayout>
 
         </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.drawerlayout.widget.DrawerLayout>

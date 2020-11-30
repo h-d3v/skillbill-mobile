@@ -10,7 +10,7 @@ public interface IContratVuePresenteurVoirGroupes {
     interface IVueVoirGroupes{
         void setPresenteur(PresenteurVoirGroupes presenteurVoirGroupes);
 
-
+        void setNomUserDrawer(String nomUser);
         void rafraichir();
 
         void ouvrirProgressBar();
@@ -36,5 +36,9 @@ public interface IContratVuePresenteurVoirGroupes {
         void redirigerModifCompte();
 
         void commencerPrendrePhotoFacture(int position);
+
+        String getNomUserConnecte();
+
+        void deconnexion();
     }
 }

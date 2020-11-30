@@ -19,7 +19,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.activity.ActivityConnexion">
+            android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -34,18 +34,22 @@
                   android:parentActivityName=".ui.activity.ActivityConnexion">
         </activity>
 
-        <!--activity android:name=".ui.activity.ActivityConnexion"
+        <activity android:name=".ui.activity.ActivityConnexion"
             android:parentActivityName=".ui.activity.SplashActivity">
-        </activity-->
+        </activity>
+
         <activity
             android:parentActivityName=".ui.activity.ActivityVoirGroupes"
             android:name=".ui.activity.ActivityAjouterFacture">
+        </activity>
 
+        <activity
+            android:parentActivityName=".ui.activity.ActivityVoirGroupes"
+            android:name=".ui.activity.ActivityModifProfil">
         </activity>
 
         <activity
                 android:name=".ui.activity.ActivityCreerGroupe">
-
         </activity>
         <activity android:name=".ui.activity.ActivityVoirGroupes">
 

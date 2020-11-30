@@ -2,19 +2,20 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout_cnx"
+    android:id="@+id/drawer_layout_voir_gp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view_cnx"
+        android:id="@+id/navigation_view_voir_gp"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:clipToPadding="false"
         app:headerLayout="@layout/header_drawer"
         app:menu="@menu/drawer_menu" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
         <androidx.appcompat.widget.Toolbar
             app:titleTextColor="@color/colorPrimary"
             app:title="Vos groupes"
-            android:id="@+id/tb_cnx"
+            android:id="@+id/tb_voir_gp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
 
