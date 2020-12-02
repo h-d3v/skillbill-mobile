@@ -56,7 +56,6 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
                 if(msg.what == MSG_TENTER_CONNECTION_REUSSI){
                     _vueConnexion.afficherMsgConnecter(_modele.getUtilisateurConnecte().getCourriel(), _modele.getUtilisateurConnecte().getNom());
                     _vueConnexion.fermerProgressBar();
-                    Log.println(Log.ASSERT, "Monnaie user connecter", _modele.getUtilisateurConnecte().getMonnaieUsuelle().name());
                     //ajout de la monnaie du user connecte aux shared pref de l'app
                     SharedPreferences.Editor editor = activite.getSharedPreferences("SKILLBILL_USER_PREF",
                             Context.MODE_PRIVATE).edit();
@@ -89,7 +88,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         gestionUtilisateur.setSource(_dataSource);
         _vueConnexion.ouvrirProgressBar();
         filEsclave= new Thread(() -> {
-            Message msg = null;
+            Message msg;
             try{
                 Utilisateur utilisateurConnecter= gestionUtilisateur.tenterConnexion(email, mdp);
 

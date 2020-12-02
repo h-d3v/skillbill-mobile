@@ -1,6 +1,5 @@
 package com.jde.skillbill.presentation.vue;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,7 +26,7 @@ import java.util.Objects;
 
 public class VueAjouterFacture extends Fragment implements IContratVPAjouterFacture.IVueAjouterFacture {
     private IContratVPAjouterFacture.IPresenteurAjouterFacture presenteurAjouterFacture;
-    protected Button boutonAjouter, boutonAnnuler;
+    protected Button boutonAjouter, boutonRetroaction;
     protected EditText editTextMontant;
     protected EditText editTextTitre;
     protected Spinner spinnerChoix;
@@ -37,10 +36,11 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     protected ProgressBar progressBar;
     protected ImageView imageFacture;
     protected ImageButton btnAjouterFacture;
+    private androidx.appcompat.widget.Toolbar toolbar;
     private TextView tvTitreMontant;
     protected TextView tvToRemoveForTest;
-    protected ImageView imageView;
-
+    private boolean estUneFactureExistante;
+    private boolean estEnCoursDeModification;
 
     @Override
     public View onCreateView (LayoutInflater inflater,
@@ -49,30 +49,69 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         View racine = inflater.inflate(R.layout.frag_ajouter_facture, container, false);
         tvToRemoveForTest = racine.findViewById(R.id.titre_payeur_facture);
         btnAjouterFacture =racine.findViewById(R.id.btn_ajouter_facture_groupe_avec_photo);
+        progressBar = racine.findViewById(R.id.progressBarAjoutFacture);
+        imageFacture = (ImageView) racine.findViewById(R.id.imageFact);
+        editTextTitre=racine.findViewById(R.id.edit_t_nom_activie);
+        boutonAjouter= racine.findViewById(R.id.btnAjouter);
+        calendarView=racine.findViewById(R.id.calendarView);
+        date = racine.findViewById(R.id.editTextDate);
+        spinnerChoix =racine.findViewById(R.id.spinner_choix_payeur);
+        editTextMontant= racine.findViewById(R.id.txt_input_montant);
+        spinnerChoixUtilisateursRedevables=racine.findViewById(R.id.spinner_choix_remboursement);
+        tvTitreMontant=racine.findViewById(R.id.txt_titre_montant);
+        boutonRetroaction = racine.findViewById(R.id.btnAnuller);
+        toolbar = racine.findViewById(R.id.toolbarAjouterFacture);
+        Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
+        tvTitreMontant.setText("Montant en " +monnaieUser.name()+"-"+monnaieUser.getSymbol());
+
         btnAjouterFacture.setOnClickListener(view -> {
             presenteurAjouterFacture.prendrePhoto();
 
         });
-         progressBar = racine.findViewById(R.id.progressBarAjoutFacture);
-         progressBar.setVisibility(View.INVISIBLE);
-         imageFacture = (ImageView) racine.findViewById(R.id.imageFact);
-         editTextTitre=racine.findViewById(R.id.edit_t_nom_activie);
-         boutonAjouter= racine.findViewById(R.id.btnAjouter);
-         boutonAjouter.setOnClickListener(view -> {
-             presenteurAjouterFacture.ajouterFacture();
-         });
-         imageView = racine.findViewById (R.id.imageFact);
 
-         boutonAnnuler= racine.findViewById(R.id.btnAnuller);
-         boutonAnnuler.setOnClickListener(view -> {
-             Objects.requireNonNull(this.getActivity()).onBackPressed();
-         });
-         calendarView=racine.findViewById(R.id.calendarView);
+        if(!estUneFactureExistante){
+            progressBar.setVisibility(View.INVISIBLE);
+            boutonAjouter.setOnClickListener(view -> {
+                presenteurAjouterFacture.ajouterFacture();
+            });
+
+            boutonRetroaction.setOnClickListener(view -> {
+                Objects.requireNonNull(this.getActivity()).onBackPressed();// TODO Rediriger vers les groupes rechargés
+            });
+        }
+        else{
+            toolbar.setTitle(presenteurAjouterFacture.trouverTitreFactureEnCours());
+            toggleVueModifierOuVoir(false);
+            boutonRetroaction.setOnClickListener(view -> {
+                if(!estEnCoursDeModification){
+                    presenteurAjouterFacture.redirigerVersListeFactures();
+                }else {
+                    estEnCoursDeModification=!estEnCoursDeModification;
+                    toggleVueModifierOuVoir(estEnCoursDeModification);
+                }
+            });
+
+            boutonAjouter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(estEnCoursDeModification){
+                        presenteurAjouterFacture.envoyerRequeteModificationFacture();
+                    }
+                    else {
+                        estEnCoursDeModification=!estEnCoursDeModification;
+                        toggleVueModifierOuVoir(estEnCoursDeModification);
+                    }
+                }
+            });
+
+        }
+
          calendarView.setVisibility(View.GONE);
-         date = racine.findViewById(R.id.editTextDate);
 
-         date.setOnFocusChangeListener((view, b) -> {
-             if(b) {
+
+         date.setOnFocusChangeListener((view, estFocus) -> {
+             if(estFocus) {
                  calendarView.setVisibility(View.VISIBLE);
              }else {
                  calendarView.setVisibility(View.GONE);
@@ -88,8 +127,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
                 date.setText(LocalDate.of(year,month+1/*Ok google?*/,dayOfMonth).toString());
             }
         });
-         editTextMontant= racine.findViewById(R.id.txt_input_montant);
-         spinnerChoixUtilisateursRedevables=racine.findViewById(R.id.spinner_choix_remboursement);
+
          spinnerChoixUtilisateursRedevables.setAdapter( ArrayAdapter.createFromResource(this.getContext(), R.array.spinner_ajouter_facture_choix_utilisateur_pour_remboursement, R.layout.support_simple_spinner_dropdown_item));
 
          spinnerChoixUtilisateursRedevables.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -108,7 +146,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
 
              }
          });
-         spinnerChoix =racine.findViewById(R.id.spinner_choix_payeur);
+
          spinnerChoix.setAdapter(ArrayAdapter.createFromResource(this.getContext(),R.array.spinner_ajouter_facture_choix, R.layout.support_simple_spinner_dropdown_item));
          spinnerChoix.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
@@ -124,9 +162,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
              }
          });
 
-        tvTitreMontant=racine.findViewById(R.id.txt_titre_montant);
-        Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
-        tvTitreMontant.setText("Montant en " +monnaieUser.name()+"-"+monnaieUser.getSymbol());
+
         return racine;
     }
 
@@ -282,6 +318,42 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     public void ouvrirProgressBar(){
         progressBar.setVisibility(View.VISIBLE);
     }
+
+    private void toggleVueModifierOuVoir(boolean estEnCoursDeModification){
+        if(estEnCoursDeModification){
+            boutonAjouter.setText(R.string.envoyer);
+            estEnCoursDeModification = true;
+            editTextMontant.setEnabled(true);
+            editTextTitre.setEnabled(true);
+            date.setEnabled(true);
+            boutonRetroaction.setText(R.string.action_annuler);
+            spinnerChoixUtilisateursRedevables.setVisibility(View.VISIBLE);
+            spinnerChoix.setVisibility(View.VISIBLE);
+        }
+        else{
+            estEnCoursDeModification = false;
+            boutonAjouter.setText(R.string.modifier);
+            editTextTitre.setEnabled(false);
+            editTextMontant.setEnabled(false);
+            date.setEnabled(false);
+            boutonRetroaction.setText(R.string.action_retour);
+            spinnerChoixUtilisateursRedevables.setVisibility(View.GONE);
+            spinnerChoix.setVisibility(View.GONE);
+            editTextMontant.setText(presenteurAjouterFacture.trouverMontantFactureEnCours());
+            editTextTitre.setText(presenteurAjouterFacture.trouverTitreFactureEnCours());
+            date.setText(presenteurAjouterFacture.trouverDateFactureEnCours());
+        }
+    }
+
+    public boolean isEstUneFactureExistante() {
+        return estUneFactureExistante;
+    }
+
+    public void setEstUneFactureExistante(boolean estUneFactureExistante) {
+        this.estUneFactureExistante = estUneFactureExistante;
+    }
+
+
 
 
 

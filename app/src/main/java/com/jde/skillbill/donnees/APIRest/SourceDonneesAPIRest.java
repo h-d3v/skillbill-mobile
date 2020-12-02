@@ -38,7 +38,7 @@ import okhttp3.Response;
 
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
-    private String URI_BASE = "http://192.168.1.32:51360/api/";
+    private String URI_BASE = "http://192.168.0.23:44302/api/";
     private String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
     private String POINT_ENTREE_GROUPE = "groupes/";
     private String POINT_ENTREE_LOGIN ="login";
@@ -239,7 +239,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "{\r\n    'Nom': '"+utilisateur.getNom()+"',\r\n    'Courriel': '"+utilisateur.getCourriel()+"',\r\n    'MotDePasse': '"+utilisateur.getMotPasse()+"'\r\n, 'Monnaie': '"+utilisateur.getMonnaieUsuelle().name()+"'\r\n}");
         Request request = new Request.Builder()
-                .url("http://192.168.1.32:51360/api/Register")
+                .url(URI_BASE+"register")
                 .method("POST", body)
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -287,11 +287,12 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             String json =  gson.toJson(new UtilisateurRestAPI("",email,mdp, null , 0));
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
-            Log.e("code reponse ", String.valueOf(httpURLConnection.getResponseCode()));
+
 
             if(httpURLConnection.getResponseCode()==200){
               InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
               utilisateur = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
+              Log.e("monnaie ", utilisateur.getMonnaieUsuelle().name());
 
               if(utilisateur==null || utilisateur.getId()==0) return null;
 

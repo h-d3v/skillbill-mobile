@@ -1,13 +1,10 @@
 package com.jde.skillbill.presentation.vue;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jde.skillbill.R;
 import com.jde.skillbill.presentation.IContratVPAjouterFacture;
@@ -35,7 +32,7 @@ public class VueVoirFacture extends VueAjouterFacture implements IContratVPVoirF
 
         toggleVueModifierOuVoir(false);
 
-        boutonAnnuler.setOnClickListener(view -> {
+        boutonRetroaction.setOnClickListener(view -> {
             if(!estEnCoursDeModification){
                 presenteurVoirFacture.redirigerVersListeFactures();
             }else {
@@ -54,10 +51,7 @@ public class VueVoirFacture extends VueAjouterFacture implements IContratVPVoirF
                 else {
                     estEnCoursDeModification=!estEnCoursDeModification;
                     toggleVueModifierOuVoir(estEnCoursDeModification);
-
                 }
-
-
             }
         });
 
@@ -71,7 +65,7 @@ public class VueVoirFacture extends VueAjouterFacture implements IContratVPVoirF
             editTextMontant.setEnabled(true);
             editTextTitre.setEnabled(true);
             date.setEnabled(true);
-            boutonAnnuler.setText(R.string.action_annuler);
+            boutonRetroaction.setText(R.string.action_annuler);
             spinnerChoixUtilisateursRedevables.setVisibility(View.VISIBLE);
             spinnerChoix.setVisibility(View.VISIBLE);
         }
@@ -81,7 +75,7 @@ public class VueVoirFacture extends VueAjouterFacture implements IContratVPVoirF
             editTextTitre.setEnabled(false);
             editTextMontant.setEnabled(false);
             date.setEnabled(false);
-            boutonAnnuler.setText(R.string.action_retour);
+            boutonRetroaction.setText(R.string.action_retour);
             spinnerChoixUtilisateursRedevables.setVisibility(View.GONE);
             spinnerChoix.setVisibility(View.GONE);
             super.editTextMontant.setText(presenteurVoirFacture.trouverMontantFactureEnCours());

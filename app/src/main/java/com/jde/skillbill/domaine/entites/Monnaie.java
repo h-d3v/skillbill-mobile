@@ -1,7 +1,7 @@
 package com.jde.skillbill.domaine.entites;
 
 public enum Monnaie {
-    CAD(1, "CA$", 1),
+    CAD(1, "CAD", 1),
     USD(0.76, "US$", 1.31),
     GBP(0.58, "£", 1.73),
     EUR(0.64, "€",1.55),

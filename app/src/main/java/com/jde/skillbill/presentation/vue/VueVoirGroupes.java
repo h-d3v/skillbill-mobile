@@ -75,12 +75,12 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
 
         ActionBarDrawerToggle toggle= new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
         toggle.setDrawerSlideAnimationEnabled(true);
-        toggle.setHomeAsUpIndicator(R.drawable.round_menu_black_18dp);
+        //toggle.setHomeAsUpIndicator(R.drawable.round_menu_black_18dp);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
-        if(presenteurVoirGroupes.getNomUserConnecte()!=null) {
+        if( presenteurVoirGroupes!=null && presenteurVoirGroupes.getNomUserConnecte()!=null) {
             tvNomUserDrawer.setText(presenteurVoirGroupes.getNomUserConnecte());
         }
         return racine;

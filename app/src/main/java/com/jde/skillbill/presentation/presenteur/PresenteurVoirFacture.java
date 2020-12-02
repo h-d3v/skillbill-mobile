@@ -32,6 +32,8 @@ public class PresenteurVoirFacture extends PresenteurAjouterFacture implements I
     private final int MSG_MODIF_FACTURE_FAIT=75;
     private static final int MSG_ERREUR = 1;
     private static final int MSG_ERREUR_CNX = 4;
+    private static final String EXTRA_ID_UTILISATEUR = "com.jde.skillbill.utlisateur_identifiant";
+    private static final String EXTRA_GROUPE_POSITION = "com.jde.skillbill.groupe_identifiant";
 
     private static final String EXTRA_FACTURE = "com.jde.skillbill.facture_identifiant";
     @SuppressLint("HandlerLeak")

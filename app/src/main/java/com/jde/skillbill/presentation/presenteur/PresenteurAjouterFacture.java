@@ -14,10 +14,8 @@ import android.os.Message;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -44,24 +42,26 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     Activity activityAjouterFacture;
     VueAjouterFacture vueAjouterFacture;
     Modele modele;
-    private String EXTRA_ID_UTILISATEUR = "com.jde.skillbill.utlisateur_identifiant";
-    private String EXTRA_GROUPE_POSITION = "com.jde.skillbill.groupe_identifiant";
+    private static final String EXTRA_ID_UTILISATEUR = "com.jde.skillbill.utlisateur_identifiant";
+    private static final String EXTRA_GROUPE_POSITION = "com.jde.skillbill.groupe_identifiant";
     private static final String IMAGE = "com.jde.skillbill.BitmapImage";
+    private static final String EXTRA_FACTURE = "com.jde.skillbill.facture_identifiant";
     private final IGestionFacture iGestionFacture;
     private final IGestionUtilisateur iGestionUtilisateur;
     private final IGestionGroupes iGestionGroupes;
     private static final int REQUETE_PRENDRE_PHOTO = 2;
     private String[] nomsMembres;
-
     private Thread filEsclave = null;
     private final Handler handlerReponse;
     private static final int MSG_AJOUT_FACTURE_REUSSI = 0;
     private static final int MSG_ERREUR = 1;
     private static final int MSG_ERREUR_CNX = 4;
+    private static final int  MSG_ERREUR_AJOUT_FACTURE =2424;
     private static final int MSG_TROUVER_MEMBRES = 333;
+    private final int MSG_MODIF_FACTURE_FAIT=75;
 
     @SuppressLint("HandlerLeak")
-    public PresenteurAjouterFacture(AppCompatActivity activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
+    public PresenteurAjouterFacture(Activity activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
         this.activityAjouterFacture = activityAjouterFacture;
         this.vueAjouterFacture = vueAjouterFacture;
         this.modele = modele;
@@ -69,8 +69,8 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         this.iGestionFacture = gestionFacture;
         this.iGestionUtilisateur = gestionUtilisateur;
         this.iGestionGroupes = gestionGroupes;
-
         modele.setGroupeEnCours((Groupe) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_GROUPE_POSITION));
+        modele.setFactureEnCours((Facture) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_FACTURE)); // TODO Recharger la facture depuis l'interacteur
 
 
         handlerReponse = new Handler() {
@@ -94,6 +94,14 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 } else if (msg.what == MSG_ERREUR_CNX) {
                     Toast.makeText(activityAjouterFacture, R.string.pas_de_connection_internet, Toast.LENGTH_LONG).show();
                 }
+                if(msg.what==MSG_MODIF_FACTURE_FAIT){
+                    Toast.makeText(activityAjouterFacture, R.string.modif_effectuee, Toast.LENGTH_LONG).show();
+                    redirigerVersListeFactures();
+                }
+                if(msg.what==MSG_ERREUR_AJOUT_FACTURE){
+                    Toast.makeText(activityAjouterFacture, R.string.erreur_modification, Toast.LENGTH_LONG).show();
+                    redirigerVersListeFactures();
+                }
             }
         };
         chargerListeUtilisateurs();
@@ -106,17 +114,17 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             @Override
             public void run() {
                 try {
-                    List<Utilisateur> utilisateursGroupe = iGestionGroupes.trouverTousLesUtilisateurs(modele.getGroupeEnCours());
-                    String[] membres = new String[utilisateursGroupe.size()];
-                    int i = 0;
-                    for (Utilisateur utilisateur : utilisateursGroupe) {
-                        membres[i] = utilisateur.getNom();
+                    List<Utilisateur> utilisateursGroupe= iGestionGroupes.trouverTousLesUtilisateurs(modele.getGroupeEnCours());
+                    String[] membres=new String[utilisateursGroupe.size()];
+                    int i=0;
+                    for (Utilisateur utilisateur : utilisateursGroupe){
+                        membres[i]=utilisateur.getNom();
                         i++;
                     }
                     message = handlerReponse.obtainMessage(MSG_TROUVER_MEMBRES);
                     message.obj = membres;
 
-                } catch (SourceDonneeException e) {
+                }catch (SourceDonneeException e){
                     message = handlerReponse.obtainMessage(MSG_ERREUR_CNX);
                 }
                 handlerReponse.sendMessage(message);
@@ -126,9 +134,12 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         filEsclave.start();
 
 
+
+
     }
 
     /**
+     *
      * @return liste des noms des utilisateurs du groupe
      */
     @Override
@@ -143,8 +154,8 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     @Override
     public void ajouterFacture() {
         vueAjouterFacture.ouvrirProgressBar();
-        filEsclave = new Thread(() -> {
-            Message msg;
+        filEsclave= new Thread (()-> {
+            Message msg = null;
 
             try {
                 double montant = vueAjouterFacture.getMontantFactureCADInput();
@@ -189,6 +200,22 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         filEsclave.start();
     }
 
+    @Override
+    public String trouverMontantFactureEnCours() {
+
+        return String.valueOf(modele.getFactureEnCours().getMontantTotal());
+    }
+
+    @Override
+    public String trouverTitreFactureEnCours() {
+        return modele.getFactureEnCours().getLibelle();
+    }
+
+    @Override
+    public String trouverDateFactureEnCours() {
+        return modele.getFactureEnCours().getDateFacture().toString();
+    }
+
 
     /**
      * Redirige vers l'activite voirUnGroupe pour montrer la nouvelle facture ajoutee
@@ -220,5 +247,40 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         SharedPreferences sharedPref = activityAjouterFacture.getSharedPreferences("SKILLBILL_USER_PREF", Context.MODE_PRIVATE);
         String strMonnaieUser = sharedPref.getString("monnaieUser", "CAD");
         return Monnaie.valueOf(strMonnaieUser);
+    }
+
+
+    @Override
+    public void envoyerRequeteModificationFacture() {
+        filEsclave = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message message;
+                try{
+                    Facture factureAModifier = modele.getFactureEnCours();
+                    factureAModifier.setLibelle(vueAjouterFacture.getTitreInput());
+                    factureAModifier.setDateFacture(vueAjouterFacture.getDateFactureInput());
+                    factureAModifier.setMontantTotal(vueAjouterFacture.getMontantFactureCADInput());
+                    //TODO solution provisoire seul l'utilisateur connecté est pris en compte
+                    HashMap<Utilisateur, Double> montantsPayesParUtilisateur = new HashMap<>();
+                    montantsPayesParUtilisateur.put(modele.getUtilisateurConnecte(),vueAjouterFacture.getMontantFactureCADInput());
+                    factureAModifier.setMontantPayeParParUtilisateur(montantsPayesParUtilisateur);
+                    Log.e("presenteur voir facture", String.valueOf(montantsPayesParUtilisateur.get(modele.getUtilisateurConnecte())));
+                    Log.e("presenteur voir facture utilis ", montantsPayesParUtilisateur.keySet().toArray()[0].toString());
+                    boolean estReussi = iGestionFacture.modifierFacture(factureAModifier);
+
+                    if(estReussi) message = handlerReponse.obtainMessage(MSG_MODIF_FACTURE_FAIT);
+                    else message = handlerReponse.obtainMessage(MSG_ERREUR_AJOUT_FACTURE);
+                }
+                catch (NumberFormatException | DateTimeParseException e) {
+                    message = handlerReponse.obtainMessage(MSG_ERREUR);
+                }
+                catch (SourceDonneeException e){
+                    message = handlerReponse.obtainMessage(MSG_ERREUR_CNX);
+                }
+                handlerReponse.sendMessage(message);
+            }
+        });
+        filEsclave.start();
     }
 }

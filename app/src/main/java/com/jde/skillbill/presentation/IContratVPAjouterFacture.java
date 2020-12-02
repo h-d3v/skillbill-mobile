@@ -15,9 +15,17 @@ public interface IContratVPAjouterFacture {
 
         void prendrePhoto();
 
+        String trouverMontantFactureEnCours();
+
+        String trouverTitreFactureEnCours();
+
+        String trouverDateFactureEnCours();
+
         void redirigerVersListeFactures();
 
         Monnaie getMonnaieUserConnecte();
+
+        void envoyerRequeteModificationFacture();
     }
 
     interface IVueAjouterFacture{

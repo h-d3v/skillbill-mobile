@@ -80,6 +80,8 @@
     </string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close drawer</string>
+    <string name="modif_effectuee">La modification abie été effectuée</string>
+    <string name="erreur_modification">Une erreur s\'est produite, les données n\'ont pas été modifiées</string>
 
 
 </resources>

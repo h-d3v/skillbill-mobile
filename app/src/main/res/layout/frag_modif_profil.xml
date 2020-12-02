@@ -165,7 +165,6 @@
         android:layout_marginBottom="120dp"
         android:backgroundTint="@color/colorPrimary"
         android:text="Enregistrer"
-        app:icon="@drawable/round_save_black_18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
