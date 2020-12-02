@@ -126,7 +126,7 @@
             android:layout_height="70dp"
             android:layout_gravity="center"
             android:hint="Mot de passe"
-            android:inputType="textPersonName"
+            android:inputType="textPassword"
             android:shadowColor="@color/colorPrimary"
             android:textColorHighlight="@color/colorPrimary" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -143,7 +143,7 @@
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
         app:boxCornerRadiusTopStart="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSaveProfil"
+        app:layout_constraintBottom_toTopOf="@+id/btnEnrgstProfil"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tlModifMdp"
@@ -158,7 +158,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btnSaveProfil"
+        android:id="@+id/btnEnrgstProfil"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="190dp"
         android:layout_height="wrap_content"

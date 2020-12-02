@@ -1,7 +1,6 @@
 package com.jde.skillbill.presentation;
 
 import com.jde.skillbill.domaine.entites.Monnaie;
-import com.jde.skillbill.domaine.entites.Utilisateur;
 
 public interface IContratVPModifProfil {
     interface VueModifProfil {
@@ -15,13 +14,18 @@ public interface IContratVPModifProfil {
         void setNomUser(String nom);
         void setMonnaieUser(String monnaieStr);
         void setEmailUser(String nom);
+
+        void setMdpUser(String mdp);
     }
 
     interface PresenteurModifProfil {
-        boolean modifierProfil(String nom, String email, String mdp, Monnaie monnaie);
+
+        void modifierProfil();
+
         void remplirInfosUser();
         String getEmailUserConnecte();
         String getNomUserConnecte();
-        Monnaie  getNomMonnaieConnecte();
+        Monnaie  getMonnaieConnecte();
+        String getMdpUserConnecte();
     }
 }

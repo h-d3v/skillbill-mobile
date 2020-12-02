@@ -49,10 +49,9 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         View racine = inflater.inflate(R.layout.frag_voir_groupes, container, false);
         drawerLayout=racine.findViewById(R.id.drawer_layout_voir_gp);
         toolbar=racine.findViewById(R.id.tb_voir_gp);
-        NavigationView navigationView = racine.findViewById(R.id.navigation_view_voir_gp);
+        navigationView = racine.findViewById(R.id.navigation_view_voir_gp);
         tvNomUserDrawer = navigationView.getHeaderView(0).findViewById(R.id.nom_compte_drawer);
 
-        Log.i("to string header", navigationView.getHeaderView(0).toString());
         buttonCommencerActiviteCreerGroupe=racine.findViewById(R.id.floatingActionButtonAjouterGroupe);
         buttonCommencerActivityAjouterFacture=racine.findViewById(R.id.btn_ajouter_facture_groupe);
         buttonSoldeGroupe=racine.findViewById(R.id.btn_detail_solde);
@@ -81,7 +80,9 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
         toggle.syncState();
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
-        tvNomUserDrawer.setText(presenteurVoirGroupes.getNomUserConnecte());
+        if(presenteurVoirGroupes.getNomUserConnecte()!=null) {
+            tvNomUserDrawer.setText(presenteurVoirGroupes.getNomUserConnecte());
+        }
         return racine;
     }
 
@@ -135,4 +136,9 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
     public void closeDrawer(){
         drawerLayout.closeDrawer(GravityCompat.START);
     }
+
+    public void setNomUserDrawer(String nom){
+        tvNomUserDrawer.setText(nom);
+    }
+
 }

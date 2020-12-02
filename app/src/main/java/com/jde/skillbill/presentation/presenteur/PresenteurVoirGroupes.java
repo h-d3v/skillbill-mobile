@@ -2,7 +2,9 @@ package com.jde.skillbill.presentation.presenteur;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
 
+import static android.provider.Settings.System.getConfiguration;
 import static android.provider.Settings.System.getString;
 
 
@@ -179,7 +182,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     public void redirigerModifCompte() {
         Intent intent = new Intent(activity, ActivityModifProfil.class);
         intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
-        activity.startActivity(intent);
+        activity.startActivityForResult(intent, 1);
     }
 
 
@@ -206,5 +209,6 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         activity.startActivity(intent);
         this.activity.finish();
     }
+
 
 }

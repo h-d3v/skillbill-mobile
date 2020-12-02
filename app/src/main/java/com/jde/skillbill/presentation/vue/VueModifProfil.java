@@ -17,8 +17,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVPModifProfil;
-import com.jde.skillbill.presentation.presenteur.PresenteurCreerCompte;
-import com.jde.skillbill.presentation.presenteur.PresenteurModifProfil;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +42,7 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View racine= inflater.inflate(R.layout.frag_modif_profil, container, false);
-        btnSave=racine.findViewById(R.id.btnSaveProfil);
+        btnSave=racine.findViewById(R.id.btnEnrgstProfil);
         tfNewNom=racine.findViewById(R.id.tfModifierNom);
         tfNewCourriel=racine.findViewById(R.id.tfModifEmail);
         tfNewMdp=racine.findViewById(R.id.tfModifMdp);
@@ -60,33 +58,37 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
 
         tfNewMonnaie.setAdapter(adapterMonnaies);
 
-        //on initialise la devise à CAD
-        tfNewMonnaie.setText(Monnaie.CAD.name(), false);
 
         setNomUser(_presenteur.getNomUserConnecte());
         setEmailUser(_presenteur.getEmailUserConnecte());
-        setMonnaieUser(_presenteur.getNomMonnaieConnecte().toString());
+        setMonnaieUser(_presenteur.getMonnaieConnecte().toString());
+        setMdpUser(_presenteur.getMdpUserConnecte());
+        btnSave.setOnClickListener(v -> {
+            _presenteur.modifierProfil();
+        });
+
+        //todo, textwatchers pour tous les champs avec regex
         return racine;
     }
 
     @Override
     public String getNouveauNom() {
-        return null;
+        return tfNewNom.getText().toString();
     }
 
     @Override
     public String getNouveauEmail() {
-        return null;
+        return tfNewCourriel.getText().toString();
     }
 
     @Override
     public String getNouveauMdp() {
-        return null;
+        return tfNewMdp.getText().toString();
     }
 
     @Override
     public Monnaie getNouvelleMonnaie() {
-        return null;
+        return Monnaie.valueOf(tfNewMonnaie.getText().toString());
     }
 
     @Override
@@ -103,4 +105,9 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
     public void setEmailUser(String email) {
         tfNewCourriel.setText(email);
     }
+
+    @Override
+    public void setMdpUser(String mdp){tfNewMdp.setText(mdp);}
+
+
 }

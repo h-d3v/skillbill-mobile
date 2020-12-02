@@ -151,6 +151,46 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         return false;
     }
 
+    @Override
+    public Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException {
+        Utilisateur utilisateurRetour=null;
+        URL url = null;
+        try {
+            url=new URL(URI_BASE + POINT_ENTREE_UTILISATEUR + "update/"+((UtilisateurRestAPI) utilisateurCourrant).getId());
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI url malformed: ", e.toString());
+        }
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "{\r\n    'Nom': '"+utilisateurModifier.getNom()+"',\r\n    'Courriel': '"+utilisateurModifier.getCourriel()+"',\r\n    'MotDePasse': '"+utilisateurModifier.getMotPasse()+"'\r\n, 'Monnaie': '"+utilisateurModifier.getMonnaieUsuelle().name()+"'\r\n}");
+        Request request = new Request.Builder()
+                .url(url)
+                .method("PUT", body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        try {
+            Gson gson = new GsonBuilder().create();
+            String json =  gson.toJson(new UtilisateurRestAPI("","","", null , 0));
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
+            Response response = client.newCall(request).execute();
+            if (response.code() == 200) {
+                InputStreamReader inputStreamReader= new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8);
+                utilisateurRetour = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
+            } else if (response.code() == 409) {
+              //todo faire un truc avec le 409 ou juste ne rien faire?
+            }
+        } catch(ConnectException e) {
+            Log.e("erreur connection api", "message:" + Objects.requireNonNull(e.getMessage()) + " \n cause: " + e.getCause());
+            throw new SourceDonneeException("Connexion non disponnible");
+        } //si l'email entrer est deja pris, on retourne un user invalide
+        catch (IOException e) {
+            Log.e("IOException creerUtilisateur","Cause: "+e.getMessage()+"\n Message: "+e.getMessage());
+        }
+        return utilisateurRetour;
+    }
+
 
     public boolean utilisateurExiste(String email) throws SourceDonneeException {
         URL url = null;
@@ -550,6 +590,8 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
         return false;
     }
+
+
 
     private Utilisateur decoderUtilisateur( InputStream utilisateurEncode ) throws IOException {
         InputStreamReader responseBodyReader =

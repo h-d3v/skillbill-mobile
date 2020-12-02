@@ -30,4 +30,6 @@ public interface IGestionUtilisateur  {
      * @return la liste des groupes auxquels l'utilisateur est inscrit
      */
     List<Groupe> trouverGroupesAbonne(Utilisateur utilisateur)throws SourceDonneeException;
+
+    Utilisateur modifierUtilisateur(Utilisateur utilisateurModifie, Utilisateur utilisateurCourrant) throws SourceDonneeException;
 }

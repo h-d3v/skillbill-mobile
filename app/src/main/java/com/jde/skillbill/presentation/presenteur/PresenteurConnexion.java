@@ -54,7 +54,6 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
                 super.handleMessage(msg);
                 filEsclave = null;
                 if(msg.what == MSG_TENTER_CONNECTION_REUSSI){
-                    //todo mettre le string de la monnaie usuelle dans les shared prefs a la connection.
                     _vueConnexion.afficherMsgConnecter(_modele.getUtilisateurConnecte().getCourriel(), _modele.getUtilisateurConnecte().getNom());
                     _vueConnexion.fermerProgressBar();
                     Log.println(Log.ASSERT, "Monnaie user connecter", _modele.getUtilisateurConnecte().getMonnaieUsuelle().name());
@@ -113,8 +112,6 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
 
         });
         filEsclave.start();
-
-
 
 
     }

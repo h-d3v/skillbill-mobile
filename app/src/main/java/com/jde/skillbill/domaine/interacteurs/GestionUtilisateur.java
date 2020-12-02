@@ -53,4 +53,9 @@ public class GestionUtilisateur  implements IGestionUtilisateur {
     public List<Groupe> trouverGroupesAbonne(Utilisateur utilisateur) throws SourceDonneeException {
         return _dataSource.lireTousLesGroupesAbonnes(utilisateur) ;
     }
+
+    @Override
+    public Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException {
+        return _dataSource.modifierUtilisateur(utilisateurModifier, utilisateurCourrant);
+    }
 }
