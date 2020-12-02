@@ -14,7 +14,8 @@ import android.os.Message;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -27,7 +28,8 @@ import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueAjouterFacture;
-
+import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
+import com.jde.skillbill.ui.activity.ActivityVoirFacture;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.io.ByteArrayOutputStream;

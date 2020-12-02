@@ -67,7 +67,7 @@ public class FactureRestAPI extends Facture {
         this.id = id;
     }
 
-    public ArrayList<PhotoRestApi> getPhotoesEncodeesBase64() {
+    public ArrayList<PhotoRestApi> getPhotosRestAPI() {
         return photoesEncodeesBase64;
     }
 
