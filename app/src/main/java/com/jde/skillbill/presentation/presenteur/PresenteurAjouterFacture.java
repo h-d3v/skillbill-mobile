@@ -7,15 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.os.Handler;
 import android.os.Message;
-
-import android.util.Base64;
-import android.util.Log;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -28,8 +25,7 @@ import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueAjouterFacture;
-import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
-import com.jde.skillbill.ui.activity.ActivityVoirFacture;
+
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.io.ByteArrayOutputStream;
@@ -58,10 +54,12 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private static final int MSG_ERREUR_CNX = 4;
     private static final int  MSG_ERREUR_AJOUT_FACTURE =2424;
     private static final int MSG_TROUVER_MEMBRES = 333;
-    private final int MSG_MODIF_FACTURE_FAIT=75;
+    private static final int MSG_MODIF_FACTURE_FAIT=75;
+    private static final int MSG_RECHARGER_FACTURE = 4444;
+    private boolean photoChangee;
 
     @SuppressLint("HandlerLeak")
-    public PresenteurAjouterFacture(Activity activityAjouterFacture, VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
+    public PresenteurAjouterFacture(Activity activityAjouterFacture, boolean estFactureExistante,  VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
         this.activityAjouterFacture = activityAjouterFacture;
         this.vueAjouterFacture = vueAjouterFacture;
         this.modele = modele;
@@ -70,7 +68,8 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         this.iGestionUtilisateur = gestionUtilisateur;
         this.iGestionGroupes = gestionGroupes;
         modele.setGroupeEnCours((Groupe) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_GROUPE_POSITION));
-        modele.setFactureEnCours((Facture) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_FACTURE)); // TODO Recharger la facture depuis l'interacteur
+        modele.setFactureEnCours((Facture) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_FACTURE));
+
 
 
         handlerReponse = new Handler() {
@@ -84,27 +83,42 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                     redirigerVersListeFactures();
 
                 } else if (msg.what == MSG_ERREUR) {
-
                     vueAjouterFacture.afficherMessageErreurAlertDialog(
                             activityAjouterFacture.getResources().getString(R.string.txt_message_erreur)
                             , activityAjouterFacture.getResources().getString(R.string.titre_erreur_generique)
                     );
-                } else if (msg.what == MSG_TROUVER_MEMBRES) {
+                }
+                else if (msg.what == MSG_TROUVER_MEMBRES) {
                     nomsMembres = (String[]) msg.obj;
-                } else if (msg.what == MSG_ERREUR_CNX) {
+                }
+                else if (msg.what == MSG_ERREUR_CNX) {
                     Toast.makeText(activityAjouterFacture, R.string.pas_de_connection_internet, Toast.LENGTH_LONG).show();
                 }
-                if(msg.what==MSG_MODIF_FACTURE_FAIT){
+                else if(msg.what==MSG_MODIF_FACTURE_FAIT){
                     Toast.makeText(activityAjouterFacture, R.string.modif_effectuee, Toast.LENGTH_LONG).show();
                     redirigerVersListeFactures();
                 }
-                if(msg.what==MSG_ERREUR_AJOUT_FACTURE){
+                else if(msg.what==MSG_ERREUR_AJOUT_FACTURE){
                     Toast.makeText(activityAjouterFacture, R.string.erreur_modification, Toast.LENGTH_LONG).show();
                     redirigerVersListeFactures();
+                }
+                else if(msg.what == MSG_RECHARGER_FACTURE){
+                    if(msg.obj!=null){
+                        modele.setFactureEnCours((Facture) msg.obj);
+                        //ne prend en charge qu'une seule photo car l'ui ne prend en charge qu'une photo pour le moment
+                        if(!(modele.getFactureEnCours().getPhotos()==null || modele.getFactureEnCours().getPhotos().size()==0)){
+                            byte[] photoByte = modele.getFactureEnCours().getPhotos().get(0);
+                            vueAjouterFacture.setImageFacture(BitmapFactory.decodeByteArray(photoByte, 0, photoByte.length ));
+                        }
+                    }
                 }
             }
         };
         chargerListeUtilisateurs();
+        if(estFactureExistante){
+            rechargerFactureEnCours();
+        }
+
     }
 
     public void chargerListeUtilisateurs() {
@@ -132,9 +146,6 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
 
         });
         filEsclave.start();
-
-
-
 
     }
 
@@ -264,9 +275,17 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                     //TODO solution provisoire seul l'utilisateur connecté est pris en compte
                     HashMap<Utilisateur, Double> montantsPayesParUtilisateur = new HashMap<>();
                     montantsPayesParUtilisateur.put(modele.getUtilisateurConnecte(),vueAjouterFacture.getMontantFactureCADInput());
+                    if (photoChangee) {
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        vueAjouterFacture.getBitmapFacture().compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                        byte[] bytes = byteArrayOutputStream.toByteArray();
+                        factureAModifier.getPhotos().add(bytes);
+
+                    }
                     factureAModifier.setMontantPayeParParUtilisateur(montantsPayesParUtilisateur);
-                    Log.e("presenteur voir facture", String.valueOf(montantsPayesParUtilisateur.get(modele.getUtilisateurConnecte())));
-                    Log.e("presenteur voir facture utilis ", montantsPayesParUtilisateur.keySet().toArray()[0].toString());
+
+
+
                     boolean estReussi = iGestionFacture.modifierFacture(factureAModifier);
 
                     if(estReussi) message = handlerReponse.obtainMessage(MSG_MODIF_FACTURE_FAIT);
@@ -282,5 +301,30 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             }
         });
         filEsclave.start();
+    }
+    public void rechargerFactureEnCours(){
+        filEsclave = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Message message;
+                try {
+                    message = handlerReponse.obtainMessage(MSG_RECHARGER_FACTURE);
+                    Facture factureRechargee = iGestionFacture.rechargerFacture(modele.getFactureEnCours());
+                    message.obj = factureRechargee;
+                } catch (SourceDonneeException e) {
+                    message = handlerReponse.obtainMessage(MSG_ERREUR_CNX);
+                }
+                handlerReponse.sendMessage(message);
+            }
+        });
+        filEsclave.start();
+    }
+
+    public boolean isPhotoChangee() {
+        return photoChangee;
+    }
+
+    public void setPhotoChangee(boolean photoChangee) {
+        this.photoChangee = photoChangee;
     }
 }

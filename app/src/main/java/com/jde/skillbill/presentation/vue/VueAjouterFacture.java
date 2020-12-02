@@ -1,6 +1,5 @@
 package com.jde.skillbill.presentation.vue;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,7 +35,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     protected EditText date;
     protected ProgressBar progressBar;
     protected ImageView imageFacture;
-    protected ImageButton btnAjouterFacture;
+    protected ImageButton btnAjouterPhotoFacture;
     private androidx.appcompat.widget.Toolbar toolbar;
     private TextView tvTitreMontant;
     protected TextView tvToRemoveForTest;
@@ -49,7 +48,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
                               Bundle savedInstanceState) {
         View racine = inflater.inflate(R.layout.frag_ajouter_facture, container, false);
         tvToRemoveForTest = racine.findViewById(R.id.titre_payeur_facture);
-        btnAjouterFacture =racine.findViewById(R.id.btn_ajouter_facture_groupe_avec_photo);
+        btnAjouterPhotoFacture =racine.findViewById(R.id.btn_ajouter_facture_groupe_avec_photo);
         progressBar = racine.findViewById(R.id.progressBarAjoutFacture);
         imageFacture = (ImageView) racine.findViewById(R.id.imageFact);
         editTextTitre=racine.findViewById(R.id.edit_t_nom_activie);
@@ -65,7 +64,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
         tvTitreMontant.setText("Montant en " +monnaieUser.name()+"-"+monnaieUser.getSymbol());
 
-        btnAjouterFacture.setOnClickListener(view -> {
+        btnAjouterPhotoFacture.setOnClickListener(view -> {
             presenteurAjouterFacture.prendrePhoto();
 
         });
@@ -241,7 +240,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     }
 
     public void setImageFacture(Bitmap bitmap) {
-
+        imageFacture.setImageBitmap(bitmap);
     }
 
     //TODO implementer le partage inegale de la facture(vision future)
@@ -330,6 +329,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
             boutonRetroaction.setText(R.string.action_annuler);
             spinnerChoixUtilisateursRedevables.setVisibility(View.VISIBLE);
             spinnerChoix.setVisibility(View.VISIBLE);
+            btnAjouterPhotoFacture.setVisibility(View.VISIBLE);
         }
         else{
             estEnCoursDeModification = false;
@@ -340,15 +340,13 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
             boutonRetroaction.setText(R.string.action_retour);
             spinnerChoixUtilisateursRedevables.setVisibility(View.GONE);
             spinnerChoix.setVisibility(View.GONE);
+            btnAjouterPhotoFacture.setVisibility(View.GONE);
             editTextMontant.setText(presenteurAjouterFacture.trouverMontantFactureEnCours());
             editTextTitre.setText(presenteurAjouterFacture.trouverTitreFactureEnCours());
             date.setText(presenteurAjouterFacture.trouverDateFactureEnCours());
         }
     }
 
-    public boolean isEstUneFactureExistante() {
-        return estUneFactureExistante;
-    }
 
     public void setEstUneFactureExistante(boolean estUneFactureExistante) {
         this.estUneFactureExistante = estUneFactureExistante;

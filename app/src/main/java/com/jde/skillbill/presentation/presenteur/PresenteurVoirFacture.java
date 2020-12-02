@@ -70,13 +70,12 @@ public class PresenteurVoirFacture implements IContratVPVoirFacture.PresenteurVo
                             byte[] photoByte = modele.getFactureEnCours().getPhotos().get(0);
                             vueVoirFacture.setImageFacture(BitmapFactory.decodeByteArray(photoByte, 0, photoByte.length ));
                         }
-
                     }
-
                 }
             }
         };
         rechargerFactureEnCours();
+        chargerPhotoFactureEnCours();
     }
 
     public void redirigerVersListeFactures() {

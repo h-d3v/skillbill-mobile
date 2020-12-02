@@ -21,7 +21,7 @@ import com.jde.skillbill.presentation.vue.VueAjouterFacture;
 import com.jde.skillbill.presentation.vue.VueVoirFacture;
 
 public class ActivityVoirFacture extends AppCompatActivity {
-
+    private PresenteurAjouterFacture presenteurVoirFacture;
     private static final int REQUETE_PRENDRE_PHOTO= 2;
 
     @Override
@@ -33,7 +33,7 @@ public class ActivityVoirFacture extends AppCompatActivity {
 
         Modele modele = new Modele();
         ISourceDonnee sourceDonnee = new SourceDonneesAPIRest();
-        PresenteurAjouterFacture presenteurVoirFacture = new PresenteurAjouterFacture(this, vueVoirFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
+        presenteurVoirFacture = new PresenteurAjouterFacture(this, true,  vueVoirFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
 
         vueVoirFacture.setPresenteur(presenteurVoirFacture);
         vueVoirFacture.setEstUneFactureExistante(true);
@@ -52,6 +52,7 @@ public class ActivityVoirFacture extends AppCompatActivity {
             if (imageBitmap != null) {
                 ImageView imageView = findViewById(R.id.imageFact);
                 imageView.setImageBitmap(imageBitmap);
+                presenteurVoirFacture.setPhotoChangee(true);
 
             }
         }

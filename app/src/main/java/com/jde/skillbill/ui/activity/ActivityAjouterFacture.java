@@ -27,7 +27,7 @@ public class ActivityAjouterFacture extends AppCompatActivity {
         VueAjouterFacture vueAjouterFacture= new VueAjouterFacture();
         Modele modele= new Modele();
         ISourceDonnee sourceDonnee = new SourceDonneesAPIRest();
-        PresenteurAjouterFacture presenteurAjouterFacture= new PresenteurAjouterFacture(this, vueAjouterFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
+        PresenteurAjouterFacture presenteurAjouterFacture= new PresenteurAjouterFacture(this, false , vueAjouterFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
         vueAjouterFacture.setPresenteur(presenteurAjouterFacture);
 
         FragmentTransaction fragmentTransaction= getSupportFragmentManager().beginTransaction();
@@ -44,7 +44,6 @@ public class ActivityAjouterFacture extends AppCompatActivity {
             if (imageBitmap != null) {
                 ImageView imageView = findViewById(R.id.imageFact);
                 imageView.setImageBitmap(imageBitmap);
-
             }
 
 

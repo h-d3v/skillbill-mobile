@@ -45,6 +45,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     private static final int READ_TIME_OUT =8000;
     private static final int CONNECT_TIME_OUT = 4000;
     private final String POINT_ENTREE_FACTURE="factures/";
+    private final String POINT_ENTREE_PHOTO = "photos/";
 
 
     @Override
@@ -200,7 +201,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         } catch (MalformedURLException e) {
             Log.e("SOurceDonneAPI: ", e.toString());
         }
-        Log.e("source API", url.toString());
+
         try {
 
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
@@ -491,10 +492,16 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
 
             ((FactureRestAPI) facture).setPayeursEtMontantsListe(payeursEtMontant);
-            ((FactureRestAPI) facture).setMontantTotal(facture.getMontantTotal());
+            facture.setMontantTotal(facture.getMontantTotal());
+            if(!Objects.requireNonNull(facture.getPhotos()).isEmpty()){
+                for(byte[] bytes : facture.getPhotos()){
+
+                    ((FactureRestAPI) facture).getPhotosRestAPI().get(0).setPhotoEncodee(Base64.encodeToString(bytes, Base64.DEFAULT));
+                }
+            }
             Gson gson = new GsonBuilder().create();
             String json = gson.toJson(facture);
-            Log.e("json", json);
+
 
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
@@ -564,7 +571,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             }
 
             String json = gson.toJson(facture);
-            Log.e("json", json);
+
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
 
@@ -625,7 +632,8 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                    String base64Photo = photoRestApi.getPhotoEncodee();
                    factureRestAPI.getPhotos().add(Base64.decode(base64Photo.toString(), Base64.DEFAULT));
                 }
-                Log.e("JSON recharger facture ", gson.toJson(factureRestAPI));
+
+
             }
 
 
