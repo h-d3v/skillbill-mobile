@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 
-import android.util.Log;
 import android.widget.Toast;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Facture;
@@ -20,12 +19,10 @@ import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 
 import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
-import com.jde.skillbill.donnees.APIRest.entites.FactureRestAPI;
-import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 import com.jde.skillbill.presentation.IContratVuePresenteurVoirUnGroupe;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirUnGroupe;
-import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
+
 import com.jde.skillbill.ui.activity.ActivityVoirFacture;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 

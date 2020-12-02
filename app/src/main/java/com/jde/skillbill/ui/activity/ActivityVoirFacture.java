@@ -1,6 +1,5 @@
 package com.jde.skillbill.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,12 +12,9 @@ import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.donnees.APIRest.SourceDonneesAPIRest;
-import com.jde.skillbill.presentation.IContratVPVoirFacture;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.presenteur.PresenteurAjouterFacture;
-import com.jde.skillbill.presentation.presenteur.PresenteurVoirFacture;
 import com.jde.skillbill.presentation.vue.VueAjouterFacture;
-import com.jde.skillbill.presentation.vue.VueVoirFacture;
 
 public class ActivityVoirFacture extends AppCompatActivity {
     private PresenteurAjouterFacture presenteurVoirFacture;
