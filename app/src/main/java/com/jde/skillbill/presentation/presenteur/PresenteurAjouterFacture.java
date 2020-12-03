@@ -331,7 +331,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 if(montantsUstilisateur.get(utilisateur)!=null &&  montantsUstilisateur.get(utilisateur)>0){
                     if(vueAjouterFacture.getMultipleUtilisateursPayeurs()==null){
                         payeurs+= utilisateur.getNom() + activityAjouterFacture.getResources().getString(R.string.a_paye) +
-                                montantsUstilisateur.get(utilisateur) +"\n";
+                                montantsUstilisateur.get(utilisateur) + System.getProperty("line.separator");
                     }
                 }
             }
@@ -352,7 +352,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 for(Utilisateur utilisateur : montantsUstilisateurAAjouter.keySet()){
                     montantsUstilisateurAAjouter.put(utilisateur, vueAjouterFacture.getMontantFactureCADInput()/nbrPayeurs);
                     payeurs+= utilisateur.getNom() + activityAjouterFacture.getResources().getString(R.string.a_paye) +
-                            montantsUstilisateurAAjouter.get(utilisateur) +"\n";
+                            montantsUstilisateurAAjouter.get(utilisateur) +System.getProperty("line.separator");
                 }
                 for(Utilisateur utilisateur : modele.getGroupeEnCours().getUtilisateurs()){
                     montantsUstilisateurAAjouter.putIfAbsent(utilisateur, 0.0);
@@ -361,7 +361,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             }else
 
             payeurs+= modele.getUtilisateurConnecte().getNom() + activityAjouterFacture.getResources().getString(R.string.a_paye) +
-                    vueAjouterFacture.getMontantFactureCADInput() +"\n";
+                    vueAjouterFacture.getMontantFactureCADInput() +System.getProperty("line.separator");
         }
 
 

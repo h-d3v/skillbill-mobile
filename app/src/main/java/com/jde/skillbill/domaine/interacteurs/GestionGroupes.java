@@ -96,16 +96,18 @@ public class GestionGroupes implements IGestionGroupes {
 
             nbrUtilisateurSurLaFacture = 0;
             for (Utilisateur utilisateur : facture.getMontantPayeParParUtilisateur().keySet()) {
-               // Log.e(String.valueOf(((UtilisateurRestAPI)utilisateur).getId()), String.valueOf(facture.getMontantPayeParParUtilisateur().get(utilisateur)));
                 total += facture.getMontantPayeParParUtilisateur().get(utilisateur);
                 nbrUtilisateurSurLaFacture++;
-                if (utilisateur.equals(utilisateurConcerne)) {
-                    montantPayeUtilisateurConcerne += facture.getMontantPayeParParUtilisateur().get(utilisateur);
-                }
+
             }
+            montantPayeUtilisateurConcerne += facture.getMontantPayeParParUtilisateur().get(utilisateurConcerne);
+
             double montantDuParUtilisateur = total / nbrUtilisateurSurLaFacture;
             solde = (montantPayeUtilisateurConcerne - montantDuParUtilisateur);
+
         }
+
+
         return solde;
     }
 }

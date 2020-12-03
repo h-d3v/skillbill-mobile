@@ -294,7 +294,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             if(httpURLConnection.getResponseCode()==200){
               InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
               utilisateur = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
-              Log.e("monnaie ", utilisateur.getMonnaieUsuelle().name());
 
               if(utilisateur==null || utilisateur.getId()==0) return null;
 
@@ -773,7 +772,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
         return new UtilisateurRestAPI( nom, email, "", Monnaie.valueOf(monnaieAPI), id);
     }
-    private  static void reglerTimeout(HttpURLConnection httpURLConnection){
+    private static void reglerTimeout(HttpURLConnection httpURLConnection){
         httpURLConnection.setReadTimeout(READ_TIME_OUT);
         httpURLConnection.setConnectTimeout(CONNECT_TIME_OUT);
     }
