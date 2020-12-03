@@ -76,6 +76,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/titre_payeur_facture"/>
 
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:id="@+id/payeursActuels" android:editable="false"
+                android:inputType="textWebEditText"/>
         <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:id="@+id/spinner_choix_payeur"
@@ -89,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageFact" android:contentDescription="TODO"
-                app:srcCompat="@drawable/ic_launcher_foreground"/>
+        />
         <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="0dp" app:srcCompat="@android:drawable/ic_menu_camera"

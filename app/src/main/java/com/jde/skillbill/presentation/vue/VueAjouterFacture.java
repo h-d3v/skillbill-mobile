@@ -1,6 +1,5 @@
 package com.jde.skillbill.presentation.vue;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,52 +28,104 @@ import java.util.Objects;
 
 public class VueAjouterFacture extends Fragment implements IContratVPAjouterFacture.IVueAjouterFacture {
     private IContratVPAjouterFacture.IPresenteurAjouterFacture presenteurAjouterFacture;
-    protected Button boutonAjouter, boutonAnnuler;
-    protected EditText editTextMontant;
-    protected EditText editTextTitre;
-    protected Spinner spinnerChoix;
-    protected Spinner spinnerChoixUtilisateursRedevables;
-    protected CalendarView calendarView;
-    protected EditText date;
-    protected ProgressBar progressBar;
-    protected ImageView imageFacture;
-    protected ImageButton btnAjouterFacture;
+    private Button boutonAjouter, boutonRetroaction;
+    private EditText editTextMontant;
+    private EditText editTextTitre;
+    private Spinner spinnerChoixPayeurs;
+    private Spinner spinnerChoixUtilisateursRedevables;
+    private CalendarView calendarView;
+    private EditText date;
+    private ProgressBar progressBar;
+    private ImageView imageFacture;
+    private ImageButton btnAjouterPhotoFacture;
+    private androidx.appcompat.widget.Toolbar toolbar;
     private TextView tvTitreMontant;
-    protected TextView tvToRemoveForTest;
-    protected ImageView imageView;
-
+    private boolean estUneFactureExistante;
+    private boolean estEnCoursDeModification;
+    private TextView tvUtilisateursPayeurs;
+    private boolean[] multipleUtilisateursPayeurs;
+    private Toast toastAuMoinsUnUtilisateur;
 
     @Override
     public View onCreateView (LayoutInflater inflater,
                               ViewGroup container,
                               Bundle savedInstanceState) {
         View racine = inflater.inflate(R.layout.frag_ajouter_facture, container, false);
-        tvToRemoveForTest = racine.findViewById(R.id.titre_payeur_facture);
-        btnAjouterFacture =racine.findViewById(R.id.btn_ajouter_facture_groupe_avec_photo);
-        btnAjouterFacture.setOnClickListener(view -> {
+        btnAjouterPhotoFacture =racine.findViewById(R.id.btn_ajouter_facture_groupe_avec_photo);
+        progressBar = racine.findViewById(R.id.progressBarAjoutFacture);
+        imageFacture = (ImageView) racine.findViewById(R.id.imageFact);
+        editTextTitre=racine.findViewById(R.id.edit_t_nom_activie);
+        boutonAjouter= racine.findViewById(R.id.btnAjouter);
+        calendarView=racine.findViewById(R.id.calendarView);
+        date = racine.findViewById(R.id.editTextDate);
+        spinnerChoixPayeurs =racine.findViewById(R.id.spinner_choix_payeur);
+        editTextMontant= racine.findViewById(R.id.txt_input_montant);
+        spinnerChoixUtilisateursRedevables=racine.findViewById(R.id.spinner_choix_remboursement);
+        tvTitreMontant=racine.findViewById(R.id.txt_titre_montant);
+        boutonRetroaction = racine.findViewById(R.id.btnAnuller);
+        toolbar = racine.findViewById(R.id.toolbarAjouterFacture);
+        tvUtilisateursPayeurs =  racine.findViewById(R.id.payeursActuels);
+        toastAuMoinsUnUtilisateur = Toast.makeText(racine.getContext(), R.string.au_moins_un, Toast.LENGTH_LONG);
+        Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
+        tvTitreMontant.setText("Montant en " +monnaieUser.name()+"-"+monnaieUser.getSymbol());
+        editTextMontant.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!"".equals(editTextMontant)){
+                    tvUtilisateursPayeurs.setText(presenteurAjouterFacture.presenterPayeurs());
+                }
+            }
+        });
+
+        btnAjouterPhotoFacture.setOnClickListener(view -> {
             presenteurAjouterFacture.prendrePhoto();
 
         });
-         progressBar = racine.findViewById(R.id.progressBarAjoutFacture);
-         progressBar.setVisibility(View.INVISIBLE);
-         imageFacture = (ImageView) racine.findViewById(R.id.imageFact);
-         editTextTitre=racine.findViewById(R.id.edit_t_nom_activie);
-         boutonAjouter= racine.findViewById(R.id.btnAjouter);
-         boutonAjouter.setOnClickListener(view -> {
-             presenteurAjouterFacture.ajouterFacture();
-         });
-         imageView = racine.findViewById (R.id.imageFact);
 
-         boutonAnnuler= racine.findViewById(R.id.btnAnuller);
-         boutonAnnuler.setOnClickListener(view -> {
-             Objects.requireNonNull(this.getActivity()).onBackPressed();
-         });
-         calendarView=racine.findViewById(R.id.calendarView);
+        if(!estUneFactureExistante){
+            progressBar.setVisibility(View.INVISIBLE);
+            boutonAjouter.setOnClickListener(view -> {
+                presenteurAjouterFacture.ajouterFacture();
+            });
+
+            boutonRetroaction.setOnClickListener(view -> {
+                Objects.requireNonNull(this.getActivity()).onBackPressed();// TODO Rediriger vers les groupes rechargés
+            });
+        }
+        else{
+            toolbar.setTitle(presenteurAjouterFacture.trouverTitreFactureEnCours());
+            toggleVueModifierOuVoir(false);
+            tvUtilisateursPayeurs.setText(presenteurAjouterFacture.presenterPayeurs());
+            boutonRetroaction.setOnClickListener(view -> {
+                if(!estEnCoursDeModification){
+                    presenteurAjouterFacture.redirigerVersListeFactures();
+                }else {
+                    estEnCoursDeModification=!estEnCoursDeModification;
+                    toggleVueModifierOuVoir(estEnCoursDeModification);
+                }
+            });
+
+            boutonAjouter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(estEnCoursDeModification){
+                        presenteurAjouterFacture.envoyerRequeteModificationFacture();
+                    }
+                    else {
+                        estEnCoursDeModification=!estEnCoursDeModification;
+                        toggleVueModifierOuVoir(estEnCoursDeModification);
+                    }
+                }
+            });
+
+        }
+
          calendarView.setVisibility(View.GONE);
-         date = racine.findViewById(R.id.editTextDate);
 
-         date.setOnFocusChangeListener((view, b) -> {
-             if(b) {
+
+         date.setOnFocusChangeListener((view, estFocus) -> {
+             if(estFocus) {
                  calendarView.setVisibility(View.VISIBLE);
              }else {
                  calendarView.setVisibility(View.GONE);
@@ -88,8 +141,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
                 date.setText(LocalDate.of(year,month+1/*Ok google?*/,dayOfMonth).toString());
             }
         });
-         editTextMontant= racine.findViewById(R.id.txt_input_montant);
-         spinnerChoixUtilisateursRedevables=racine.findViewById(R.id.spinner_choix_remboursement);
+
          spinnerChoixUtilisateursRedevables.setAdapter( ArrayAdapter.createFromResource(this.getContext(), R.array.spinner_ajouter_facture_choix_utilisateur_pour_remboursement, R.layout.support_simple_spinner_dropdown_item));
 
          spinnerChoixUtilisateursRedevables.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -108,13 +160,17 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
 
              }
          });
-         spinnerChoix =racine.findViewById(R.id.spinner_choix_payeur);
-         spinnerChoix.setAdapter(ArrayAdapter.createFromResource(this.getContext(),R.array.spinner_ajouter_facture_choix, R.layout.support_simple_spinner_dropdown_item));
-         spinnerChoix.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+         spinnerChoixPayeurs.setAdapter(ArrayAdapter.createFromResource(this.getContext(),R.array.spinner_ajouter_facture_choix, R.layout.support_simple_spinner_dropdown_item));
+         spinnerChoixPayeurs.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
              @Override
              public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                  if(i==1){
                      afficherAlertDialog();
+                 }
+                 if(i==0){
+                     multipleUtilisateursPayeurs=null;
+                     tvUtilisateursPayeurs.setText(presenteurAjouterFacture.presenterPayeurs());
                  }
              }
 
@@ -124,9 +180,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
              }
          });
 
-        tvTitreMontant=racine.findViewById(R.id.txt_titre_montant);
-        Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
-        tvTitreMontant.setText("Montant en " +monnaieUser.name()+"-"+monnaieUser.getSymbol());
+
         return racine;
     }
 
@@ -204,7 +258,7 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     }
 
     public void setImageFacture(Bitmap bitmap) {
-
+        imageFacture.setImageBitmap(bitmap);
     }
 
     //TODO implementer le partage inegale de la facture(vision future)
@@ -217,25 +271,18 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         String[] noms = presenteurAjouterFacture.presenterListeUtilsateur();
-
         final boolean[] nomsSelectionnes = new boolean[noms.length];
 
         int i=0;
         while(i<noms.length){
-            Log.e("vueAjouterFacture", noms[i]);
             nomsSelectionnes[i] = false;
             i++;
         }
 
-        final List<String> listNoms = Arrays.asList(noms);
-
         builder.setMultiChoiceItems(noms, nomsSelectionnes, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-
                 nomsSelectionnes[which] = isChecked;
-
-                String currentItem = listNoms.get(which);
 
             }
         });
@@ -244,29 +291,39 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         builder.setCancelable(false);
 
 
-        builder.setTitle("Choisir les payeurs NON IMPLÉMETÉ !!!!! A VENIR");//TODO
+        builder.setTitle("Choisir les payeurs");//TODO string.xml
 
-        // Set the positive/yes button click listener
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Do something when click positive button
+                boolean auMoinsUnUtilisateurSelectionne = false;
+                for(boolean estSelectionne : nomsSelectionnes){
+                    if(estSelectionne){
+                        auMoinsUnUtilisateurSelectionne = true;
+                        break;
+                    }
+                }
+                if(auMoinsUnUtilisateurSelectionne){
+                    multipleUtilisateursPayeurs = nomsSelectionnes;
+                    tvUtilisateursPayeurs.setText(presenteurAjouterFacture.presenterPayeurs());
+                }
+                else {
+                    toastAuMoinsUnUtilisateur.show();
+                    spinnerChoixPayeurs.setSelection(0);
+                    tvUtilisateursPayeurs.setText(presenteurAjouterFacture.presenterPayeurs());
+                }
+
 
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+
+        builder.setNeutralButton(R.string.action_annuler, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Do something when click the negative button
-            }
-        });
-
-
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
+                spinnerChoixPayeurs.setSelection(0);
+                tvUtilisateursPayeurs.setText(presenteurAjouterFacture.presenterPayeurs());
             }
         });
 
@@ -282,6 +339,47 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
     public void ouvrirProgressBar(){
         progressBar.setVisibility(View.VISIBLE);
     }
+
+    @Override
+    public boolean[] getMultipleUtilisateursPayeurs() {
+
+        return multipleUtilisateursPayeurs;
+    }
+
+    private void toggleVueModifierOuVoir(boolean estEnCoursDeModification){
+        if(estEnCoursDeModification){
+            boutonAjouter.setText(R.string.envoyer);
+            estEnCoursDeModification = true;
+            editTextMontant.setEnabled(true);
+            editTextTitre.setEnabled(true);
+            date.setEnabled(true);
+            boutonRetroaction.setText(R.string.action_annuler);
+            spinnerChoixUtilisateursRedevables.setVisibility(View.VISIBLE);
+            spinnerChoixPayeurs.setVisibility(View.VISIBLE);
+            btnAjouterPhotoFacture.setVisibility(View.VISIBLE);
+        }
+        else{
+            estEnCoursDeModification = false;
+            boutonAjouter.setText(R.string.modifier);
+            editTextTitre.setEnabled(false);
+            editTextMontant.setEnabled(false);
+            date.setEnabled(false);
+            boutonRetroaction.setText(R.string.action_retour);
+            spinnerChoixUtilisateursRedevables.setVisibility(View.GONE);
+            spinnerChoixPayeurs.setVisibility(View.GONE);
+            btnAjouterPhotoFacture.setVisibility(View.GONE);
+            editTextMontant.setText(presenteurAjouterFacture.trouverMontantFactureEnCours());
+            editTextTitre.setText(presenteurAjouterFacture.trouverTitreFactureEnCours());
+            date.setText(presenteurAjouterFacture.trouverDateFactureEnCours());
+        }
+    }
+
+
+    public void setEstUneFactureExistante(boolean estUneFactureExistante) {
+        this.estUneFactureExistante = estUneFactureExistante;
+    }
+
+
 
 
 

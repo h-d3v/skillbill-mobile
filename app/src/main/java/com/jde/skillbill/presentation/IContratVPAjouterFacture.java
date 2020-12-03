@@ -15,9 +15,19 @@ public interface IContratVPAjouterFacture {
 
         void prendrePhoto();
 
+        String trouverMontantFactureEnCours();
+
+        String trouverTitreFactureEnCours();
+
+        String trouverDateFactureEnCours();
+
         void redirigerVersListeFactures();
 
         Monnaie getMonnaieUserConnecte();
+
+        void envoyerRequeteModificationFacture();
+
+        String presenterPayeurs();
     }
 
     interface IVueAjouterFacture{
@@ -39,5 +49,6 @@ public interface IContratVPAjouterFacture {
 
         void ouvrirProgressBar();
 
+        boolean[] getMultipleUtilisateursPayeurs();
     }
 }

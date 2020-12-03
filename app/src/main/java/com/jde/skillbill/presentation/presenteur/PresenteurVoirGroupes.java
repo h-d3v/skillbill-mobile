@@ -2,23 +2,15 @@ package com.jde.skillbill.presentation.presenteur;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-import android.provider.MediaStore;
-import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
-import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
@@ -30,12 +22,15 @@ import com.jde.skillbill.presentation.IContratVuePresenteurVoirGroupes;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueVoirGroupes;
 import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
+import com.jde.skillbill.ui.activity.ActivityConnexion;
 import com.jde.skillbill.ui.activity.ActivityCreerGroupe;
+import com.jde.skillbill.ui.activity.ActivityModifProfil;
 import com.jde.skillbill.ui.activity.ActivityVoirGroupes;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
 
+import static android.provider.Settings.System.getConfiguration;
 import static android.provider.Settings.System.getString;
 
 
@@ -43,6 +38,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     private Modele modele;
     private VueVoirGroupes vueVoirGroupes;
     private Activity activity;
+
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private String EXTRA_GROUPE_POSITION= "com.jde.skillbill.groupe_identifiant";
     private Handler handler;
@@ -87,8 +83,8 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
 
             }
         };
-        chargerGroupes();
 
+        chargerGroupes();
     }
 
 
@@ -182,6 +178,13 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         activity.startActivity(intent);
     }
 
+    @Override
+    public void redirigerModifCompte() {
+        Intent intent = new Intent(activity, ActivityModifProfil.class);
+        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
+        activity.startActivityForResult(intent, 1);
+    }
+
 
     @Override
     public void commencerCreerGroupeActivite() {
@@ -195,6 +198,17 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         //TODO remove
     }
 
+    @Override
+    public String getNomUserConnecte(){
+        return modele.getUtilisateurConnecte().getNom();
+    }
+
+    @Override
+    public void deconnexion(){
+        Intent intent = new Intent(activity, ActivityConnexion.class);
+        activity.startActivity(intent);
+        this.activity.finish();
+    }
 
 
 }

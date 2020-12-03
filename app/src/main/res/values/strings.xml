@@ -78,6 +78,12 @@
     <string name="pas_d_activite_photo_diponible">Nous ne pouvons trouver une application compatible pour prendre des
         photos sur votre appareil
     </string>
+    <string name="open_drawer">Open Drawer</string>
+    <string name="close_drawer">Close drawer</string>
+    <string name="modif_effectuee">La modification abie été effectuée</string>
+    <string name="erreur_modification">Une erreur s\'est produite, les données n\'ont pas été modifiées</string>
+    <string name="a_paye"> \u0020 a payé \u0020 </string>
+    <string name="au_moins_un">Au moins un utilisateur doit être selectionné</string>
 
 
 </resources>

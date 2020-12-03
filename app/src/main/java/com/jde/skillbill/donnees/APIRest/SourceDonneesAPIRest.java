@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import kotlin.NotImplementedError;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -38,13 +39,14 @@ import okhttp3.Response;
 
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
-    private String URI_BASE = "http://192.168.1.32:51360/api/";
-    private String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
-    private String POINT_ENTREE_GROUPE = "groupes/";
-    private String POINT_ENTREE_LOGIN ="login";
+    private final String URI_BASE = "http://192.168.0.23:44302/api/";
+    private final String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
+    private final String POINT_ENTREE_GROUPE = "groupes/";
+    private final String POINT_ENTREE_LOGIN ="login";
     private static final int READ_TIME_OUT =8000;
     private static final int CONNECT_TIME_OUT = 4000;
     private final String POINT_ENTREE_FACTURE="factures/";
+    private final String POINT_ENTREE_PHOTO = "photos/";
 
 
     @Override
@@ -151,6 +153,46 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         return false;
     }
 
+    @Override
+    public Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException {
+        Utilisateur utilisateurRetour=null;
+        URL url = null;
+        try {
+            url=new URL(URI_BASE + POINT_ENTREE_UTILISATEUR + "update/"+((UtilisateurRestAPI) utilisateurCourrant).getId());
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI url malformed: ", e.toString());
+        }
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        MediaType mediaType = MediaType.parse("application/json");
+        RequestBody body = RequestBody.create(mediaType, "{\r\n    'Nom': '"+utilisateurModifier.getNom()+"',\r\n    'Courriel': '"+utilisateurModifier.getCourriel()+"',\r\n    'MotDePasse': '"+utilisateurModifier.getMotPasse()+"'\r\n, 'Monnaie': '"+utilisateurModifier.getMonnaieUsuelle().name()+"'\r\n}");
+        Request request = new Request.Builder()
+                .url(url)
+                .method("PUT", body)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        try {
+            Gson gson = new GsonBuilder().create();
+            String json =  gson.toJson(new UtilisateurRestAPI("","","", null , 0));
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
+            Response response = client.newCall(request).execute();
+            if (response.code() == 200) {
+                InputStreamReader inputStreamReader= new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8);
+                utilisateurRetour = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
+            } else if (response.code() == 409) {
+              //todo faire un truc avec le 409 ou juste ne rien faire?
+            }
+        } catch(ConnectException e) {
+            Log.e("erreur connection api", "message:" + Objects.requireNonNull(e.getMessage()) + " \n cause: " + e.getCause());
+            throw new SourceDonneeException("Connexion non disponnible");
+        } //si l'email entrer est deja pris, on retourne un user invalide
+        catch (IOException e) {
+            Log.e("IOException creerUtilisateur","Cause: "+e.getMessage()+"\n Message: "+e.getMessage());
+        }
+        return utilisateurRetour;
+    }
+
 
     public boolean utilisateurExiste(String email) throws SourceDonneeException {
         URL url = null;
@@ -160,7 +202,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         } catch (MalformedURLException e) {
             Log.e("SOurceDonneAPI: ", e.toString());
         }
-        Log.e("source API", url.toString());
+
         try {
 
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
@@ -199,7 +241,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, "{\r\n    'Nom': '"+utilisateur.getNom()+"',\r\n    'Courriel': '"+utilisateur.getCourriel()+"',\r\n    'MotDePasse': '"+utilisateur.getMotPasse()+"'\r\n, 'Monnaie': '"+utilisateur.getMonnaieUsuelle().name()+"'\r\n}");
         Request request = new Request.Builder()
-                .url("http://192.168.1.32:51360/api/Register")
+                .url(URI_BASE+"register")
                 .method("POST", body)
                 .addHeader("Content-Type", "application/json")
                 .build();
@@ -247,7 +289,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             String json =  gson.toJson(new UtilisateurRestAPI("",email,mdp, null , 0));
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
-            Log.e("code reponse ", String.valueOf(httpURLConnection.getResponseCode()));
+
 
             if(httpURLConnection.getResponseCode()==200){
               InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
@@ -424,6 +466,38 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         return false;
     }
 
+
+    public boolean ajouterPhoto(Facture facture, byte[] photo) throws SourceDonneeException, NotImplementedError {
+        URL url = null;
+        try {
+
+            url = new URL(URI_BASE+POINT_ENTREE_FACTURE+ ((FactureRestAPI) facture).getId()  );
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI : ", e.toString());
+        } catch (ClassCastException e){
+            Log.e("SOurceDonneAPI : ", e.toString());
+        }
+
+        HttpURLConnection httpURLConnection= null;
+        try {
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+            httpURLConnection.setRequestMethod("PUT");
+            reglerTimeout(httpURLConnection);
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+        }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     @Override
     public boolean modifierFacture(Facture facture) throws SourceDonneeException {
         URL url = null;
@@ -450,10 +524,19 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
 
             ((FactureRestAPI) facture).setPayeursEtMontantsListe(payeursEtMontant);
-            ((FactureRestAPI) facture).setMontantTotal(facture.getMontantTotal());
+            facture.setMontantTotal(facture.getMontantTotal());
+            if(Objects.requireNonNull(facture.getPhotos()).size()!=0){ // Ne fonctionne que pour une photo
+                for(byte[] bytes : facture.getPhotos()){
+                    if(((FactureRestAPI) facture).getPhotosRestAPI().size()!=0)
+                        ((FactureRestAPI) facture).getPhotosRestAPI().get(0).setPhotoEncodee(Base64.encodeToString(bytes, Base64.DEFAULT));
+                    else
+                        ((FactureRestAPI) facture).getPhotosRestAPI().add (new PhotoRestApi(Base64.encodeToString(bytes, Base64.DEFAULT)));
+                }
+            }
+
             Gson gson = new GsonBuilder().create();
             String json = gson.toJson(facture);
-            Log.e("json", json);
+
 
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
@@ -476,7 +559,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         catch (IOException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
@@ -513,7 +595,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 factureRestAPI.setPayeursEtMontantsListe(payeursEtMontant);
                 if(!Objects.requireNonNull(facture.getPhotos()).isEmpty()){
                     for(byte[] bytes : facture.getPhotos()){
-                        factureRestAPI.getPhotoesEncodeesBase64().add(new PhotoRestApi( Base64.encodeToString(bytes, Base64.DEFAULT)));
+                        factureRestAPI.getPhotosRestAPI().add(new PhotoRestApi( Base64.encodeToString(bytes, Base64.DEFAULT)));
                     }
                 }
                 facture = factureRestAPI;
@@ -523,7 +605,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             }
 
             String json = gson.toJson(facture);
-            Log.e("json", json);
+
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
 
@@ -550,6 +632,112 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
         return false;
     }
+
+
+
+    public FactureRestAPI rechargerFacture(Facture facture) throws SourceDonneeException{
+        URL url= null;
+        FactureRestAPI factureRestAPI;
+        try {
+            factureRestAPI = (FactureRestAPI) facture;
+
+        }catch (ClassCastException e){
+            Log.e("Source donnée API Rest :", e.getStackTrace().toString());
+            throw new SourceDonneeException("entité invalide pour la source de donnée");
+        }
+        try {
+            url = new URL(URI_BASE+POINT_ENTREE_FACTURE+factureRestAPI.getId());
+        }catch (MalformedURLException e ){
+            Log.e("SOurceDonneAPI: ", e.toString());
+        }
+        HttpURLConnection httpURLConnection= null;
+        try {
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            reglerTimeout(httpURLConnection);
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+
+            if(httpURLConnection.getResponseCode()==200) {
+                Gson gson = new Gson();
+                InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                factureRestAPI = gson.fromJson(inputStreamReader, FactureRestAPI.class);
+                factureRestAPI.setPhotos(new ArrayList<>());
+                for (PhotoRestApi photoRestApi : factureRestAPI.getPhotosRestAPI()){
+                   String base64Photo = photoRestApi.getPhotoEncodee();
+                   factureRestAPI.getPhotos().add(Base64.decode(base64Photo.toString(), Base64.DEFAULT));
+                }
+
+
+            }
+
+
+        }
+        catch (java.net.SocketTimeoutException e ){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e ){
+            e.printStackTrace();
+        }
+
+        return factureRestAPI;
+
+    }
+
+    @Override
+    public List<byte[]> chargerPhotos(Facture factureEnCours) throws SourceDonneeException {
+        URL url=null;
+        List<PhotoRestApi> photoRestApiList=null;
+        List<byte[]> photosBytes = new ArrayList<>();
+        try{
+             photoRestApiList =  ((FactureRestAPI)factureEnCours).getPhotosRestAPI();
+        }catch (ClassCastException e){
+            Log.e("Source donnée API Rest :", e.getStackTrace().toString());
+            throw new SourceDonneeException("entité invalide pour la source de donnée");
+        }
+        if(photoRestApiList==null || photoRestApiList.size()==0){
+            return photosBytes;
+        }
+        else {
+            for(PhotoRestApi photoRestApi : photoRestApiList){
+                try {
+                    url = new URL(URI_BASE+POINT_ENTREE_FACTURE+POINT_ENTREE_PHOTO+photoRestApi.getId());
+                }catch (MalformedURLException e ){
+                    Log.e("SOurceDonneAPI: ", e.toString());
+                }
+
+                HttpURLConnection httpURLConnection= null;
+                try {
+                    httpURLConnection = (HttpURLConnection) url.openConnection();
+                    reglerTimeout(httpURLConnection);
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+
+                    if(httpURLConnection.getResponseCode()==200) {
+                        InputStreamReader inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
+                        String sortie;
+                        while ((sortie = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(sortie);
+                        }
+                        byte[] photoByte = Base64.decode(stringBuilder.toString(), Base64.DEFAULT);
+                        photosBytes.add(photoByte);
+                    }
+                }
+                catch (java.net.SocketTimeoutException e ){
+                    throw new SourceDonneeException("Connection non disponible");
+                }
+
+                catch (IOException e ){
+                    e.printStackTrace();
+                    }
+                }
+
+            }
+
+        return photosBytes;
+    }
+
 
     private Utilisateur decoderUtilisateur( InputStream utilisateurEncode ) throws IOException {
         InputStreamReader responseBodyReader =
@@ -584,7 +772,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
         return new UtilisateurRestAPI( nom, email, "", Monnaie.valueOf(monnaieAPI), id);
     }
-    private  static void reglerTimeout(HttpURLConnection httpURLConnection){
+    private static void reglerTimeout(HttpURLConnection httpURLConnection){
         httpURLConnection.setReadTimeout(READ_TIME_OUT);
         httpURLConnection.setConnectTimeout(CONNECT_TIME_OUT);
     }

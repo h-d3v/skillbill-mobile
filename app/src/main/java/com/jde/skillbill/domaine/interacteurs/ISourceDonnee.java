@@ -14,6 +14,8 @@ public interface ISourceDonnee {
 
     boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) throws SourceDonneeException;
 
+    Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException;
+
     boolean utilisateurExiste(String email) throws SourceDonneeException ;
     Utilisateur creerUtilisateur(Utilisateur utilisateur)throws SourceDonneeException;
     Utilisateur tenterConnexion(String email, String mdp) throws SourceDonneeException;
@@ -23,6 +25,9 @@ public interface ISourceDonnee {
 
     boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur)throws SourceDonneeException;
     boolean modifierFacture(Facture facture) throws SourceDonneeException;
-
     boolean creerFacture(Facture facture) throws SourceDonneeException;
+
+    List<byte[]> chargerPhotos(Facture factureEnCours) throws SourceDonneeException;
+
+    Facture rechargerFacture(Facture facture) throws SourceDonneeException;
 }

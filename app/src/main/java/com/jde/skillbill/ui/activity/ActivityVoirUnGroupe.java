@@ -20,6 +20,13 @@ public class ActivityVoirUnGroupe extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        onStart();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         setContentView(R.layout.activite_voir_un_groupe);
 
 

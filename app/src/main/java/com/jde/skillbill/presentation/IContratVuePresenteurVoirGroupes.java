@@ -10,7 +10,6 @@ public interface IContratVuePresenteurVoirGroupes {
     interface IVueVoirGroupes{
         void setPresenteur(PresenteurVoirGroupes presenteurVoirGroupes);
 
-
         void rafraichir();
 
         void ouvrirProgressBar();
@@ -33,6 +32,12 @@ public interface IContratVuePresenteurVoirGroupes {
 
         void commencerAjouterFactureActivite(int position);
 
+        void redirigerModifCompte();
+
         void commencerPrendrePhotoFacture(int position);
+
+        String getNomUserConnecte();
+
+        void deconnexion();
     }
 }

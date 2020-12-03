@@ -4,16 +4,26 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.jde.skillbill.R;
 import com.jde.skillbill.presentation.IContratVPConnexion;
 import com.jde.skillbill.presentation.presenteur.PresenteurConnexion;
@@ -21,7 +31,6 @@ import com.jde.skillbill.presentation.presenteur.PresenteurConnexion;
 import java.util.Objects;
 
 public class VueConnexion extends Fragment implements IContratVPConnexion.IVueConnexion {
-
     private PresenteurConnexion _presenteur;
     private FloatingActionButton btnCnx;
     private MaterialButton btnInscription;
@@ -29,13 +38,13 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
     private EditText etEmail;
     private EditText etMdp;
     private ProgressBar progressBar;
-
     private boolean emailValide;
     private boolean mdpValide;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View vue = inflater.inflate(R.layout.frag_cnx, container, false);
+
         etMdp=vue.findViewById(R.id.etMdpCnx);
         etEmail=vue.findViewById(R.id.etEmailCnx);
         btnCnx=vue.findViewById(R.id.btnCnx);
@@ -144,7 +153,7 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
      */
 
     public void afficherMsgErreur() {
-        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(this.requireContext());
         alertBuilder.setTitle("Connexion impossible!");
         alertBuilder.setMessage("L'email et le mot de passe ne correspondent pas.");
         alertBuilder.show();
@@ -157,7 +166,7 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
      */
     
     public void afficherMsgConnecter(String email, String nom) {
-        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(Objects.requireNonNull(this.getContext()));
+        MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(this.requireContext());
         alertBuilder.setTitle("Connexion réussie!");
         alertBuilder.setMessage("Courriel: "+email+"  Nom: "+nom);
         alertBuilder.show();
@@ -171,4 +180,8 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
     public void ouvrirProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
     }
+
+
+
+
 }

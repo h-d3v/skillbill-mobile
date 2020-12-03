@@ -1,6 +1,5 @@
 package com.jde.skillbill.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -13,13 +12,12 @@ import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.donnees.APIRest.SourceDonneesAPIRest;
-import com.jde.skillbill.presentation.IContratVPVoirFacture;
 import com.jde.skillbill.presentation.modele.Modele;
-import com.jde.skillbill.presentation.presenteur.PresenteurVoirFacture;
-import com.jde.skillbill.presentation.vue.VueVoirFacture;
+import com.jde.skillbill.presentation.presenteur.PresenteurAjouterFacture;
+import com.jde.skillbill.presentation.vue.VueAjouterFacture;
 
 public class ActivityVoirFacture extends AppCompatActivity {
-
+    private PresenteurAjouterFacture presenteurVoirFacture;
     private static final int REQUETE_PRENDRE_PHOTO= 2;
 
     @Override
@@ -27,12 +25,14 @@ public class ActivityVoirFacture extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_ajouter_facture);
-        VueVoirFacture vueVoirFacture = new VueVoirFacture();
+        VueAjouterFacture vueVoirFacture = new VueAjouterFacture();
+
         Modele modele = new Modele();
         ISourceDonnee sourceDonnee = new SourceDonneesAPIRest();
-        PresenteurVoirFacture presenteurVoirFacture = new PresenteurVoirFacture(this, vueVoirFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
+        presenteurVoirFacture = new PresenteurAjouterFacture(this, true,  vueVoirFacture, modele, new GestionFacture(sourceDonnee), new GestionUtilisateur(sourceDonnee), new GestionGroupes(sourceDonnee));
 
-        vueVoirFacture.setPresenteur((IContratVPVoirFacture.PresenteurVoirFacture) presenteurVoirFacture);
+        vueVoirFacture.setPresenteur(presenteurVoirFacture);
+        vueVoirFacture.setEstUneFactureExistante(true);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.layout_ajouter_facture, vueVoirFacture);
@@ -48,10 +48,9 @@ public class ActivityVoirFacture extends AppCompatActivity {
             if (imageBitmap != null) {
                 ImageView imageView = findViewById(R.id.imageFact);
                 imageView.setImageBitmap(imageBitmap);
+                presenteurVoirFacture.setPhotoChangee(true);
 
             }
-
-
         }
     }
 }
