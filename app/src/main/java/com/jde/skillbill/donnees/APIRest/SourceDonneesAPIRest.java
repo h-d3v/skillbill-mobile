@@ -560,7 +560,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         catch (IOException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 

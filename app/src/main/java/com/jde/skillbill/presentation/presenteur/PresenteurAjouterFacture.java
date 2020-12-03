@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPresenteurAjouterFacture {
     Activity activityAjouterFacture;
@@ -46,7 +47,6 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private final IGestionUtilisateur iGestionUtilisateur;
     private final IGestionGroupes iGestionGroupes;
     private static final int REQUETE_PRENDRE_PHOTO = 2;
-    private String[] nomsMembres;
     private Thread filEsclave = null;
     private final Handler handlerReponse;
     private static final int MSG_AJOUT_FACTURE_REUSSI = 0;
@@ -57,6 +57,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     private static final int MSG_MODIF_FACTURE_FAIT=75;
     private static final int MSG_RECHARGER_FACTURE = 4444;
     private boolean photoChangee;
+    private Map<Utilisateur, Double> montantsUstilisateurAAjouter;
 
     @SuppressLint("HandlerLeak")
     public PresenteurAjouterFacture(Activity activityAjouterFacture, boolean estFactureExistante,  VueAjouterFacture vueAjouterFacture, Modele modele, IGestionFacture gestionFacture, IGestionUtilisateur gestionUtilisateur, IGestionGroupes gestionGroupes) {
@@ -89,7 +90,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                     );
                 }
                 else if (msg.what == MSG_TROUVER_MEMBRES) {
-                    nomsMembres = (String[]) msg.obj;
+
                 }
                 else if (msg.what == MSG_ERREUR_CNX) {
                     Toast.makeText(activityAjouterFacture, R.string.pas_de_connection_internet, Toast.LENGTH_LONG).show();
@@ -100,7 +101,6 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 }
                 else if(msg.what==MSG_ERREUR_AJOUT_FACTURE){
                     Toast.makeText(activityAjouterFacture, R.string.erreur_modification, Toast.LENGTH_LONG).show();
-                    redirigerVersListeFactures();
                 }
                 else if(msg.what == MSG_RECHARGER_FACTURE){
                     if(msg.obj!=null){
@@ -129,14 +129,9 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             public void run() {
                 try {
                     List<Utilisateur> utilisateursGroupe= iGestionGroupes.trouverTousLesUtilisateurs(modele.getGroupeEnCours());
-                    String[] membres=new String[utilisateursGroupe.size()];
-                    int i=0;
-                    for (Utilisateur utilisateur : utilisateursGroupe){
-                        membres[i]=utilisateur.getNom();
-                        i++;
-                    }
                     message = handlerReponse.obtainMessage(MSG_TROUVER_MEMBRES);
-                    message.obj = membres;
+                    modele.getGroupeEnCours().setUtilisateurs( utilisateursGroupe );
+
 
                 }catch (SourceDonneeException e){
                     message = handlerReponse.obtainMessage(MSG_ERREUR_CNX);
@@ -155,8 +150,13 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
      */
     @Override
     public String[] presenterListeUtilsateur() {
-
-        return nomsMembres;
+        String[] membres = new String[modele.getGroupeEnCours().getUtilisateurs().size()];
+        int i = 0;
+        for(Utilisateur utilisateur : modele.getGroupeEnCours().getUtilisateurs()){
+            membres[i] = utilisateur.getNom();
+            i++;
+        }
+        return membres;
     }
 
     /**
@@ -181,9 +181,9 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 factureAAjouter.setLibelle(vueAjouterFacture.getTitreInput());
                 factureAAjouter.setGroupe(modele.getGroupeEnCours());
                 factureAAjouter.setUtilisateurCreateur(modele.getUtilisateurConnecte());
-                HashMap<Utilisateur, Double> hashMap = new HashMap<>();//TODO provisoire ajoute seulement l'utilisateur connecte a la facture
-                hashMap.put(modele.getUtilisateurConnecte(), vueAjouterFacture.getMontantFactureCADInput());
-                factureAAjouter.setMontantPayeParParUtilisateur(hashMap);
+
+                ajouterPayeursAFacture(factureAAjouter);
+
 
                 if (factureAAjouter.getLibelle() == null) {
                     factureAAjouter.setLibelle(activityAjouterFacture.getResources().getString(R.string.txt_facture_par_defaut) + " " + factureAAjouter.getDateFacture().toString());
@@ -197,7 +197,10 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 }
 
                 boolean factureAjoutee = iGestionFacture.creerFacture(factureAAjouter);
-                msg = handlerReponse.obtainMessage(MSG_AJOUT_FACTURE_REUSSI, factureAjoutee);
+                if(factureAjoutee)
+                    msg = handlerReponse.obtainMessage(MSG_AJOUT_FACTURE_REUSSI);
+                else
+                    msg = handlerReponse.obtainMessage(MSG_ERREUR_AJOUT_FACTURE);
 
             } catch (NumberFormatException | DateTimeParseException e) {
                 msg = handlerReponse.obtainMessage(MSG_ERREUR);
@@ -210,6 +213,21 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         });
         filEsclave.start();
     }
+    private void ajouterPayeursAFacture(Facture facture){
+        if(vueAjouterFacture.getMultipleUtilisateursPayeurs()==null){
+            HashMap<Utilisateur, Double> hashMap = new HashMap<>();
+            hashMap.put(modele.getUtilisateurConnecte(), vueAjouterFacture.getMontantFactureCADInput());
+            for(Utilisateur utilisateur : modele.getGroupeEnCours().getUtilisateurs()){
+                hashMap.putIfAbsent(utilisateur, 0.0);
+            }
+            facture.setMontantPayeParParUtilisateur(hashMap);
+            }
+
+            else {
+                facture.setMontantPayeParParUtilisateur(montantsUstilisateurAAjouter);
+            }
+    }
+
 
     @Override
     public String trouverMontantFactureEnCours() {
@@ -223,8 +241,11 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     }
 
     @Override
-    public String trouverDateFactureEnCours() {
-        return modele.getFactureEnCours().getDateFacture().toString();
+    public String trouverDateFactureEnCours() {//TODO verif pourquoi la date disparait du modele quand on appuie sur annuler dans l'activite voir modif facture
+        if(modele.getFactureEnCours().getDateFacture()!=null)
+            return modele.getFactureEnCours().getDateFacture().toString();
+        else
+            return null;
     }
 
 
@@ -272,9 +293,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                     factureAModifier.setLibelle(vueAjouterFacture.getTitreInput());
                     factureAModifier.setDateFacture(vueAjouterFacture.getDateFactureInput());
                     factureAModifier.setMontantTotal(vueAjouterFacture.getMontantFactureCADInput());
-                    //TODO solution provisoire seul l'utilisateur connecté est pris en compte
-                    HashMap<Utilisateur, Double> montantsPayesParUtilisateur = new HashMap<>();
-                    montantsPayesParUtilisateur.put(modele.getUtilisateurConnecte(),vueAjouterFacture.getMontantFactureCADInput());
+
                     if (photoChangee) {
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                         vueAjouterFacture.getBitmapFacture().compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -282,8 +301,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                         factureAModifier.getPhotos().add(bytes);
 
                     }
-                    factureAModifier.setMontantPayeParParUtilisateur(montantsPayesParUtilisateur);
-
+                    ajouterPayeursAFacture(factureAModifier);
 
 
                     boolean estReussi = iGestionFacture.modifierFacture(factureAModifier);
@@ -302,6 +320,54 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         });
         filEsclave.start();
     }
+
+    @Override
+    public String presenterPayeurs() {
+        String payeurs = "";
+
+        if(modele.getFactureEnCours()!=null && modele.getFactureEnCours().getMontantPayeParParUtilisateur()!=null){//Cas d'une facture deja existante
+        Map<Utilisateur, Double> montantsUstilisateur = modele.getFactureEnCours().getMontantPayeParParUtilisateur();
+            for( Utilisateur utilisateur : modele.getGroupeEnCours().getUtilisateurs() ){
+                if(montantsUstilisateur.get(utilisateur)!=null &&  montantsUstilisateur.get(utilisateur)>0){
+                    if(vueAjouterFacture.getMultipleUtilisateursPayeurs()==null){
+                        payeurs+= utilisateur.getNom() + activityAjouterFacture.getResources().getString(R.string.a_paye) +
+                                montantsUstilisateur.get(utilisateur) +"\n";
+                    }
+                }
+            }
+        }else { //Cas ajout ou modification
+            montantsUstilisateurAAjouter = new HashMap<Utilisateur, Double>();
+            try{vueAjouterFacture.getMontantFactureCADInput();}catch (NumberFormatException e) {return "";}
+            int i = 0;
+            int nbrPayeurs = 0 ;
+            if (vueAjouterFacture.getMultipleUtilisateursPayeurs() != null) { // Cas ou il y a plusieurs payeurs
+                while (i< vueAjouterFacture.getMultipleUtilisateursPayeurs().length ){
+                    if (vueAjouterFacture.getMultipleUtilisateursPayeurs()[i] ) {
+                        nbrPayeurs++;
+                        montantsUstilisateurAAjouter.putIfAbsent(modele.getGroupeEnCours().getUtilisateurs().get(i),
+                                                                 0.0);
+                    }
+                    i++;
+                }
+                for(Utilisateur utilisateur : montantsUstilisateurAAjouter.keySet()){
+                    montantsUstilisateurAAjouter.put(utilisateur, vueAjouterFacture.getMontantFactureCADInput()/nbrPayeurs);
+                    payeurs+= utilisateur.getNom() + activityAjouterFacture.getResources().getString(R.string.a_paye) +
+                            montantsUstilisateurAAjouter.get(utilisateur) +"\n";
+                }
+                for(Utilisateur utilisateur : modele.getGroupeEnCours().getUtilisateurs()){
+                    montantsUstilisateurAAjouter.putIfAbsent(utilisateur, 0.0);
+                }
+
+            }else
+
+            payeurs+= modele.getUtilisateurConnecte().getNom() + activityAjouterFacture.getResources().getString(R.string.a_paye) +
+                    vueAjouterFacture.getMontantFactureCADInput() +"\n";
+        }
+
+
+        return payeurs;
+    }
+
     public void rechargerFactureEnCours(){
         filEsclave = new Thread(new Runnable() {
             @Override
@@ -318,10 +384,6 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             }
         });
         filEsclave.start();
-    }
-
-    public boolean isPhotoChangee() {
-        return photoChangee;
     }
 
     public void setPhotoChangee(boolean photoChangee) {

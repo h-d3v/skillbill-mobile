@@ -26,6 +26,8 @@ public interface IContratVPAjouterFacture {
         Monnaie getMonnaieUserConnecte();
 
         void envoyerRequeteModificationFacture();
+
+        String presenterPayeurs();
     }
 
     interface IVueAjouterFacture{
@@ -47,5 +49,6 @@ public interface IContratVPAjouterFacture {
 
         void ouvrirProgressBar();
 
+        boolean[] getMultipleUtilisateursPayeurs();
     }
 }

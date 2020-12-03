@@ -82,6 +82,8 @@
     <string name="close_drawer">Close drawer</string>
     <string name="modif_effectuee">La modification abie été effectuée</string>
     <string name="erreur_modification">Une erreur s\'est produite, les données n\'ont pas été modifiées</string>
+    <string name="a_paye"> a payé </string>
+    <string name="au_moins_un">Au moins un utilisateur doit être selectionné</string>
 
 
 </resources>
