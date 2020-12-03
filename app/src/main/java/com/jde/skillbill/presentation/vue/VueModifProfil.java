@@ -96,7 +96,7 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
                 }
             }
         });
-        //todo, textwatchers pour tous les champs avec regex
+
 
         tfNewCourriel.addTextChangedListener(new TextWatcher() {
             @Override
