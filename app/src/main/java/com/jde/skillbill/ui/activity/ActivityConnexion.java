@@ -1,20 +1,11 @@
 package com.jde.skillbill.ui.activity;
 
 import android.os.Bundle;
-import android.view.Menu;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.ui.AppBarConfiguration;
 
-import com.google.android.material.navigation.NavigationView;
 import com.jde.skillbill.R;
 import com.jde.skillbill.donnees.APIRest.SourceDonneesAPIRest;
-import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.presenteur.PresenteurConnexion;
 import com.jde.skillbill.presentation.vue.VueConnexion;

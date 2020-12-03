@@ -26,9 +26,7 @@
             android:layout_height="110dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/material_drawer_ico_account_layer"
             android:contentDescription="@string/app_logo"
-            android:src="@drawable/material_drawer_ico_account"
             app:tint="@color/colorPrimaryDark" />
 
         <TextView

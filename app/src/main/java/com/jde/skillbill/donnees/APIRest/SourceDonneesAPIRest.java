@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import kotlin.NotImplementedError;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -466,6 +467,38 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         return false;
     }
 
+
+    public boolean ajouterPhoto(Facture facture, byte[] photo) throws SourceDonneeException, NotImplementedError {
+        URL url = null;
+        try {
+
+            url = new URL(URI_BASE+POINT_ENTREE_FACTURE+ ((FactureRestAPI) facture).getId()  );
+        } catch (MalformedURLException e) {
+            Log.e("SOurceDonneAPI : ", e.toString());
+        } catch (ClassCastException e){
+            Log.e("SOurceDonneAPI : ", e.toString());
+        }
+
+        HttpURLConnection httpURLConnection= null;
+        try {
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
+            httpURLConnection.setRequestMethod("PUT");
+            reglerTimeout(httpURLConnection);
+            httpURLConnection.setDoOutput(true);
+            httpURLConnection.setDoInput(true);
+            OutputStream outputStream = httpURLConnection.getOutputStream();
+        }
+        catch (java.net.SocketTimeoutException e){
+            throw new SourceDonneeException("Connection non disponible");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     @Override
     public boolean modifierFacture(Facture facture) throws SourceDonneeException {
         URL url = null;
@@ -493,12 +526,15 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
             ((FactureRestAPI) facture).setPayeursEtMontantsListe(payeursEtMontant);
             facture.setMontantTotal(facture.getMontantTotal());
-            if(!Objects.requireNonNull(facture.getPhotos()).isEmpty()){
+            if(Objects.requireNonNull(facture.getPhotos()).size()!=0){ // Ne fonctionne que pour une photo
                 for(byte[] bytes : facture.getPhotos()){
-
-                    ((FactureRestAPI) facture).getPhotosRestAPI().get(0).setPhotoEncodee(Base64.encodeToString(bytes, Base64.DEFAULT));
+                    if(((FactureRestAPI) facture).getPhotosRestAPI().size()!=0)
+                        ((FactureRestAPI) facture).getPhotosRestAPI().get(0).setPhotoEncodee(Base64.encodeToString(bytes, Base64.DEFAULT));
+                    else
+                        ((FactureRestAPI) facture).getPhotosRestAPI().add (new PhotoRestApi(Base64.encodeToString(bytes, Base64.DEFAULT)));
                 }
             }
+
             Gson gson = new GsonBuilder().create();
             String json = gson.toJson(facture);
 
