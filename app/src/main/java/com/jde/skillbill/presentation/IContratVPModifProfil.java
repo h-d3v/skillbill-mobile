@@ -16,6 +16,8 @@ public interface IContratVPModifProfil {
         void setEmailUser(String nom);
 
         void setMdpUser(String mdp);
+
+        boolean tousLesChampsValides();
     }
 
     interface PresenteurModifProfil {

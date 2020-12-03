@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.ui.AppBarConfiguration;
+
 
 import com.google.android.material.navigation.NavigationView;
 import com.jde.skillbill.R;
@@ -27,9 +27,6 @@ public class ActivityConnexion extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_connexion);
         Modele modele = new Modele();
-
-
-
         VueConnexion vue=new VueConnexion();
         _presenteur=new PresenteurConnexion(this,modele, vue);
         _presenteur.setDataSource(new SourceDonneesAPIRest());
