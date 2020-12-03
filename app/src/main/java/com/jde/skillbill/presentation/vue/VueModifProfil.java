@@ -1,6 +1,8 @@
 package com.jde.skillbill.presentation.vue;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,9 +32,10 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
     private TextInputEditText tfNewMdp;
     private AutoCompleteTextView tfNewMonnaie;
 
-    private boolean mdpValide = false;
-    private boolean nomValide = false;
-    private boolean emailValide = false;
+    private boolean mdpValide =true;
+    private boolean nomValide = true;
+    private boolean emailValide = true;
+
     @Override
     public void setPresenteur(IContratVPModifProfil.PresenteurModifProfil presenteur) {
         _presenteur=presenteur;
@@ -67,7 +70,84 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
             _presenteur.modifierProfil();
         });
 
-        //todo, textwatchers pour tous les champs avec regex
+        btnSave.setEnabled(false);
+
+        tfNewNom.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!getNouveauNom().matches("[A-z\\s]+")) {
+                    nomValide=false;
+                    btnSave.setEnabled(false);
+                    tfNewNom.setError("Le nom doit être valide.");
+                } else {
+                    nomValide = true;
+                    if (tousLesChampsValides()) {
+                        btnSave.setEnabled(true);
+                    }
+                }
+            }
+        });
+
+
+        tfNewCourriel.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!getNouveauEmail().matches("[A-z0-9._%+-]+@[A-z0-9.-]+\\.[A-z]{2,4}")) {
+                    emailValide=false;
+                    btnSave.setEnabled(false);
+                    tfNewCourriel.setError("Le courriel doit être valide.");
+                } else {
+                    emailValide = true;
+                    if (tousLesChampsValides()) {
+                        btnSave.setEnabled(true);
+                    }
+                }
+            }
+        });
+
+        tfNewMdp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!getNouveauMdp().matches("[.\\S]+") || getNouveauMdp().length() < 8) {
+                    mdpValide=false;
+                    btnSave.setEnabled(false);
+                    tfNewMdp.setError("Le mot de passe doit être valide et contenir au moins 8 caractères.");
+                } else {
+                    mdpValide = true;
+                    if (tousLesChampsValides()) {
+                        btnSave.setEnabled(true);
+                    }
+                }
+            }
+        });
+
+
+
         return racine;
     }
 
@@ -109,5 +189,12 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
     @Override
     public void setMdpUser(String mdp){tfNewMdp.setText(mdp);}
 
+    /**
+     * @return true si tous les champs remplis par le user sont valides
+     */
+    @Override
+    public boolean tousLesChampsValides() {
+        return emailValide && nomValide && mdpValide;
+    }
 
 }

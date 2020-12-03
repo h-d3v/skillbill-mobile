@@ -8,6 +8,7 @@ import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
+import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueConnexion;
 import com.jde.skillbill.ui.activity.ActivityConnexion;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.*;
 @RunWith(AndroidJUnit4.class)
 public class PresenteurConnexionTest {
     @Test
-    public void testTenterConnectionReussie(){
+    public void testTenterConnectionReussie() throws SourceDonneeException {
         final ISourceDonnee source = mock(ISourceDonnee.class);
         final IGestionUtilisateur iGestionUtilisateur;
         final Modele modele =mock(Modele.class);
@@ -55,7 +56,7 @@ public class PresenteurConnexionTest {
     }
 
     @Test
-    public void testTenterConnectionEchouee() {
+    public void testTenterConnectionEchouee() throws SourceDonneeException {
         final ISourceDonnee source = mock(ISourceDonnee.class);
         final IGestionUtilisateur iGestionUtilisateur;
         final Modele modele = mock(Modele.class);

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+
 import com.jde.skillbill.R;
 import com.jde.skillbill.donnees.APIRest.SourceDonneesAPIRest;
 import com.jde.skillbill.presentation.modele.Modele;
@@ -18,9 +19,6 @@ public class ActivityConnexion extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activite_connexion);
         Modele modele = new Modele();
-
-
-
         VueConnexion vue=new VueConnexion();
         _presenteur=new PresenteurConnexion(this,modele, vue);
         _presenteur.setDataSource(new SourceDonneesAPIRest());

@@ -66,7 +66,7 @@ public class PresenteurModifProfil implements IContratVPModifProfil.PresenteurMo
                 }
                 if(msg.what == MSG_ERREUR){
                     //mettre a jours les infos de l'utilisateurs dans l'application
-                    Toast.makeText(activite, "Erreur, vos infos n'ont pas pu etre mise a jours", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activite, "Ce courriel est deja pris, veuillez en choisir un autre", Toast.LENGTH_SHORT).show();
                 }
                 if(msg.what == MSG_PAS_DE_CONNECTION){
                     Toast.makeText(activite, R.string.pas_de_connection_internet, Toast.LENGTH_SHORT).show();
