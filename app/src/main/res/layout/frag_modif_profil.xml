@@ -20,15 +20,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-
             android:clickable="true"
             android:layout_width="104dp"
             android:layout_height="110dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
             android:contentDescription="@string/app_logo"
-            app:tint="@color/colorPrimaryDark" />
-
+            android:src="@drawable/no_profile_pic"
+            app:tint="#000000" />
         <TextView
 
             android:layout_width="wrap_content"
@@ -123,7 +122,7 @@
             android:layout_width="400dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
-            android:hint="Mot de passe"
+            android:hint="Nouveau mot de passe"
             android:inputType="textPassword"
             android:shadowColor="@color/colorPrimary"
             android:textColorHighlight="@color/colorPrimary" />
@@ -163,6 +162,7 @@
         android:layout_marginBottom="120dp"
         android:backgroundTint="@color/colorPrimary"
         android:text="Enregistrer"
+        app:icon="@drawable/round_save_black_18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
