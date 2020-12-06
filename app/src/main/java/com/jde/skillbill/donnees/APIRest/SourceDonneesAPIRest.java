@@ -1,5 +1,6 @@
 package com.jde.skillbill.donnees.APIRest;
 
+import android.content.SharedPreferences;
 import android.util.Base64;
 import android.util.JsonReader;
 import android.util.Log;
@@ -47,6 +48,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     private static final int CONNECT_TIME_OUT = 4000;
     private final String POINT_ENTREE_FACTURE="factures/";
     private final String POINT_ENTREE_PHOTO = "photos/";
+    private static String apiKey="";
 
 
     @Override
@@ -58,10 +60,12 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         } catch (MalformedURLException e) {
             Log.e("SOurceDonneAPI: ", e.toString());
         }
+
         try {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             Gson gson = new Gson();
             reglerTimeout(httpURLConnection);
+            reglerHeader(httpURLConnection);
             if (httpURLConnection.getResponseCode() == 200) {
                 InputStreamReader inputStreamReader = new InputStreamReader(httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
 
@@ -113,6 +117,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             try {
                 httpURLConnection = (HttpURLConnection) url.openConnection();
                 reglerTimeout(httpURLConnection);
+                reglerHeader(httpURLConnection);
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
                 httpURLConnection.setDoOutput(true);
@@ -170,6 +175,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 .url(url)
                 .method("PUT", body)
                 .addHeader("Content-Type", "application/json")
+                .addHeader("api-key", "")//TODO
                 .build();
 
         try {
@@ -207,6 +213,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
             reglerTimeout(httpURLConnection);
+            reglerHeader(httpURLConnection);
             httpURLConnection.setRequestMethod("HEAD");
             httpURLConnection.addRequestProperty("Accept-Encoding", "identity");
 
@@ -284,20 +291,18 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
 
+
             OutputStream outputStream = httpURLConnection.getOutputStream();
             Gson gson = new GsonBuilder().create();
             String json =  gson.toJson(new UtilisateurRestAPI("",email,mdp, null , 0));
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
 
-
             if(httpURLConnection.getResponseCode()==200){
-              InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
-              utilisateur = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
-
-              if(utilisateur==null || utilisateur.getId()==0) return null;
-
-
+                InputStream inputStream = httpURLConnection.getInputStream();
+                utilisateur = decoderUtilisateur(inputStream);
+                if(utilisateur==null || utilisateur.getId()==0)
+                    return null;
             }
 
 
@@ -331,6 +336,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
             reglerTimeout(httpURLConnection);
+            reglerHeader(httpURLConnection);
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
             httpURLConnection.setDoOutput(true);
@@ -371,6 +377,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
             reglerTimeout(httpURLConnection);
+            reglerHeader(httpURLConnection);
             Gson gson = new Gson();
             if(httpURLConnection.getResponseCode()==200){
                 InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
@@ -404,6 +411,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try{
             HttpURLConnection httpURLConnection= (HttpURLConnection) url.openConnection();
             reglerTimeout(httpURLConnection);
+            reglerHeader(httpURLConnection);
             Gson gson = new Gson();
             if(httpURLConnection.getResponseCode()==200){
                 InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
@@ -441,6 +449,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
+            reglerHeader(httpURLConnection);
             reglerTimeout(httpURLConnection);
 
             if(httpURLConnection.getResponseCode()==200){
@@ -481,6 +490,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         HttpURLConnection httpURLConnection= null;
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
+            reglerHeader(httpURLConnection);
             httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
             httpURLConnection.setRequestMethod("PUT");
             reglerTimeout(httpURLConnection);
@@ -513,6 +523,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
             httpURLConnection.setRequestMethod("PUT");
+            reglerHeader(httpURLConnection);
             reglerTimeout(httpURLConnection);
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setDoInput(true);
@@ -574,6 +585,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             reglerTimeout(httpURLConnection);
+            reglerHeader(httpURLConnection);
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
             httpURLConnection.setDoOutput(true);
@@ -654,6 +666,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         try {
             httpURLConnection = (HttpURLConnection) url.openConnection();
             reglerTimeout(httpURLConnection);
+            reglerHeader(httpURLConnection);
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
 
@@ -709,6 +722,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 try {
                     httpURLConnection = (HttpURLConnection) url.openConnection();
                     reglerTimeout(httpURLConnection);
+                    reglerHeader(httpURLConnection);
                     httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
 
@@ -732,48 +746,71 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                     e.printStackTrace();
                     }
                 }
-
             }
 
         return photosBytes;
     }
 
 
-    private Utilisateur decoderUtilisateur( InputStream utilisateurEncode ) throws IOException {
-        InputStreamReader responseBodyReader =
-                new InputStreamReader(utilisateurEncode, "UTF-8");
+    private UtilisateurRestAPI decoderUtilisateur( InputStream utilisateurEncode ) throws SourceDonneeException  {
 
-        JsonReader jsonReader = new JsonReader(responseBodyReader);
-        jsonReader.beginObject();
+        try{
+            InputStreamReader responseBodyReader =
+                    new InputStreamReader(utilisateurEncode, "UTF-8");
+            String apiKey="";
 
-        String email="";
-        String nom="";
-        int id=-1;
-        String monnaieAPI= "";
-        while (jsonReader.hasNext()) {
-            String key = jsonReader.nextName();
+            JsonReader jsonReader = new JsonReader(responseBodyReader);
+            jsonReader.beginObject();
 
-            if (key.equals("Courriel")) {
-                email = jsonReader.nextString();
+            String email="";
+            String nom="";
+            int id=-1;
+            String monnaieAPI= "";
+            while (jsonReader.hasNext()) {
+                String key = jsonReader.nextName();
+
+                if (key.equals("Courriel")) {
+                    email = jsonReader.nextString();
+                }
+                else if (key.equals("Nom")) {
+                    nom= jsonReader.nextString();
+                }
+                else if (key.equals("Id")) {
+                    id= jsonReader.nextInt();
+                }
+                else if (key.equals("Monnaie")) {
+                    monnaieAPI= jsonReader.nextString();
+                }
+                else if(key.equals("ApiKey")) {
+                    apiKey = jsonReader.nextString();
+                }
+                else {
+                    jsonReader.skipValue();
+                }
             }
-            else if (key.equals("Nom")) {
-                nom= jsonReader.nextString();
-            }
-            else if (key.equals("Id")) {
-                id= jsonReader.nextInt();
-            }
-            else if (key.equals("Monnaie")) {
-                monnaieAPI= jsonReader.nextString();
-            }
-            else {
-                jsonReader.skipValue();
-            }
+
+        if("".equals(apiKey)){
+            throw new SourceDonneeException("La clé d'api est introuvable");
         }
 
-        return new UtilisateurRestAPI( nom, email, "", Monnaie.valueOf(monnaieAPI), id);
+        else {
+            SourceDonneesAPIRest.apiKey = apiKey ;
+            return new UtilisateurRestAPI(nom, email, "", Monnaie.valueOf(monnaieAPI),id);
+        }
+
+        }
+        catch (IOException e){
+            Log.e("SourceAPI", "erreur de deserialisation JSON utilisateur ");
+        }
+
+        return null;
     }
     private static void reglerTimeout(HttpURLConnection httpURLConnection){
         httpURLConnection.setReadTimeout(READ_TIME_OUT);
         httpURLConnection.setConnectTimeout(CONNECT_TIME_OUT);
+    }
+    private static void reglerHeader(HttpURLConnection httpURLConnection){
+
+        httpURLConnection.setRequestProperty("api-key", apiKey);
     }
 }

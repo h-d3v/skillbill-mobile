@@ -245,7 +245,8 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         if(modele.getFactureEnCours().getDateFacture()!=null)
             return modele.getFactureEnCours().getDateFacture().toString();
         else
-            return null;
+            rechargerFactureEnCours();
+        return null;
     }
 
 

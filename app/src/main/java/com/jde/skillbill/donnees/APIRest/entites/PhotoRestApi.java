@@ -3,7 +3,9 @@ package com.jde.skillbill.donnees.APIRest.entites;
 
 import com.google.gson.annotations.SerializedName;
 
-public class PhotoRestApi {
+import java.io.Serializable;
+
+public class PhotoRestApi implements Serializable {
     @SerializedName("LowResEncodeBase64")
     private String photoEncodee;
     @SerializedName("Id")
