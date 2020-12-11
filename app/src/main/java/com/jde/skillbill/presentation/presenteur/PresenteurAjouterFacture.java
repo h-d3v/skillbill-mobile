@@ -354,10 +354,10 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         Map<Utilisateur, Double> montantsUstilisateur = modele.getFactureEnCours().getMontantPayeParParUtilisateur();
             for( Utilisateur utilisateur : modele.getGroupeEnCours().getUtilisateurs() ){
                 if(montantsUstilisateur.get(utilisateur)!=null &&  montantsUstilisateur.get(utilisateur)>0){
-                    if(vueAjouterFacture.getMultipleUtilisateursPayeurs()==null){
+
                         payeurs+= utilisateur.getNom() + activityAjouterFacture.getResources().getString(R.string.a_paye) +
-                                montantsUstilisateur.get(utilisateur) + System.getProperty("line.separator");
-                    }
+                                montantsUstilisateur.get(utilisateur) + ".\n"+ System.getProperty("line.separator");
+
                 }
             }
         }else { //Cas ajout d'une facure
@@ -386,7 +386,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             }else
 
             payeurs+= modele.getUtilisateurConnecte().getNom() + activityAjouterFacture.getResources().getString(R.string.a_paye) +
-                    vueAjouterFacture.getMontantFactureCADInput() +System.getProperty("line.separator");
+                    vueAjouterFacture.getMontantFactureCADInput() + ".\n" +System.getProperty("line.separator");
         }
 
 
