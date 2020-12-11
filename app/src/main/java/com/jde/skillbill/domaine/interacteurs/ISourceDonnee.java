@@ -3,6 +3,7 @@ package com.jde.skillbill.domaine.interacteurs;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
+import com.jde.skillbill.domaine.entites.UtilisateurException;
 import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 
 import java.time.LocalDate;
@@ -24,13 +25,10 @@ public interface ISourceDonnee {
     List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur)throws SourceDonneeException;
 //endregion
 
-    Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException, UtilisateurException;
-
 //region Utilisateur
-    Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException;
+    Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException, UtilisateurException;
     boolean utilisateurExiste(String email) throws SourceDonneeException ;
     Utilisateur creerUtilisateur(Utilisateur utilisateur)throws SourceDonneeException;
-
     /**
      *
      * @param email
