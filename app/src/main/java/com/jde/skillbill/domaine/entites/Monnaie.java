@@ -6,7 +6,7 @@ public enum Monnaie {
     GBP(0.58, "£", 1.73),
     EUR(0.64, "€",1.55),
     AUD(1.05,"A$", 0.95);
-    //reprsente la valeur du dollard canadien en la devise
+    //reprsente la valeur du dollar canadien en la devise
     private final double tauxCad;
     private final String symbol;
     //represente la valeur de la devise en dollar canadien

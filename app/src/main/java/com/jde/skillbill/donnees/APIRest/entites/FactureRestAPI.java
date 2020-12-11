@@ -15,6 +15,7 @@ import java.util.Map;
 public class FactureRestAPI extends Facture {
     @SerializedName("PayeursEtMontant")
     private List<PayeursEtMontant> payeursEtMontantsListe;
+
     @SerializedName("DateCreation")
     private String date;
     @SerializedName("Id")

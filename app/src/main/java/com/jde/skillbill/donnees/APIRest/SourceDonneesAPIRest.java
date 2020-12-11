@@ -37,7 +37,7 @@ import okhttp3.Response;
 
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
-    private final String URI_BASE = "http://192.168.0.23:44302/api/";
+    private final String URI_BASE = "https://skillbillweb.azurewebsites.net/api/";
     private final String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
     private final String POINT_ENTREE_GROUPE = "groupes/";
     private final String POINT_ENTREE_LOGIN ="login";
@@ -73,7 +73,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
                 for(FactureRestAPI factureRestAPI :factureRestAPIS) {
                     HashMap<Utilisateur, Double> utilisateurMontantMap = new HashMap<>();
-                    factureRestAPI.setDateFacture(LocalDate.parse(factureRestAPI.getDate().substring(0,10)));
+                    //factureRestAPI.setDateFacture(LocalDate.parse(factureRestAPI.getDate().substring(0,10)));
 
                     for(PayeursEtMontant payeursEtMontant : factureRestAPI.getPayeursEtMontantsListe()){
 
@@ -353,9 +353,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     @Override
     public Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe) throws SourceDonneeException {
         URL url = null;
-
-
-
         try {
 
             url = new URL(URI_BASE+POINT_ENTREE_UTILISATEUR+((UtilisateurRestAPI) utilisateur).getId()+"/groupes");
@@ -374,7 +371,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
             OutputStream outputStream = httpURLConnection.getOutputStream();
             Gson gson = new GsonBuilder().create();
             String json = gson.toJson(new GroupeRestApi(groupe.getNomGroupe(), utilisateur, groupe.getMonnaieDuGroupe(), 0));
-            Log.println(7,"json", json);
             byte[] input = json.getBytes(StandardCharsets.UTF_8);
             outputStream.write(input, 0,input.length);
 
