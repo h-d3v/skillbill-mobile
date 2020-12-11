@@ -10,24 +10,24 @@
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="72dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/gradient_bg_toolbar"
+        android:maxHeight="160dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/tlModifNom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:clickable="true"
             android:layout_width="104dp"
             android:layout_height="110dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
+            android:clickable="true"
             android:contentDescription="@string/app_logo"
             android:src="@drawable/no_profile_pic"
             app:tint="#000000" />
+
         <TextView
 
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/oswald"
-            android:text="Modifier votre profil"
+            android:text="@string/modifier_votre_profil"
             android:textColor="#000000"
             android:textSize="30sp" />
     </LinearLayout>
@@ -45,13 +45,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="9dp"
+        android:layout_marginTop="30dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
         app:boxCornerRadiusTopStart="30dp"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@+id/tlModifEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
@@ -61,8 +60,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfModifierNom"
             android:layout_width="400dp"
-            android:layout_height="70dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:backgroundTint="#66000000"
             android:hint="Nom"
             android:inputType="textPersonName"
             android:shadowColor="@color/colorPrimary"
@@ -74,13 +74,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="11dp"
+        android:layout_marginTop="8dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
         app:boxCornerRadiusTopStart="30dp"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@+id/tlModifMdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tlModifNom"
@@ -90,9 +89,10 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfModifEmail"
             android:layout_width="400dp"
-            android:layout_height="70dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:hint="Courriel"
+            android:backgroundTint="#66000000"
+            android:hint="exemple@Courriel.ca"
             android:inputType="textPersonName"
             android:shadowColor="@color/colorPrimary"
             android:textColorHighlight="@color/colorPrimary" />
@@ -103,44 +103,44 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="8dp"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
+
         app:boxCornerRadiusTopStart="30dp"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tlModifEmail"
         app:startIconDrawable="@drawable/round_vpn_key_white_18dp"
-        app:startIconTint="@color/colorAccent"
-        >
+        app:startIconTint="@color/colorAccent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tfModifMdp"
             android:layout_width="400dp"
-            android:layout_height="70dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:hint="Nouveau mot de passe"
+            android:backgroundTint="#66000000"
+            android:hint="@string/nouveau_mdp_laissez_vide_si_inchang"
             android:inputType="textPassword"
             android:shadowColor="@color/colorPrimary"
             android:textColorHighlight="@color/colorPrimary" />
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout2"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="33dp"
-        android:hint="Devise"
+        android:layout_marginTop="8dp"
+        android:hint="@string/devise"
         app:boxCornerRadiusBottomEnd="30dp"
         app:boxCornerRadiusBottomStart="30dp"
         app:boxCornerRadiusTopEnd="30dp"
         app:boxCornerRadiusTopStart="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnEnrgstProfil"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tlModifMdp"
@@ -149,23 +149,65 @@
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/modif_monnaie_dropdown"
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#66000000"
             android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tlMdpCourrant"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="29dp"
+        app:boxCornerRadiusBottomEnd="30dp"
+        app:boxCornerRadiusBottomStart="30dp"
+        app:boxCornerRadiusTopEnd="30dp"
+
+        app:boxCornerRadiusTopStart="30dp"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+        app:startIconDrawable="@drawable/round_vpn_key_white_18dp"
+        app:startIconTint="@color/colorAccent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tfMdpCourrant"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#66000000"
+            android:hint="@string/mot_de_passe_actuel"
+            android:inputType="textPassword"
+            android:shadowColor="@color/colorPrimary"
+            android:textColorHighlight="@color/colorPrimary" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarModifProfil"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="148dp"
+        android:layout_height="104dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tlMdpCourrant" />
 
     <Button
         android:id="@+id/btnEnrgstProfil"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="190dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="120dp"
+        android:layout_marginTop="18dp"
         android:backgroundTint="@color/colorPrimary"
-        android:text="Enregistrer"
+        android:foregroundGravity="center"
+        android:text="@string/enregistrer"
         app:icon="@drawable/round_save_black_18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+        app:layout_constraintTop_toTopOf="@+id/progressBarModifProfil"
         app:rippleColor="#232222" />
 </androidx.constraintlayout.widget.ConstraintLayout>

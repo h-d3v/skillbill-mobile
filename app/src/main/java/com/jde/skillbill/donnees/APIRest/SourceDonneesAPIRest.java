@@ -12,6 +12,7 @@ import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
+import com.jde.skillbill.domaine.entites.UtilisateurException;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.donnees.APIRest.entites.*;
@@ -40,7 +41,7 @@ import okhttp3.Response;
 
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
-    private final String URI_BASE = "http://192.168.0.23:44302/api/";
+    private final String URI_BASE = "http://192.168.1.32:51360/api/";
     private final String POINT_ENTREE_UTILISATEUR ="utilisateurs/";
     private final String POINT_ENTREE_GROUPE = "groupes/";
     private final String POINT_ENTREE_LOGIN ="login";
@@ -159,7 +160,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     }
 
     @Override
-    public Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException {
+    public Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException, UtilisateurException {
         Utilisateur utilisateurRetour=null;
         URL url = null;
         try {
@@ -170,12 +171,18 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\r\n    'Nom': '"+utilisateurModifier.getNom()+"',\r\n    'Courriel': '"+utilisateurModifier.getCourriel()+"',\r\n    'MotDePasse': '"+utilisateurModifier.getMotPasse()+"'\r\n, 'Monnaie': '"+utilisateurModifier.getMonnaieUsuelle().name()+"'\r\n}");
+        String requestUserJson="{\r\n    'Nom': '"+utilisateurModifier.getNom()+"',\r\n    'Courriel': '"+utilisateurModifier.getCourriel()+"',\r\n    " +
+                "'MotDePasse': '"+utilisateurModifier.getMotPasse()+"'\r\n, 'Monnaie': '"+utilisateurModifier.getMonnaieUsuelle().name()+"'\r\n";
+        if(utilisateurModifier.getNouveauMotDePasse()!=null&&utilisateurModifier.getNouveauMotDePasse().length()>=8){
+            requestUserJson+=", 'MotDePasseMod': '"+utilisateurModifier.getNouveauMotDePasse()+"'\r\n";
+        }
+        RequestBody body = RequestBody.create(mediaType, requestUserJson+"}");
+        assert url != null;
         Request request = new Request.Builder()
                 .url(url)
                 .method("PUT", body)
                 .addHeader("Content-Type", "application/json")
-                .addHeader("api-key", "")//TODO
+                .addHeader("api-key", "")
                 .build();
 
         try {
@@ -187,7 +194,11 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
                 InputStreamReader inputStreamReader= new InputStreamReader(Objects.requireNonNull(response.body()).byteStream(), StandardCharsets.UTF_8);
                 utilisateurRetour = gson.fromJson(inputStreamReader, UtilisateurRestAPI.class);
             } else if (response.code() == 409) {
-              //todo faire un truc avec le 409 ou juste ne rien faire?
+              //le 409 est retourner si l'email est deja pris
+                throw new UtilisateurException("Courriel deja pris, choisisse en un autre SVP.");
+            } else if(response.code()==403){
+                //le 403 est retourner si la combinaison id/mot de passe actuel est mauvaise.
+                throw new UtilisateurException("Le mot de passe actuel entré n'est pas le bon.");
             }
         } catch(ConnectException e) {
             Log.e("erreur connection api", "message:" + Objects.requireNonNull(e.getMessage()) + " \n cause: " + e.getCause());
@@ -805,6 +816,7 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
         return null;
     }
+
     private static void reglerTimeout(HttpURLConnection httpURLConnection){
         httpURLConnection.setReadTimeout(READ_TIME_OUT);
         httpURLConnection.setConnectTimeout(CONNECT_TIME_OUT);

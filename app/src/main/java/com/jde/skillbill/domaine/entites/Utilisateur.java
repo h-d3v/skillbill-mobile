@@ -16,8 +16,12 @@ public class Utilisateur implements Serializable {
     @SerializedName("Courriel")
     private String courriel;
     private String numeroTelephone;
+
     @SerializedName("Monnaie")
     private Monnaie monnaieUsuelle;
+
+    @SerializedName("MotDePasseMod")
+    private String nouveauMotDePasse;
 
     public Utilisateur(String nom, String courriel, String motPasse, Monnaie monnaie) {
         this.nom = nom;
@@ -65,6 +69,14 @@ public class Utilisateur implements Serializable {
 
     public void setNumeroTelephone(String numeroTelephone) {
         this.numeroTelephone = numeroTelephone;
+    }
+
+    public String getNouveauMotDePasse() {
+        return nouveauMotDePasse;
+    }
+
+    public void setNouveauMotDePasse(String nouveauMotDePasse) {
+        this.nouveauMotDePasse = nouveauMotDePasse;
     }
 
     public Monnaie getMonnaieUsuelle() {
