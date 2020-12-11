@@ -9,7 +9,7 @@ public enum Monnaie {
     //reprsente la valeur du dollard canadien en la devise
     private final double tauxCad;
     private final String symbol;
-    //represente la valeur de la devise en dollard canadien
+    //represente la valeur de la devise en dollar canadien
     private final double tauxDevise;
     Monnaie(double tauxCad, String symbol, double tauxDevise) {
         this.tauxCad = tauxCad;

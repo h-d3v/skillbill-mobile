@@ -84,6 +84,7 @@
     <string name="erreur_modification">Une erreur s\'est produite, les données n\'ont pas été modifiées</string>
     <string name="a_paye"> \u0020 a payé \u0020 </string>
     <string name="au_moins_un">Au moins un utilisateur doit être selectionné</string>
+    <string name="dans_votre_monnaie">dans votre monnaie</string>
 
 
 </resources>

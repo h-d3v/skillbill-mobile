@@ -67,7 +67,8 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
         tvUtilisateursPayeurs =  racine.findViewById(R.id.payeursActuels);
         toastAuMoinsUnUtilisateur = Toast.makeText(racine.getContext(), R.string.au_moins_un, Toast.LENGTH_LONG);
         Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
-        tvTitreMontant.setText("Montant en " +monnaieUser.name()+"-"+monnaieUser.getSymbol());
+        Monnaie monnaieGroupe =presenteurAjouterFacture.getMonnaieGroupe();
+        tvTitreMontant.setText("Montant en " +monnaieGroupe.name()+"-"+monnaieGroupe.getSymbol());
         editTextMontant.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -213,12 +214,11 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
      */
     @Override
     public double getMontantFactureCADInput() throws NullPointerException, NumberFormatException {
-        Monnaie monnaieUser=presenteurAjouterFacture.getMonnaieUserConnecte();
+
         if(Double.parseDouble( editTextMontant.getText().toString())<=0){
             throw new NumberFormatException();
         }
-        double monatantDevise=Double.parseDouble( editTextMontant.getText().toString());
-        return monatantDevise*monnaieUser.getTauxDevise();
+        return Double.parseDouble( editTextMontant.getText().toString());
     }
 
     /**
@@ -283,7 +283,6 @@ public class VueAjouterFacture extends Fragment implements IContratVPAjouterFact
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                 nomsSelectionnes[which] = isChecked;
-
             }
         });
 

@@ -17,6 +17,7 @@ public class Groupe implements Serializable {
     @SerializedName("factures")
     private List<Facture> factures;
     private Map<Utilisateur, Double> soldeParUtilisateur;
+    @SerializedName("Monnaie")
     private Monnaie monnaieDuGroupe;
     @SerializedName("UtilisateurCreateur")
     private Utilisateur utilisateurCreateurGroupe;

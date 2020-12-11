@@ -299,6 +299,11 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         String strMonnaieUser = sharedPref.getString("monnaieUser", "CAD");
         return Monnaie.valueOf(strMonnaieUser);
     }
+    @Override
+    public Monnaie getMonnaieGroupe() {
+
+        return Monnaie.valueOf(modele.getGroupeEnCours().getMonnaieDuGroupe().name());
+    }
 
     /**
      * Envoie les données d'une facture entrées dans la vue à la source de données du présenteur

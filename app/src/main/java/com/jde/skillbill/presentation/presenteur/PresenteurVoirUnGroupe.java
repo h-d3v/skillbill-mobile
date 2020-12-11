@@ -231,6 +231,11 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         activityVoirUnGroupe.finish();
     }
 
+    @Override
+    public Monnaie getMonnaieGroupe() {
+        return groupeEncours.getMonnaieDuGroupe();
+    }
+
     /**
      *
      * @return factures du groupes

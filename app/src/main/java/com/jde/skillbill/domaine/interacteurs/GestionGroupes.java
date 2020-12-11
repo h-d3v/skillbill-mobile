@@ -4,7 +4,6 @@ import android.util.Log;
 import com.jde.skillbill.domaine.entites.*;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
-import com.jde.skillbill.donnees.APIRest.entites.UtilisateurRestAPI;
 
 import java.util.List;
 
@@ -77,11 +76,11 @@ public class GestionGroupes implements IGestionGroupes {
      *
      * @param utilisateurConcerne un utilisateur du groupe
      * @param groupe un groupe
-     * @return double le solde de l'utilisateur du total payé ou à payer pour toutes les factures de son groupe
+     * @return string le solde de l'utilisateur du total payé ou à payer pour toutes les factures de son groupe
      */
 
     @Override
-    public double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConcerne, Groupe groupe) throws SourceDonneeException {
+    public String getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConcerne, Groupe groupe) throws SourceDonneeException {
 
         List<Facture> factures = sourceDonnee.lireFacturesParGroupe(groupe);
         if (factures == null || factures.size() == 0) {
@@ -106,8 +105,10 @@ public class GestionGroupes implements IGestionGroupes {
             solde = (montantPayeUtilisateurConcerne - montantDuParUtilisateur);
 
         }
+        String retour = solde +"--"+groupe.getMonnaieDuGroupe().name();
 
 
-        return solde;
+
+        return retour;
     }
 }

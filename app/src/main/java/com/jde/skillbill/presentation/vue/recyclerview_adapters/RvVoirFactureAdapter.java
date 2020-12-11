@@ -20,6 +20,7 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
     PresenteurVoirUnGroupe _presenteur;
     MaterialButton btnNomActivite;
     TextView tvMontant;
+    TextView tvMontantConversion;
 
     public RvVoirFactureAdapter(PresenteurVoirUnGroupe presenteur){
         super();
@@ -39,14 +40,20 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         btnNomActivite =holder.itemView.findViewById(R.id.nomActivite);
         tvMontant =holder.itemView.findViewById(R.id.tvMontant);
+        tvMontantConversion = holder.itemView.findViewById(R.id.tcMontantConvert);
 
         btnNomActivite.setText(_presenteur.getFacturesGroupe().get(position).getLibelle());
         btnNomActivite.setOnClickListener(view -> _presenteur.commencerVoirDetailFacture(position));
 
         Monnaie monnaieUser= _presenteur.getMonnaieUserConnecte();
+        Monnaie monnaieGroupe = _presenteur.getMonnaieGroupe();
         Double montantFacturePayer=_presenteur.getMontantFacturePayerParUser(position);
-        montantFacturePayer*=monnaieUser.getTauxCad();
-        tvMontant.setText(( montantFacturePayer).toString()+" "+monnaieUser.getSymbol());
+        tvMontant.setText(( montantFacturePayer).toString()+" "+monnaieGroupe.getSymbol());
+        if (!monnaieUser.name().equals(monnaieGroupe.name())){
+            double montantConvertiCAD = montantFacturePayer*monnaieGroupe.getTauxDevise();
+            double montantConverti = montantConvertiCAD*monnaieUser.getTauxCad();
+            tvMontantConversion.setText(montantConverti+ monnaieUser.name());
+        }
     }
 
     @Override

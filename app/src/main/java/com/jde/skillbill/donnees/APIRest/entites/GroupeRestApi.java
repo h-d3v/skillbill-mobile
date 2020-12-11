@@ -12,8 +12,6 @@ public class GroupeRestApi extends Groupe {
 
     @SerializedName("Id")
     int id;
-    @SerializedName("Monnaie")
-    int monnaie;
     @SerializedName("UtilisateursAbonnes")
     List<UtilisateurRestAPI> utilisateursRestApi;
     @SerializedName("DateCreation")
@@ -23,7 +21,6 @@ public class GroupeRestApi extends Groupe {
 
     public GroupeRestApi(String nomGroupe, Utilisateur utilisateurCreateurGroupe, Monnaie monnaieDuGroupe, int id) {
         super(nomGroupe, utilisateurCreateurGroupe, monnaieDuGroupe);
-        monnaie= monnaieDuGroupe.ordinal();
         this.id=id;
     }
     public int getId() {
@@ -34,13 +31,6 @@ public class GroupeRestApi extends Groupe {
         this.id = id;
     }
 
-    public int getMonnaie() {
-        return monnaie;
-    }
-
-    public void setMonnaie(int monnaie) {
-        this.monnaie = monnaie;
-    }
 
     public List<UtilisateurRestAPI> getUtilisateursRestApi() {
         return utilisateursRestApi;

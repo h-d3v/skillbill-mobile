@@ -2,15 +2,15 @@ package com.jde.skillbill.presentation.presenteur;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 import com.jde.skillbill.BuildConfig;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Groupe;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionGroupes;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
@@ -25,17 +25,13 @@ import com.jde.skillbill.ui.activity.ActivityAjouterFacture;
 import com.jde.skillbill.ui.activity.ActivityConnexion;
 import com.jde.skillbill.ui.activity.ActivityCreerGroupe;
 import com.jde.skillbill.ui.activity.ActivityModifProfil;
-import com.jde.skillbill.ui.activity.ActivityVoirGroupes;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
 
-import static android.provider.Settings.System.getConfiguration;
-import static android.provider.Settings.System.getString;
-
 
 public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.IPresenteurVoirGroupe {
-    private Modele modele;
+    private Modele _modele;
     private VueVoirGroupes vueVoirGroupes;
     private Activity activity;
 
@@ -54,7 +50,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
 
     @SuppressLint("HandlerLeak")
     public PresenteurVoirGroupes(Modele modele, VueVoirGroupes vueVoirGroupes, Activity activity,  ISourceDonnee sourceDonnee) {
-        this.modele = modele;
+        this._modele = modele;
         this.vueVoirGroupes = vueVoirGroupes;
         this.activity=activity;
         modele.setUtilisateurConnecte((Utilisateur) activity.getIntent().getSerializableExtra(EXTRA_ID_UTILISATEUR));
@@ -68,8 +64,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
                 filEsclave = null;
                 vueVoirGroupes.fermerProgressBar();
                 if(msg.what == MSG_GET_GROUPES){
-                    modele.setSoldeParPosition(((Modele) msg.obj).getSoldeParPosition());
-                    modele.setGroupesAbonnesUtilisateurConnecte((((Modele) msg.obj).getListGroupeAbonneUtilisateurConnecte()));
+                    _modele.setSoldeParPosition(((Modele) msg.obj).getSoldeParPosition());
 
                     vueVoirGroupes.rafraichir();
 
@@ -97,9 +92,8 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
             public void run() {
                 Message msg;
                 try{
-                    List<Groupe> groupes= gestionUtilisateur.trouverGroupesAbonne(modele.getUtilisateurConnecte());
-                    modele.setGroupesAbonnesUtilisateurConnecte(groupes);
-
+                    List<Groupe> groupes= gestionUtilisateur.trouverGroupesAbonne(_modele.getUtilisateurConnecte());
+                    _modele.setGroupesAbonnesUtilisateurConnecte(groupes);
 
                     if(groupes!=null){
                         int position= 0;
@@ -108,15 +102,27 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
                         while (position<taille){
 
                             try {
-                                double solde = gestionGroupe.getSoldeParUtilisateurEtGroupe(modele.getUtilisateurConnecte(), modele.getListGroupeAbonneUtilisateurConnecte().get(position));
+                                String soldeMonnaie = gestionGroupe.getSoldeParUtilisateurEtGroupe(_modele.getUtilisateurConnecte(), _modele.getListGroupeAbonneUtilisateurConnecte().get(position));
+                                double solde = Double.parseDouble(soldeMonnaie.split("--")[0]);
+
+                                String monnaieGroupe = soldeMonnaie.split("--")[1];
                                 if (solde == 0) {
                                     textes[position] = activity.getResources().getString(R.string.solde_utilisateur_nul);
 
                                 } else if (solde < 0) {
-                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde);
+                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde)+" "+monnaieGroupe;
+
                                 } else {
-                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_crediteur) + " " + solde;
+                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_crediteur) + " " + solde+" "+monnaieGroupe;
+
+                                    if(!_modele.getUtilisateurConnecte().getMonnaieUsuelle().name().equals(monnaieGroupe)){
+                                        double montantConvertiCAD = solde*Monnaie.valueOf(monnaieGroupe).getTauxDevise();
+                                        double montantConverti = montantConvertiCAD*_modele.getUtilisateurConnecte().getMonnaieUsuelle().getTauxCad();
+                                        String  montantStr = montantConverti+ _modele.getUtilisateurConnecte().getMonnaieUsuelle().name();
+                                        textes[position]+="\n"+montantStr+" "+activity.getString(R.string.dans_votre_monnaie);
+                                    }
                                 }
+
 
                             } catch (NullPointerException e) { //TODO vraie exception
                                 textes[position] =  activity.getResources().getString(R.string.pas_de_facture_dans_le_groupe);
@@ -126,10 +132,10 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
 
                         }
 
-                        modele.setSoldeParPosition(textes);
+                        _modele.setSoldeParPosition(textes);
                     }
 
-                    msg = handler.obtainMessage(MSG_GET_GROUPES, modele);
+                    msg = handler.obtainMessage(MSG_GET_GROUPES, _modele);
                 }catch (SourceDonneeException e ){
                     msg = handler.obtainMessage(MSG_ERREUR_CONNECTION);
                 }
@@ -144,22 +150,21 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     @Override
     public List<Groupe> getGroupeAbonnes() {
 
-        return modele.getListGroupeAbonneUtilisateurConnecte();
+        return _modele.getListGroupeAbonneUtilisateurConnecte();
     }
 
     @Override
     public void commencerVoirUnGroupeActivite(int position) {
         Intent intent = new Intent(activity, ActivityVoirUnGroupe.class);
-        intent.putExtra(EXTRA_GROUPE_POSITION, modele.getListGroupeAbonneUtilisateurConnecte().get(position) );
-        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
+        intent.putExtra(EXTRA_GROUPE_POSITION, _modele.getListGroupeAbonneUtilisateurConnecte().get(position));
+        intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte());
         activity.startActivity(intent);
     }
 
     @Override
     public String getMessageSoldeParPosition(int position){
-      //TODO solution de contournement
-        if(modele==null || modele.getSoldeParPosition()==null || modele.getSoldeParPosition().length ==0 || position>= modele.getSoldeParPosition().length) return "";
-        return modele.getSoldeParPosition()[position];
+        if(_modele ==null || _modele.getSoldeParPosition()==null || _modele.getSoldeParPosition().length ==0 || position>= _modele.getSoldeParPosition().length) return "";
+        return _modele.getSoldeParPosition()[position];
     }
 
     @Override
@@ -167,21 +172,21 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
         if (BuildConfig.DEBUG && position < 0) {
             throw new AssertionError("Assertion failed");
         }
-        return modele.getListGroupeAbonneUtilisateurConnecte().get(position).getNomGroupe();
+        return _modele.getListGroupeAbonneUtilisateurConnecte().get(position).getNomGroupe();
     }
 
     @Override
     public void commencerAjouterFactureActivite(int position) {
         Intent intent = new Intent(activity, ActivityAjouterFacture.class);
-        intent.putExtra(EXTRA_GROUPE_POSITION, modele.getListGroupeAbonneUtilisateurConnecte().get(position));
-        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
+        intent.putExtra(EXTRA_GROUPE_POSITION, _modele.getListGroupeAbonneUtilisateurConnecte().get(position));
+        intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte());
         activity.startActivity(intent);
     }
 
     @Override
     public void redirigerModifCompte() {
         Intent intent = new Intent(activity, ActivityModifProfil.class);
-        intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
+        intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte());
         activity.startActivityForResult(intent, 1);
     }
 
@@ -189,7 +194,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
     @Override
     public void commencerCreerGroupeActivite() {
         Intent intent = new Intent(activity, ActivityCreerGroupe.class);
-        intent.putExtra(EXTRA_ID_UTILISATEUR,modele.getUtilisateurConnecte());
+        intent.putExtra(EXTRA_ID_UTILISATEUR, _modele.getUtilisateurConnecte());
         activity.startActivity(intent);
     }
 
@@ -200,7 +205,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
 
     @Override
     public String getNomUserConnecte(){
-        return modele.getUtilisateurConnecte().getNom();
+        return _modele.getUtilisateurConnecte().getNom();
     }
 
     @Override

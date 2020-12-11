@@ -1,5 +1,7 @@
 package com.jde.skillbill.presentation;
 
+import com.jde.skillbill.domaine.entites.Monnaie;
+
 public interface IContratVuePresenteurVoirUnGroupe {
 
      interface IPresenteurVoirUnGroupe{
@@ -11,6 +13,8 @@ public interface IContratVuePresenteurVoirUnGroupe {
 
 
          void commencerVoirDetailFacture(int position);
+
+         Monnaie getMonnaieGroupe();
      }
      interface IVueVoirUnGroupe{
         void setPresenteur(IPresenteurVoirUnGroupe iPresenteurVoirUnGroupe);

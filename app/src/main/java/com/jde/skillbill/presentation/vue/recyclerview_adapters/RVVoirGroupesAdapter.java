@@ -13,7 +13,6 @@ import com.jde.skillbill.presentation.presenteur.PresenteurVoirGroupes;
 
 public class RVVoirGroupesAdapter extends RecyclerView.Adapter {
     PresenteurVoirGroupes presenteurVoirGroupes;
-    Button buttonSoldeGroupe;
 
     public RVVoirGroupesAdapter(PresenteurVoirGroupes presenteurVoirGroupes) {
         super();
