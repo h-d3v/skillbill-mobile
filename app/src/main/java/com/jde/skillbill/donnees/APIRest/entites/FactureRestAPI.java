@@ -71,7 +71,5 @@ public class FactureRestAPI extends Facture {
         return photoesEncodeesBase64;
     }
 
-    public void setPhotoesEncodeesBase64(ArrayList<PhotoRestApi> photoesEncodeesBase64) {
-        this.photoesEncodeesBase64 = photoesEncodeesBase64;
-    }
+
 }

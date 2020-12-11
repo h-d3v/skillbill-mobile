@@ -29,8 +29,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-
-import kotlin.NotImplementedError;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -105,59 +103,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
     return null;
 }
 
-    @Override//TODO supprimer
-    public boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) throws SourceDonneeException {
-        URL url = null;
-        try {
-            url = new URL(URI_BASE+"Factures");
-        } catch (MalformedURLException e) {
-            Log.e("SOurceDonneAPI: ", e.toString());
-        }
-        HttpURLConnection httpURLConnection= null;
-        try {
-            httpURLConnection = (HttpURLConnection) url.openConnection();
-            reglerTimeout(httpURLConnection);
-            reglerHeader(httpURLConnection);
-            httpURLConnection.setRequestMethod("POST");
-            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
-            httpURLConnection.setDoOutput(true);
-            httpURLConnection.setDoInput(true);
-            OutputStream outputStream = httpURLConnection.getOutputStream();
-            Gson gson = new GsonBuilder().create();
-            FactureRestAPI factureRestAPI = new FactureRestAPI(localDate.toString(), ((GroupeRestApi)groupe).getId(),montantTotal ,((UtilisateurRestAPI) utilisateurPayeur).getId());
-            factureRestAPI.setLibelle(titre);
-            List<PayeursEtMontant> payeursEtMontant  = new ArrayList<>();
-            payeursEtMontant.add( new PayeursEtMontant(((UtilisateurRestAPI)utilisateurPayeur).getId() ,montantTotal));
-
-            factureRestAPI.setPayeursEtMontantsListe(payeursEtMontant);
-            String json = gson.toJson(factureRestAPI);
-            byte[] input = json.getBytes(StandardCharsets.UTF_8);
-            outputStream.write(input, 0,input.length);
-
-            if(httpURLConnection.getResponseCode()==200){
-                InputStreamReader inputStreamReader = new InputStreamReader( httpURLConnection.getInputStream(), StandardCharsets.UTF_8);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                String sortie;
-                while ((sortie = bufferedReader.readLine())!=null){
-                    stringBuilder.append(sortie);
-                }
-
-                return "true".equals(stringBuilder.toString());
-            }
-
-        }
-        catch (java.net.SocketTimeoutException e){
-            throw new SourceDonneeException("Connection non disponible");
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        return false;
-    }
-
     @Override
     public boolean modifierFacture(Facture facture) throws SourceDonneeException {
         URL url = null;
@@ -224,38 +169,6 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
         return false;
     }
 
-    //TODO Remove?
-    public boolean ajouterPhoto(Facture facture, byte[] photo) throws SourceDonneeException, NotImplementedError {
-        URL url = null;
-        try {
-
-            url = new URL(URI_BASE+POINT_ENTREE_FACTURE+ ((FactureRestAPI) facture).getId()  );
-        } catch (MalformedURLException e) {
-            Log.e("SOurceDonneAPI : ", e.toString());
-        } catch (ClassCastException e){
-            Log.e("SOurceDonneAPI : ", e.toString());
-        }
-
-        HttpURLConnection httpURLConnection= null;
-        try {
-            httpURLConnection = (HttpURLConnection) url.openConnection();
-            reglerHeader(httpURLConnection);
-            httpURLConnection.setRequestProperty("Content-Type", "application/json ; utf-8 ");
-            httpURLConnection.setRequestMethod("PUT");
-            reglerTimeout(httpURLConnection);
-            httpURLConnection.setDoOutput(true);
-            httpURLConnection.setDoInput(true);
-            OutputStream outputStream = httpURLConnection.getOutputStream();
-        }
-        catch (java.net.SocketTimeoutException e){
-            throw new SourceDonneeException("Connection non disponible");
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
 
 
     @Override

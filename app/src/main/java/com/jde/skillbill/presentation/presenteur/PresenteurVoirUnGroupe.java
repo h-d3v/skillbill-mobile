@@ -228,6 +228,7 @@ public class PresenteurVoirUnGroupe implements IContratVuePresenteurVoirUnGroupe
         intent.putExtra(EXTRA_ID_UTILISATEUR, modele.getUtilisateurConnecte());
         intent.putExtra(EXTRA_FACTURE, facturesGroupe.get(position));
         activityVoirUnGroupe.startActivity(intent);
+        activityVoirUnGroupe.finish();
     }
 
     /**

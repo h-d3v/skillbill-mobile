@@ -12,7 +12,6 @@ import android.provider.MediaStore;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
-
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Facture;
 import com.jde.skillbill.domaine.entites.Groupe;
@@ -25,15 +24,17 @@ import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.presentation.IContratVPAjouterFacture;
 import com.jde.skillbill.presentation.modele.Modele;
 import com.jde.skillbill.presentation.vue.VueAjouterFacture;
-
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
-
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+/**
+ * Presenteur qui assure la presentation de la modification d'un groupe, de l'ajout et de la modification d'un groupe
+ */
 
 public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPresenteurAjouterFacture {
     Activity activityAjouterFacture;
@@ -71,8 +72,6 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         modele.setGroupeEnCours((Groupe) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_GROUPE_POSITION));
         modele.setFactureEnCours((Facture) activityAjouterFacture.getIntent().getSerializableExtra(EXTRA_FACTURE));
 
-
-
         handlerReponse = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -98,6 +97,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                 else if(msg.what==MSG_MODIF_FACTURE_FAIT){
                     Toast.makeText(activityAjouterFacture, R.string.modif_effectuee, Toast.LENGTH_LONG).show();
                     redirigerVersListeFactures();
+
                 }
                 else if(msg.what==MSG_ERREUR_AJOUT_FACTURE){
                     Toast.makeText(activityAjouterFacture, R.string.erreur_modification, Toast.LENGTH_LONG).show();
@@ -115,11 +115,16 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             }
         };
         chargerListeUtilisateurs();
+
         if(estFactureExistante){
             rechargerFactureEnCours();
         }
 
     }
+
+    /**
+     * Fonction qui permet de chercher la liste des utilisateurs dans la source de données dans un fil esclave
+     */
 
     public void chargerListeUtilisateurs() {
         filEsclave = new Thread(new Runnable() {
@@ -160,7 +165,8 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     }
 
     /**
-     * ajoute une facture a un groupe
+     * ajoute une facture a un groupe à partir des données entrées dans la vue
+     * Persite dans la source de données du présenteur
      */
     @Override
     public void ajouterFacture() {
@@ -213,6 +219,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         });
         filEsclave.start();
     }
+
     private void ajouterPayeursAFacture(Facture facture){
         if(vueAjouterFacture.getMultipleUtilisateursPayeurs()==null){
             HashMap<Utilisateur, Double> hashMap = new HashMap<>();
@@ -228,17 +235,28 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
             }
     }
 
-
+    /**
+     *
+     * @return la valeur du Montant dans la vue
+     */
     @Override
     public String trouverMontantFactureEnCours() {
-
         return String.valueOf(modele.getFactureEnCours().getMontantTotal());
     }
 
+    /**
+     *
+     * @return la valeur du titre dans la vue
+     */
     @Override
     public String trouverTitreFactureEnCours() {
         return modele.getFactureEnCours().getLibelle();
     }
+
+    /**
+     *
+     * @return la date de la facture entrée dans la vue
+     */
 
     @Override
     public String trouverDateFactureEnCours() {//TODO verif pourquoi la date disparait du modele quand on appuie sur annuler dans l'activite voir modif facture
@@ -268,7 +286,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
     @Override
     public void prendrePhoto() {
         Intent prendrePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try { //TODO verifier que l'appareil est capable de prendre des photos
+        try {
             activityAjouterFacture.startActivityForResult(prendrePhotoIntent, REQUETE_PRENDRE_PHOTO);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(activityAjouterFacture, R.string.pas_d_activite_photo_diponible, Toast.LENGTH_LONG).show();
@@ -282,7 +300,9 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         return Monnaie.valueOf(strMonnaieUser);
     }
 
-
+    /**
+     * Envoie les données d'une facture entrées dans la vue à la source de données du présenteur
+     */
     @Override
     public void envoyerRequeteModificationFacture() {
         filEsclave = new Thread(new Runnable() {
@@ -322,6 +342,10 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         filEsclave.start();
     }
 
+    /**
+     *
+     * @return la liste des payeurs d'une facture à ajouter ou à modifier
+     */
     @Override
     public String presenterPayeurs() {
         String payeurs = "";
@@ -336,7 +360,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
                     }
                 }
             }
-        }else { //Cas ajout ou modification
+        }else { //Cas ajout d'une facure
             montantsUstilisateurAAjouter = new HashMap<Utilisateur, Double>();
             try{vueAjouterFacture.getMontantFactureCADInput();}catch (NumberFormatException e) {return "";}
             int i = 0;
@@ -369,6 +393,10 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         return payeurs;
     }
 
+    /**
+     * Recharge la facture en cours enregistrée dans le modele avec celle qui est dans la source de données
+     */
+
     public void rechargerFactureEnCours(){
         filEsclave = new Thread(new Runnable() {
             @Override
@@ -386,6 +414,7 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         });
         filEsclave.start();
     }
+
 
     public void setPhotoChangee(boolean photoChangee) {
         this.photoChangee = photoChangee;

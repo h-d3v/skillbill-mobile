@@ -54,10 +54,4 @@ public class GroupeRestApi extends Groupe {
         this.date = date;
     }
 
-
-
-    public void setUtilisateursRestApi(List<UtilisateurRestAPI> utilisateurs) {
-        this.utilisateursRestApi = utilisateurs;
-        super.setUtilisateurs( (List<Utilisateur>) (List<? extends Utilisateur>) utilisateurs);
-    }
 }

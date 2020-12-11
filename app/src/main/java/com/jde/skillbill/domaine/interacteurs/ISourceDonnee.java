@@ -9,25 +9,40 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ISourceDonnee {
-
+//region Facture
     List<Facture> lireFacturesParGroupe(Groupe groupe) throws SourceDonneeException;
-
-    boolean ajouterFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) throws SourceDonneeException;
-
-    Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException;
-
-    boolean utilisateurExiste(String email) throws SourceDonneeException ;
-    Utilisateur creerUtilisateur(Utilisateur utilisateur)throws SourceDonneeException;
-    Utilisateur tenterConnexion(String email, String mdp) throws SourceDonneeException;
-    Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe)throws SourceDonneeException ;
-    List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur)throws SourceDonneeException;
-    List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe)throws SourceDonneeException;
-
-    boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur)throws SourceDonneeException;
+    Facture rechargerFacture(Facture facture) throws SourceDonneeException;
+    List<byte[]> chargerPhotos(Facture factureEnCours) throws SourceDonneeException;
     boolean modifierFacture(Facture facture) throws SourceDonneeException;
     boolean creerFacture(Facture facture) throws SourceDonneeException;
+//endregion
 
-    List<byte[]> chargerPhotos(Facture factureEnCours) throws SourceDonneeException;
+//region Groupe
+    Groupe creerGroupeParUtilisateur(Utilisateur utilisateur, Groupe groupe)throws SourceDonneeException ;
+    List<Utilisateur> lireUTilisateurParGroupe(Groupe groupe)throws SourceDonneeException;
+    boolean ajouterMembre(Groupe groupe, Utilisateur utilisateur)throws SourceDonneeException;
+    List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur)throws SourceDonneeException;
+//endregion
 
-    Facture rechargerFacture(Facture facture) throws SourceDonneeException;
+//region Utilisateur
+    Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException;
+    boolean utilisateurExiste(String email) throws SourceDonneeException ;
+    Utilisateur creerUtilisateur(Utilisateur utilisateur)throws SourceDonneeException;
+
+    /**
+     *
+     * @param email
+     * @param mdp
+     * @return null si l'utilisateur ne peut pas se connecter selon son mdp et email entrés en param
+     * SINON l'utilisateur tel qu'il est dans la source de données
+     * @throws SourceDonneeException
+     */
+    Utilisateur tenterConnexion(String email, String mdp) throws SourceDonneeException;
+//endregion
+
+
+
+
+
+
 }

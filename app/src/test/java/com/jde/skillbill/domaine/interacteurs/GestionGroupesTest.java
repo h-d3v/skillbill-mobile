@@ -43,12 +43,9 @@ public class GestionGroupesTest {
     }
     @Test
     public void TestcreerGroupeEchoue()throws SourceDonneeException {
-        when(iSourceDonnee.creerGroupeParUtilisateur(utilisateurCobaye,groupeCobaye)).thenReturn(new Groupe("safasasddsa", null, null));
-        assertEquals(gestionGroupes.creerGroupe("le nom",utilisateurCobaye, Monnaie.CAD),null);
+        when(iSourceDonnee.creerGroupeParUtilisateur(utilisateurCobaye,groupeCobaye)).thenReturn(new Groupe("le nom", null, null));
+        assertEquals(gestionGroupes.creerGroupe("le nom",null, null),null);
     }
-
-
-
 
     @Test
     public void TestajouterMembreReussi()throws SourceDonneeException {
