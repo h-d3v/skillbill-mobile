@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
@@ -59,6 +60,7 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
                     //ajout de la monnaie du user connecte aux shared pref de l'app
                     SharedPreferences.Editor editor = activite.getSharedPreferences("SKILLBILL_USER_PREF",
                             Context.MODE_PRIVATE).edit();
+
                     editor.putString("monnaieUser", _modele.getUtilisateurConnecte().getMonnaieUsuelle().name());
                     editor.apply();
                     redirigerVersActiviteVoirLesGroupes();

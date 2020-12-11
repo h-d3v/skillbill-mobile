@@ -37,7 +37,6 @@ public class PresenteurConnexionTest {
                         final PresenteurConnexion presenteurConnexion = new PresenteurConnexion(activityConnexion, modele, vueConnexion);
                         presenteurConnexion.setDataSource(source);
                         presenteurConnexion.tenterConnexion(utilisateur.getCourriel(), utilisateur.getMotPasse());
-
                     }
 
                 }
