@@ -16,6 +16,8 @@ import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVPVoirUnGroupe;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirUnGroupe;
 
+import java.util.Locale;
+
 public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContratVPVoirUnGroupe.IAdapterVoirUneFacture {
     PresenteurVoirUnGroupe _presenteur;
     MaterialButton btnNomActivite;
@@ -48,11 +50,11 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
         Monnaie monnaieUser= _presenteur.getMonnaieUserConnecte();
         Monnaie monnaieGroupe = _presenteur.getMonnaieGroupe();
         Double montantFacturePayer=_presenteur.getMontantFacturePayerParUser(position);
-        tvMontant.setText(( montantFacturePayer).toString()+" "+monnaieGroupe.getSymbol());
+        tvMontant.setText(String.format(Locale.CANADA,"%.2f",montantFacturePayer)+" "+monnaieGroupe.getSymbol());
         if (!monnaieUser.name().equals(monnaieGroupe.name())){
             double montantConvertiCAD = montantFacturePayer*monnaieGroupe.getTauxDevise();
             double montantConverti = montantConvertiCAD*monnaieUser.getTauxCad();
-            tvMontantConversion.setText(montantConverti+ monnaieUser.name());
+            tvMontantConversion.setText(String.format(Locale.CANADA,"%.2f",montantConverti)+ monnaieUser.getSymbol());
         }
     }
 

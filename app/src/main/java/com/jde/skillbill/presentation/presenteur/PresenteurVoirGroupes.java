@@ -28,6 +28,7 @@ import com.jde.skillbill.ui.activity.ActivityModifProfil;
 import com.jde.skillbill.ui.activity.ActivityVoirUnGroupe;
 
 import java.util.List;
+import java.util.Locale;
 
 
 public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.IPresenteurVoirGroupe {
@@ -118,7 +119,7 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
                                     if(!_modele.getUtilisateurConnecte().getMonnaieUsuelle().name().equals(monnaieGroupe)){
                                         double montantConvertiCAD = solde*Monnaie.valueOf(monnaieGroupe).getTauxDevise();
                                         double montantConverti = montantConvertiCAD*_modele.getUtilisateurConnecte().getMonnaieUsuelle().getTauxCad();
-                                        String  montantStr = montantConverti+ _modele.getUtilisateurConnecte().getMonnaieUsuelle().name();
+                                        String  montantStr = String.format(Locale.CANADA,"%.2f",montantConverti)+ _modele.getUtilisateurConnecte().getMonnaieUsuelle().name();
                                         textes[position]+="\n"+montantStr+" "+activity.getString(R.string.dans_votre_monnaie);
                                     }
                                 }
