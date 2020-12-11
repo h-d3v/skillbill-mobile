@@ -85,6 +85,11 @@
     <string name="a_paye"> \u0020 a payé \u0020 </string>
     <string name="au_moins_un">Au moins un utilisateur doit être selectionné</string>
     <string name="dans_votre_monnaie">dans votre monnaie</string>
+    <string name="mot_de_passe_actuel">Mot de passe actuel</string>
+    <string name="nouveau_mdp_laissez_vide_si_inchang">Nouveau mdp (laissez vide si inchangé)</string>
+    <string name="devise">Devise</string>
+    <string name="enregistrer">Enregistrer</string>
+    <string name="modifier_votre_profil">Modifier votre profil</string>
 
 
 </resources>

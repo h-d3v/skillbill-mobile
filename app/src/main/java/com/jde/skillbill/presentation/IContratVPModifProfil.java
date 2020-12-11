@@ -9,6 +9,9 @@ public interface IContratVPModifProfil {
         String getNouveauNom();
         String getNouveauEmail();
         String getNouveauMdp();
+
+        String getMdpCourrant();
+
         Monnaie getNouvelleMonnaie();
 
         void setNomUser(String nom);
@@ -18,13 +21,14 @@ public interface IContratVPModifProfil {
         void setMdpUser(String mdp);
 
         boolean tousLesChampsValides();
+
+        void activerDescativerBtn();
     }
 
     interface PresenteurModifProfil {
 
         void modifierProfil();
 
-        void remplirInfosUser();
         String getEmailUserConnecte();
         String getNomUserConnecte();
         Monnaie  getMonnaieConnecte();

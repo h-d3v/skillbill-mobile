@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.jde.skillbill.R;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
+import com.jde.skillbill.domaine.entites.UtilisateurException;
 import com.jde.skillbill.domaine.interacteurs.GestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
@@ -28,7 +29,7 @@ public class PresenteurModifProfil implements IContratVPModifProfil.PresenteurMo
     private Activity _activite;
     private String EXTRA_ID_UTILISATEUR="com.jde.skillbill.utlisateur_identifiant";
     private static final int MSG_MODIFICATION_REUSSIE =0;
-    private static final int MSG_ERREUR =1;
+    private static final int MSG_ERREUR_USER =1;
     private static  final int MSG_PAS_DE_CONNECTION=3;
 
     private final Handler handlerReponse;
@@ -64,13 +65,14 @@ public class PresenteurModifProfil implements IContratVPModifProfil.PresenteurMo
                     Toast.makeText(activite, "Vos informations ont été modifiées avec succès", Toast.LENGTH_SHORT).show();
                     //afficher un message indiquant la reussite
                 }
-                if(msg.what == MSG_ERREUR){
+                if(msg.what == MSG_ERREUR_USER){
                     //mettre a jours les infos de l'utilisateurs dans l'application
-                    Toast.makeText(activite, "Ce courriel est deja pris, veuillez en choisir un autre", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activite, (String) msg.obj, Toast.LENGTH_SHORT).show();
                 }
                 if(msg.what == MSG_PAS_DE_CONNECTION){
                     Toast.makeText(activite, R.string.pas_de_connection_internet, Toast.LENGTH_SHORT).show();
                 }
+                _vue.activerDescativerBtn();
             }
         };
 
@@ -80,39 +82,33 @@ public class PresenteurModifProfil implements IContratVPModifProfil.PresenteurMo
 
     @Override
     public void modifierProfil() {
-        //todo methode rest classe api qui retourne un utilisateur
+        _vue.activerDescativerBtn();
        //TODO ouvrir et fermer progress bar
         filEsclave = new Thread(() -> {
             Utilisateur utilisateurRetour;
-            Message msg;
+            Message msg=null;
             GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
-            Utilisateur userModifier= new Utilisateur(_vue.getNouveauNom(), _vue.getNouveauEmail(), _vue.getNouveauMdp(), _vue.getNouvelleMonnaie());
+            Utilisateur userModifier= new Utilisateur(_vue.getNouveauNom(), _vue.getNouveauEmail(), _vue.getMdpCourrant(), _vue.getNouvelleMonnaie());
+            if(_vue.getNouveauMdp().length()>=8){
+                userModifier.setNouveauMotDePasse(_vue.getNouveauMdp());
+            }
             try{
-
                 utilisateurRetour = gestionUtilisateur.modifierUtilisateur(userModifier, _modele.getUtilisateurConnecte());
                 if(utilisateurRetour!=null){
-
                     msg = handlerReponse.obtainMessage(MSG_MODIFICATION_REUSSIE,utilisateurRetour);
-
+                }
+            }catch (SourceDonneeException | UtilisateurException e){
+                if(e.getClass()==UtilisateurException.class){
+                    msg=handlerReponse.obtainMessage(MSG_ERREUR_USER);
+                    msg.obj=((UtilisateurException) e).getMessage();
                 }
                 else {
-                    msg=handlerReponse.obtainMessage(MSG_ERREUR);
+                    msg = handlerReponse.obtainMessage(MSG_PAS_DE_CONNECTION);
                 }
-            }catch (SourceDonneeException e){
-                msg = handlerReponse.obtainMessage(MSG_PAS_DE_CONNECTION);
             }
-
             handlerReponse.sendMessage(msg);
         });
         filEsclave.start();
-    }
-
-    @Override
-    public void remplirInfosUser() {
-        //todo remove, cette methode devrais etre creer dans la vue
-        //_vue.setEmailUser(_modele.getUtilisateurConnecte().getCourriel());
-        //_vue.setNomUser(_modele.getUtilisateurConnecte().getNom());
-        //_vue.setMonnaieUser(_modele.getUtilisateurConnecte().getMonnaieUsuelle().toString());
     }
 
     @Override

@@ -4,6 +4,7 @@ package com.jde.skillbill.domaine.interacteurs.interfaces;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
+import com.jde.skillbill.domaine.entites.UtilisateurException;
 
 import java.util.List;
 
@@ -31,5 +32,5 @@ public interface IGestionUtilisateur  {
      */
     List<Groupe> trouverGroupesAbonne(Utilisateur utilisateur)throws SourceDonneeException;
 
-    Utilisateur modifierUtilisateur(Utilisateur utilisateurModifie, Utilisateur utilisateurCourrant) throws SourceDonneeException;
+    Utilisateur modifierUtilisateur(Utilisateur utilisateurModifie, Utilisateur utilisateurCourrant) throws SourceDonneeException, UtilisateurException;
 }

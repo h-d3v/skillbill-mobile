@@ -24,6 +24,8 @@ public interface ISourceDonnee {
     List<Groupe> lireTousLesGroupesAbonnes(Utilisateur utilisateur)throws SourceDonneeException;
 //endregion
 
+    Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException, UtilisateurException;
+
 //region Utilisateur
     Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException;
     boolean utilisateurExiste(String email) throws SourceDonneeException ;
