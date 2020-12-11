@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -160,7 +161,15 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!getNouveauMdp().matches("[.\\S]+") || getNouveauMdp().length() < 8) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(getNouveauMdp().length()<=0){
+                    nouveauMdpValide=true;
+                }
+                else if (!getNouveauMdp().matches("[.\\S]+") || getNouveauMdp().length() < 8) {
                     nouveauMdpValide=false;
                     btnSave.setEnabled(false);
                     tfNewMdp.setError("Le mot de passe doit être valide et contenir au moins 8 caractères.");
@@ -170,10 +179,6 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
                         btnSave.setEnabled(true);
                     }
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
             }
         });
 

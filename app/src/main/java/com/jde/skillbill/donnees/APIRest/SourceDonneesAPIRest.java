@@ -38,7 +38,7 @@ import okhttp3.Response;
 
 
 public class SourceDonneesAPIRest implements ISourceDonnee {
-    private final String URI_BASE = "http://192.168.1.32:51360/api/";
+    private final String URI_BASE = "https://skillbillweb.azurewebsites.net/api/";
     private final String POINT_ENTREE_UTILISATEUR = "utilisateurs/";
     private final String POINT_ENTREE_GROUPE = "groupes/";
     private final String POINT_ENTREE_LOGIN = "login";
