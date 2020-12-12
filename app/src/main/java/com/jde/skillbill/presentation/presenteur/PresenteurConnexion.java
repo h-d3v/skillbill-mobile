@@ -44,6 +44,12 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
     private Thread filEsclave = null;
 
 
+    /**
+     *
+     * @param activite
+     * @param modele
+     * @param vueConnexion
+     */
     @SuppressLint("HandlerLeak")
     public PresenteurConnexion(Activity activite, Modele modele, VueConnexion vueConnexion) {
         _activite = activite;
@@ -80,10 +86,20 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
         };
     }
 
+    /**
+     *
+     * @param dataSource
+     */
     public void setDataSource(ISourceDonnee dataSource) {
         _dataSource = dataSource;
     }
 
+    /**
+     * tente d'authentifier l'utilisateur et renvoie un message
+     * si la connexion est réussie, échouée ou s'il y a un problème de connexion
+     * @param email de l'utilisateur qui tente la connexion
+     * @param mdp de l'utilisateur qui tente la connexion
+     */
     @Override
     public void tenterConnexion(String email, String mdp){
         GestionUtilisateur gestionUtilisateur= new GestionUtilisateur(_dataSource);
@@ -117,12 +133,18 @@ public class PresenteurConnexion implements IContratVPConnexion.IPresenteurConne
 
     }
 
+    /**
+     * redirige vers l'activité d'inscription
+     */
     @Override
     public void allerInscription() {
         Intent intentInscription = new Intent(_activite, ActivityCreerCompte.class);
         _activite.startActivity(intentInscription);
     }
 
+    /**
+     * redirige vers les groupes de l'utilisateur connecté
+     */
     private void redirigerVersActiviteVoirLesGroupes(){
 
         //redirection vers ses groupes

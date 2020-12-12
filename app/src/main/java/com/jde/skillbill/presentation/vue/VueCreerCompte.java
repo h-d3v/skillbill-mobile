@@ -145,7 +145,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
                     tfMdp.setError("Le mot de passe ne doit pas contenir d'espace et plus de 8 caractères.");
                 } else if (!getPass().equals(getPassVerif())) {
                     btnRegister.setEnabled(false);
-                    tfMdpVerif.setError("Le mot de passe ne correspond pas");
+                    tfMdpVerif.setError("Les mots de passes ne correspondent pas");
                     mdpValide = false;
                 } else {
                     mdpValide = true;
@@ -167,7 +167,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!getPass().equals(getPassVerif())) {
                     btnRegister.setEnabled(false);
-                    tfMdpVerif.setError("Le mot de passe ne correspond pas");
+                    tfMdpVerif.setError("Le mot de passe ne correspondent pas");
                     mdpValide = false;
                 } else {
                     mdpValide = true;
@@ -261,7 +261,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     @Override
     public void afficherEmailDejaPrit() {
         MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(this.requireContext());
-        alertBuilder.setTitle("Adresse e-mail deja utilisée");
+        alertBuilder.setTitle("Adresse courriel déjà utilisée");
         alertBuilder.setMessage("Veuillez choisir un autre courriel ou connectez-vous à votre compte");
         alertBuilder.show();
     }
@@ -276,7 +276,7 @@ public class VueCreerCompte extends Fragment implements IContratVPCreerCompte.Vu
     @Override
     public void afficherCompteCreer(String nom, String email, Monnaie monnaie) {
         MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(this.requireContext());
-        alertBuilder.setTitle("Compte bien créer");
+        alertBuilder.setTitle("Compte créé");
         alertBuilder.setMessage("Votre adresse courriel: " + email);
         alertBuilder.show();
     }

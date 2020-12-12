@@ -293,6 +293,10 @@ public class PresenteurAjouterFacture implements IContratVPAjouterFacture.IPrese
         }
     }
 
+    /**
+     *
+     * @return la monnaie par défaut le l'utilisateur ou CAD si non trouvée
+     */
     @Override
     public Monnaie getMonnaieUserConnecte() {
         SharedPreferences sharedPref = activityAjouterFacture.getSharedPreferences("SKILLBILL_USER_PREF", Context.MODE_PRIVATE);

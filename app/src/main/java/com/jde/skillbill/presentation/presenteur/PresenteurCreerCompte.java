@@ -36,6 +36,12 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
     };
 
 
+    /**
+     *
+     * @param activite
+     * @param modele
+     * @param vueCreerCompte
+     */
     @SuppressLint("HandlerLeak")
     public PresenteurCreerCompte(Activity activite, Modele modele, VueCreerCompte vueCreerCompte) {
         _activite=activite;
@@ -65,12 +71,20 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
         };
     }
 
+    /**
+     *
+     * @param dataSource
+     */
     public void setDataSource(ISourceDonnee dataSource) {
         _dataSource = dataSource;
     }
 
-    
 
+    /**
+     * tente de creer un compte selon les informations passées dans la vue
+     * retourne un message si le compte à bien été créer, si l'email est déjà pris
+     * ou si il y un problème de connexion.
+     */
     @Override
     public void creerCompte() {
         _vueCreerCompte.ouvrirProgressBar();
@@ -98,7 +112,9 @@ public class PresenteurCreerCompte implements IContratVPCreerCompte.PresenteurCr
     }
 
 
-
+    /**
+     * retourne à l'activité de login.
+     */
     @Override
     public void retourLogin() {
         _activite.finish();

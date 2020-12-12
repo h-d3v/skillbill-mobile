@@ -56,6 +56,13 @@ public class UtilisateurTest {
         assertNotEquals(utilisateurTest, utilisateurTest2);
     }
 
+    @Test
+    public void testGetSetNouveauMdp(){
+        Utilisateur utilisateurTest2= new Utilisateur("Zidane", "test@jdee.com", "Zizou123", Monnaie.CAD);
+        utilisateurTest2.setNouveauMotDePasse("Benzema");
+        assertEquals(utilisateurTest2.getNouveauMotDePasse(), "Benzema");
+    }
+
 
 
 

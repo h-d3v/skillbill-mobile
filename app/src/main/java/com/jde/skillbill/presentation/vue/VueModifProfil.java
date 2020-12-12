@@ -41,11 +41,22 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
     private boolean nomValide = true;
     private boolean emailValide = true;
 
+    /**
+     *
+     * @param presenteur
+     */
     @Override
     public void setPresenteur(IContratVPModifProfil.PresenteurModifProfil presenteur) {
         _presenteur=presenteur;
     }
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return la vue telle que créée
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -190,41 +201,74 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
         return tfNewNom.getText().toString();
     }
 
+    /**
+     *
+     * @return l'email tel quel dans la vue
+     */
     @Override
     public String getNouveauEmail() {
         return tfNewCourriel.getText().toString();
     }
 
+    /**
+     *
+     * @return le nouvel mdp tel quel dans la vue
+     */
     @Override
     public String getNouveauMdp() {
         return tfNewMdp.getText().toString();
     }
 
+    /**
+     *
+     * @return le mdp courrant tel quel dans la vue
+     */
     @Override
     public String getMdpCourrant() {
         return tfMdpCourrant.getText().toString();
     }
 
+    /**
+     *
+     * @return le monnaie tel quel dans la vue
+     */
     @Override
     public Monnaie getNouvelleMonnaie() {
         return Monnaie.valueOf(tfNewMonnaie.getText().toString());
     }
 
+    /**
+     *
+     * @param nom
+     */
     @Override
     public void setNomUser(String nom) {
         tfNewNom.setText(nom);
     }
 
+
+    /**
+     *
+     * @param monnaieStr la monnaie en string
+     */
     @Override
     public void setMonnaieUser(String monnaieStr) {
         tfNewMonnaie.setText(monnaieStr, false);
     }
 
+    /**
+     *
+     * @param email
+     */
     @Override
     public void setEmailUser(String email) {
         tfNewCourriel.setText(email);
     }
 
+    /**
+     *
+     * @param mdp le mot de passe actuel.
+     */
     @Override
     public void setMdpUser(String mdp){tfNewMdp.setText(mdp);}
 
@@ -236,6 +280,10 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
         return emailValide && nomValide && mdpCourrantValide && nouveauMdpValide;
     }
 
+    /**
+     * rend le boutton invisible et la progressBar visible
+     * fait le contraire si le boutton est deja invisible
+     */
     @Override
     public void activerDescativerBtn(){
         if (btnSave.getVisibility()==View.INVISIBLE){
