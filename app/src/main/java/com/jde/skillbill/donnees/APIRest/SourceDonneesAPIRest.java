@@ -24,6 +24,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,7 +77,8 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
                     for (FactureRestAPI factureRestAPI : factureRestAPIS) {
                         HashMap<Utilisateur, Double> utilisateurMontantMap = new HashMap<>();
-                        //factureRestAPI.setDateFacture(LocalDate.parse(factureRestAPI.getDate().substring(0,10)));
+                        DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        //factureRestAPI.setDateFacture(sourceFormat.parse(factureRestAPI.getDate().substring(0,10)));
 
                         for (PayeursEtMontant payeursEtMontant : factureRestAPI.getPayeursEtMontantsListe()) {
 

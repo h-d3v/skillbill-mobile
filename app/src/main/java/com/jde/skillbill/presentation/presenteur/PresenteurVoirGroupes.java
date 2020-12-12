@@ -111,10 +111,10 @@ public class PresenteurVoirGroupes implements IContratVuePresenteurVoirGroupes.I
                                     textes[position] = activity.getResources().getString(R.string.solde_utilisateur_nul);
 
                                 } else if (solde < 0) {
-                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + Math.abs(solde)+" "+monnaieGroupe;
+                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_debiteur) + " " + String.format( "%.02f",Math.abs(solde) ) +" "+monnaieGroupe;
 
                                 } else {
-                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_crediteur) + " " + solde+" "+monnaieGroupe;
+                                    textes[position] = activity.getResources().getString(R.string.solde_utilisateur_crediteur) + " " + String.format( "%.02f",Math.abs(solde) )+" "+monnaieGroupe;
 
                                     if(!_modele.getUtilisateurConnecte().getMonnaieUsuelle().name().equals(monnaieGroupe)){
                                         double montantConvertiCAD = solde*Monnaie.valueOf(monnaieGroupe).getTauxDevise();

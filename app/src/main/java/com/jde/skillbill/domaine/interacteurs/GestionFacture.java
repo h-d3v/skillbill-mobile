@@ -6,6 +6,7 @@ import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionFacture;
 import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
+import kotlin.NotImplementedError;
 
 
 import java.time.LocalDate;
@@ -26,11 +27,9 @@ public class GestionFacture implements IGestionFacture {
 
 
     @Override
-    public Facture ajouterPhotoFacture(Facture facture, String uri, Bitmap bitmap) {
+    public Facture ajouterPhotoFacture(Facture facture, String uri, Bitmap bitmap) throws SourceDonneeException {
         return null;
     }
-
-
 
     @Override
     public boolean modifierFacture(Facture facture) throws SourceDonneeException {
