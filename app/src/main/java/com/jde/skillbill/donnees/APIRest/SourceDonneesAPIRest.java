@@ -15,8 +15,6 @@ import com.jde.skillbill.domaine.entites.UtilisateurException;
 import com.jde.skillbill.domaine.interacteurs.ISourceDonnee;
 import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.donnees.APIRest.entites.*;
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,10 +22,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -77,8 +73,9 @@ public class SourceDonneesAPIRest implements ISourceDonnee {
 
                     for (FactureRestAPI factureRestAPI : factureRestAPIS) {
                         HashMap<Utilisateur, Double> utilisateurMontantMap = new HashMap<>();
-                        DateFormat sourceFormat = new SimpleDateFormat("dd/MM/yyyy");
-                        //factureRestAPI.setDateFacture(sourceFormat.parse(factureRestAPI.getDate().substring(0,10)));
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+                        factureRestAPI.setDateFacture(LocalDate.parse(factureRestAPI.getDate().substring(0,10), formatter));
 
                         for (PayeursEtMontant payeursEtMontant : factureRestAPI.getPayeursEtMontantsListe()) {
 
