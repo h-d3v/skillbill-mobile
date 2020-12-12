@@ -5,13 +5,14 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 
 public class Facture implements Serializable {
 
-    private  LocalDate dateFacture;
+    private LocalDate dateFacture;
     private  String uriImageFacture;
     private  Map<Utilisateur, Double> montantPayeParParUtilisateur;
     @SerializedName("Nom")

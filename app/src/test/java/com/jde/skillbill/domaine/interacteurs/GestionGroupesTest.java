@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
@@ -113,9 +114,9 @@ public class GestionGroupesTest {
         facture.setMontantPayeParParUtilisateur(montantPayeParUtilisateur);
         factures.add(facture);
         when(iSourceDonnee.lireFacturesParGroupe(groupeCobaye)).thenReturn(factures);
-        assertEquals(gestionGroupes.getSoldeParUtilisateurEtGroupe(utilisateur1, groupeCobaye), 300.0 -400.0/3.0 , 1e-3);
-        assertEquals(gestionGroupes.getSoldeParUtilisateurEtGroupe(utilisateur2, groupeCobaye),0 - (400.0/3.0)  , 1e-3);
-        assertEquals(gestionGroupes.getSoldeParUtilisateurEtGroupe(utilisateurCobaye, groupeCobaye),100.0 - (400.0/3.0)  , 1e-3);
+        assertEquals(gestionGroupes.getSoldeParUtilisateurEtGroupe(utilisateur1, groupeCobaye), 300.0 -400.0/3.0 +"--"+ groupeCobaye.getMonnaieDuGroupe().name() );
+        assertEquals(gestionGroupes.getSoldeParUtilisateurEtGroupe(utilisateur2, groupeCobaye),0 - (400.0/3.0) +"--"+groupeCobaye.getMonnaieDuGroupe().CAD.name()  );
+        assertEquals(gestionGroupes.getSoldeParUtilisateurEtGroupe(utilisateurCobaye, groupeCobaye),100.0 - (400.0/3.0) +"--" +groupeCobaye.getMonnaieDuGroupe().CAD.name()  );
 
     }
 

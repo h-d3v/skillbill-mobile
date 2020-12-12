@@ -43,7 +43,7 @@ public abstract class SourceDonneesMock implements ISourceDonnee{
             HashMap<Utilisateur,Double> hashMap= new HashMap<>();
             hashMap.put(_utilisateurs.get(0), 100.98);
             factureMock.setMontantPayeParParUtilisateur(hashMap);
-            factureMock.setDateFacture(LocalDate.now());
+            //actureMock.setDateFacture(LocalDate.now());
 
             groupeFactureHashMap.put(new Groupe("test groupe 1", _utilisateurs.get(0), Monnaie.CAD), new LinkedList<>());
             Objects.requireNonNull(groupeFactureHashMap.get(new Groupe("test groupe 1", _utilisateurs.get(0), Monnaie.CAD))).add(factureMock);
