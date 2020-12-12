@@ -11,26 +11,7 @@ import java.util.Map;
 
 public interface IGestionFacture {
 
-    /**
-     *
-     * @param montantTotal montant total de la facture
-     * @param mantantPayeParUtilisateur le montant payé par utilisateur
-     * @param localDate la date de la facture
-     * @return true si crée, false sinon
-     */
-    boolean creerFactureAvecMultiplePayeurs(double montantTotal, Map<Utilisateur, Double> mantantPayeParUtilisateur, LocalDate localDate)throws SourceDonneeException;
 
-
-    /**
-     *
-     * @param montantTotal   montant total de la facture
-     * @param utilisateurPayeur  le montant payé par l' utilisateur
-     * @param localDate localDate la date de la facture
-     * @param groupe le groupe de la facture
-     * @param titre le nom de la facture
-     * @return
-     */
-    boolean creerFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre)throws SourceDonneeException;
 
     /**
      *
@@ -39,23 +20,31 @@ public interface IGestionFacture {
      * @param bitmap photo en bitmap
      * @return la facture ajoutée, null si pas ajouté
      */
-
     Facture ajouterPhotoFacture(Facture facture, String uri, Bitmap bitmap)throws SourceDonneeException;
 
     /**
      *
-     * @param facture la facture a laquelle on veut modifier une photo
-     * @param uri uri de la photo
-     * @param bitmap photo en bitmap
-     * @return la facture ajoutée, null si pas ajouté
+     * @param facture la facture à modifier
+     * @return facture la facture créee dans la source de données
+     * @throws SourceDonneeException
      */
-    Facture modifierPhotoFacture(Facture facture, String uri, Bitmap bitmap)throws SourceDonneeException;
-
     boolean modifierFacture(Facture facture) throws SourceDonneeException;
+
+    /**
+     *
+     * @param facture la facture à peresiter dans la source de données
+     * @return bool true si ajoutée, false sinon
+     * @throws SourceDonneeException
+     */
 
     boolean creerFacture(Facture facture) throws SourceDonneeException;
 
-    List<byte[]> chargerPhotoFacture(Facture factureEnCours) throws SourceDonneeException;
+    /**
+     *
+     * @param facture la facture que l'on souhaite rechrager
+     * @return la facture dans la source de données
+     * @throws SourceDonneeException
+     */
 
     Facture rechargerFacture(Facture facture) throws SourceDonneeException;
 }

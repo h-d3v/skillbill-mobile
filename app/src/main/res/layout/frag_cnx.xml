@@ -127,7 +127,7 @@
                 android:layout_marginTop="10dp">
 
                 <ProgressBar
-                    android:id="@+id/progressBarConnexion"
+                    android:id="@+id/progressBarModifProfil"
                     style="?android:attr/progressBarStyle"
                     android:layout_width="148dp"
                     android:layout_height="104dp"

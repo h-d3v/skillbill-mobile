@@ -1,6 +1,7 @@
 package com.jde.skillbill.presentation;
 
 import com.jde.skillbill.domaine.entites.Groupe;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface IContratVuePresenteurCreerGroupe {
         void fermerProgressBar();
 
         void ouvrirProgressBar();
+
+        Monnaie getMonnaieChoisie();
     }
 
     interface PresenteurCreerGroupe {

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,9 +32,12 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
     private TextInputEditText tfNewNom;
     private TextInputEditText tfNewCourriel;
     private TextInputEditText tfNewMdp;
+    private TextInputEditText tfMdpCourrant;
     private AutoCompleteTextView tfNewMonnaie;
+    private ProgressBar progressBar;
 
-    private boolean mdpValide =true;
+    private boolean nouveauMdpValide =true;
+    private boolean mdpCourrantValide =false;
     private boolean nomValide = true;
     private boolean emailValide = true;
 
@@ -45,12 +50,15 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View racine= inflater.inflate(R.layout.frag_modif_profil, container, false);
+        progressBar=racine.findViewById(R.id.progressBarModifProfil);
         btnSave=racine.findViewById(R.id.btnEnrgstProfil);
         tfNewNom=racine.findViewById(R.id.tfModifierNom);
         tfNewCourriel=racine.findViewById(R.id.tfModifEmail);
         tfNewMdp=racine.findViewById(R.id.tfModifMdp);
         tfNewMonnaie=racine.findViewById(R.id.modif_monnaie_dropdown);
+        tfMdpCourrant=racine.findViewById(R.id.tfMdpCourrant);
 
+        progressBar.setVisibility(View.INVISIBLE);
         //Peupler la liste de monnaies, on va chercher toutes les valeurs de l'enum
         List<String> monnaiesString = Stream.of(Monnaie.values()).map(Enum::name).collect(Collectors.toList());
 
@@ -122,6 +130,30 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
             }
         });
 
+        tfMdpCourrant.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!getMdpCourrant().matches("[.\\S]+") || getMdpCourrant().length() < 8 && getMdpCourrant().length()!=0) {
+                    mdpCourrantValide=false;
+                    btnSave.setEnabled(false);
+                    tfMdpCourrant.setError("Le mot de passe actuel doit être valide et contenir au moins 8 caractères.");
+                } else {
+                    mdpCourrantValide = true;
+                    if (tousLesChampsValides()) {
+                        btnSave.setEnabled(true);
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         tfNewMdp.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -129,24 +161,26 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!getNouveauMdp().matches("[.\\S]+") || getNouveauMdp().length() < 8) {
-                    mdpValide=false;
+                if(getNouveauMdp().length()<=0){
+                    nouveauMdpValide=true;
+                }
+                else if (!getNouveauMdp().matches("[.\\S]+") || getNouveauMdp().length() < 8) {
+                    nouveauMdpValide=false;
                     btnSave.setEnabled(false);
                     tfNewMdp.setError("Le mot de passe doit être valide et contenir au moins 8 caractères.");
                 } else {
-                    mdpValide = true;
+                    nouveauMdpValide = true;
                     if (tousLesChampsValides()) {
                         btnSave.setEnabled(true);
                     }
                 }
             }
         });
-
-
 
         return racine;
     }
@@ -164,6 +198,11 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
     @Override
     public String getNouveauMdp() {
         return tfNewMdp.getText().toString();
+    }
+
+    @Override
+    public String getMdpCourrant() {
+        return tfMdpCourrant.getText().toString();
     }
 
     @Override
@@ -194,7 +233,19 @@ public class VueModifProfil extends Fragment implements IContratVPModifProfil.Vu
      */
     @Override
     public boolean tousLesChampsValides() {
-        return emailValide && nomValide && mdpValide;
+        return emailValide && nomValide && mdpCourrantValide && nouveauMdpValide;
+    }
+
+    @Override
+    public void activerDescativerBtn(){
+        if (btnSave.getVisibility()==View.INVISIBLE){
+            btnSave.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+        }
+        else{
+            btnSave.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 
 }

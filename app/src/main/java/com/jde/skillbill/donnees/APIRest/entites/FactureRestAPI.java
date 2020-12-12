@@ -15,6 +15,7 @@ import java.util.Map;
 public class FactureRestAPI extends Facture {
     @SerializedName("PayeursEtMontant")
     private List<PayeursEtMontant> payeursEtMontantsListe;
+
     @SerializedName("DateCreation")
     private String date;
     @SerializedName("Id")
@@ -71,7 +72,5 @@ public class FactureRestAPI extends Facture {
         return photoesEncodeesBase64;
     }
 
-    public void setPhotoesEncodeesBase64(ArrayList<PhotoRestApi> photoesEncodeesBase64) {
-        this.photoesEncodeesBase64 = photoesEncodeesBase64;
-    }
+
 }

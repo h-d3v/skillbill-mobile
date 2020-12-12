@@ -7,14 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.fragment.app.Fragment;
 import com.jde.skillbill.R;
+import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVuePresenteurCreerGroupe;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCreerGroupe.VueCreerGroupe {
 
@@ -23,6 +24,7 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
     private Button boutonEnregistrer;
     private Button boutonAnnuler;
     private ProgressBar progressBar;
+    private AutoCompleteTextView editTextFilledExposedDropdown;
 
     @Override
     public View onCreateView (LayoutInflater inflater,
@@ -37,6 +39,18 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
         boutonEnregistrer.setOnClickListener(view -> presenteurCreerGroupe.creerGroupe());
         boutonAnnuler = racine.findViewById(R.id.btnAnuller);
         boutonAnnuler.setOnClickListener(view -> presenteurCreerGroupe.retournerEnArriere());
+        editTextFilledExposedDropdown = racine.findViewById(R.id.monnaies_dropdown);
+        List<String> monnaiesString = Stream.of(Monnaie.values()).map(Enum::name).collect(Collectors.toList());
+
+        ArrayAdapter<String> adapterMonnaies = new ArrayAdapter<>(
+                requireContext(),
+                R.layout.dropdown_menu_item,
+                monnaiesString);
+
+        editTextFilledExposedDropdown.setAdapter(adapterMonnaies);
+
+        //on initialise la devise à CAD
+        editTextFilledExposedDropdown.setText(Monnaie.CAD.name(), false);
 
         boutonEnregistrer.setEnabled(false);
 
@@ -82,6 +96,11 @@ public class VueCreerGroupe extends Fragment implements IContratVuePresenteurCre
     @Override
     public void ouvrirProgressBar(){
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public Monnaie getMonnaieChoisie() {
+        return Monnaie.valueOf(editTextFilledExposedDropdown.getText().toString());
     }
 
 

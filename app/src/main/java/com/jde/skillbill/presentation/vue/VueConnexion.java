@@ -4,31 +4,20 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 import com.jde.skillbill.R;
 import com.jde.skillbill.presentation.IContratVPConnexion;
 import com.jde.skillbill.presentation.presenteur.PresenteurConnexion;
-
-import java.util.Objects;
 
 public class VueConnexion extends Fragment implements IContratVPConnexion.IVueConnexion {
     private PresenteurConnexion _presenteur;
@@ -50,7 +39,7 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
         btnCnx=vue.findViewById(R.id.btnCnx);
         btnInscription=vue.findViewById(R.id.btnInscriptionCnx);
         btnMdpOublie=vue.findViewById(R.id.btnMdpOublie);
-        progressBar = vue.findViewById(R.id.progressBarConnexion);
+        progressBar = vue.findViewById(R.id.progressBarModifProfil);
         fermerProgressBar();
 
 

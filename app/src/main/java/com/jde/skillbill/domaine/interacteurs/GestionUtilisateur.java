@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import com.jde.skillbill.domaine.entites.Groupe;
 import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.domaine.entites.Utilisateur;
+import com.jde.skillbill.domaine.entites.UtilisateurException;
 import com.jde.skillbill.domaine.interacteurs.interfaces.IGestionUtilisateur;
 import com.jde.skillbill.domaine.interacteurs.interfaces.SourceDonneeException;
 import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
@@ -12,6 +13,11 @@ import com.jde.skillbill.donnees.mockDAO.SourceDonneesMock;
 import java.io.IOException;
 import java.time.chrono.IsoChronology;
 import java.util.List;
+
+/**
+ * Javadoc dans l'interface
+ */
+
 
 public class GestionUtilisateur  implements IGestionUtilisateur {
     /*
@@ -25,14 +31,14 @@ public class GestionUtilisateur  implements IGestionUtilisateur {
     }
 
     /**
-     * Accesseur de l'instance d'un Singleton
+     * Accesseur de l'instance d'une source de donnée
      */
     public void setSource(ISourceDonnee dataSource){
         assert dataSource!=null;
         _dataSource= dataSource;
     }
 
-    //Pour verifier si l'email est pris
+
     @Override
     public boolean utilisateurExiste(String email) throws SourceDonneeException{
 
@@ -55,7 +61,7 @@ public class GestionUtilisateur  implements IGestionUtilisateur {
     }
 
     @Override
-    public Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException {
+    public Utilisateur modifierUtilisateur(Utilisateur utilisateurModifier, Utilisateur utilisateurCourrant) throws SourceDonneeException, UtilisateurException {
         return _dataSource.modifierUtilisateur(utilisateurModifier, utilisateurCourrant);
     }
 }

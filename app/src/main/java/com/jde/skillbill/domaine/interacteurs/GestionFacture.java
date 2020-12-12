@@ -12,6 +12,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Javadoc dans l'interface
+ */
+
 public class GestionFacture implements IGestionFacture {
 
     private ISourceDonnee iSourceDonnee;
@@ -20,26 +24,13 @@ public class GestionFacture implements IGestionFacture {
         this.iSourceDonnee = iSourceDonnee;
     }
 
-    @Override
-    public boolean creerFactureAvecMultiplePayeurs(double montantTotal, Map<Utilisateur, Double> mantantPayeParUtilisateur, LocalDate localDate) {
-        return false;
-    }
-
-    @Override
-    public boolean creerFacture(double montantTotal, Utilisateur utilisateurPayeur, LocalDate localDate, Groupe groupe, String titre) throws SourceDonneeException {
-        return iSourceDonnee.ajouterFacture(montantTotal, utilisateurPayeur, localDate, groupe , titre);
-    }
-
 
     @Override
     public Facture ajouterPhotoFacture(Facture facture, String uri, Bitmap bitmap) {
         return null;
     }
 
-    @Override
-    public Facture modifierPhotoFacture(Facture facture, String uri, Bitmap bitmap) {
-        return null;
-    }
+
 
     @Override
     public boolean modifierFacture(Facture facture) throws SourceDonneeException {
@@ -52,10 +43,6 @@ public class GestionFacture implements IGestionFacture {
        return iSourceDonnee.creerFacture(facture);
     }
 
-    @Override
-    public List<byte[]> chargerPhotoFacture(Facture factureEnCours) throws SourceDonneeException {
-        return iSourceDonnee.chargerPhotos(factureEnCours);
-    }
 
     @Override
     public Facture rechargerFacture(Facture facture) throws SourceDonneeException {

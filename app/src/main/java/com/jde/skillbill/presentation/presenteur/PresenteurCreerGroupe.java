@@ -83,7 +83,7 @@ public class PresenteurCreerGroupe implements IContratVuePresenteurCreerGroupe.P
         filEsclave = new Thread(() -> {
             Message msg;
             try{
-                Groupe groupeACreer = gestionGroupes.creerGroupe(vueCreerGroupe.getNomGroupe(), modele.getUtilisateurConnecte(), Monnaie.CAD);
+                Groupe groupeACreer = gestionGroupes.creerGroupe(vueCreerGroupe.getNomGroupe(), modele.getUtilisateurConnecte(), vueCreerGroupe.getMonnaieChoisie());
                 if (groupeACreer != null) {
 
                     msg = handlerReponse.obtainMessage(MSG_GROUPE_CREER_REUSSI, groupeACreer);

@@ -67,7 +67,7 @@ public class VueVoirUnGroupe extends Fragment implements IContratVuePresenteurVo
         rvFactures.setAdapter(rvFacturesAdapter);
         rvFactures.setLayoutManager(new LinearLayoutManager(getContext()));
         rvFactures.addItemDecoration(new DividerItemDecoration(rvFactures.getContext(), DividerItemDecoration.VERTICAL));
-       // tvNomGroupe.setText(_presenteur.getNomGroupe());
+        tvNomGroupe.setText(_presenteur.getNomGroupe());
 
         //pour le swipe to delete
         ItemTouchHelper itemTouchHelper= new ItemTouchHelper(simpleCallback);

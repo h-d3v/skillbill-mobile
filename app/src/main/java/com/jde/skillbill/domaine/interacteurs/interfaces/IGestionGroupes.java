@@ -53,5 +53,5 @@ public interface IGestionGroupes  {
 
 
 
-    double getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConnecte, Groupe groupe)throws SourceDonneeException;
+    String getSoldeParUtilisateurEtGroupe(Utilisateur utilisateurConnecte, Groupe groupe)throws SourceDonneeException;
 }

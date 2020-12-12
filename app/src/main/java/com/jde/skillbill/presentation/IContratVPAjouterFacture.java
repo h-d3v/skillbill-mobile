@@ -25,6 +25,8 @@ public interface IContratVPAjouterFacture {
 
         Monnaie getMonnaieUserConnecte();
 
+        Monnaie getMonnaieGroupe();
+
         void envoyerRequeteModificationFacture();
 
         String presenterPayeurs();

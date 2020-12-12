@@ -16,10 +16,13 @@ import com.jde.skillbill.domaine.entites.Monnaie;
 import com.jde.skillbill.presentation.IContratVPVoirUnGroupe;
 import com.jde.skillbill.presentation.presenteur.PresenteurVoirUnGroupe;
 
+import java.util.Locale;
+
 public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContratVPVoirUnGroupe.IAdapterVoirUneFacture {
     PresenteurVoirUnGroupe _presenteur;
     MaterialButton btnNomActivite;
     TextView tvMontant;
+    TextView tvMontantConversion;
 
     public RvVoirFactureAdapter(PresenteurVoirUnGroupe presenteur){
         super();
@@ -39,14 +42,20 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         btnNomActivite =holder.itemView.findViewById(R.id.nomActivite);
         tvMontant =holder.itemView.findViewById(R.id.tvMontant);
+        tvMontantConversion = holder.itemView.findViewById(R.id.tcMontantConvert);
 
         btnNomActivite.setText(_presenteur.getFacturesGroupe().get(position).getLibelle());
         btnNomActivite.setOnClickListener(view -> _presenteur.commencerVoirDetailFacture(position));
 
         Monnaie monnaieUser= _presenteur.getMonnaieUserConnecte();
+        Monnaie monnaieGroupe = _presenteur.getMonnaieGroupe();
         Double montantFacturePayer=_presenteur.getMontantFacturePayerParUser(position);
-        montantFacturePayer*=monnaieUser.getTauxCad();
-        tvMontant.setText(( montantFacturePayer).toString()+" "+monnaieUser.getSymbol());
+        tvMontant.setText(String.format(Locale.CANADA,"%.2f",montantFacturePayer)+" "+monnaieGroupe.getSymbol());
+        if (!monnaieUser.name().equals(monnaieGroupe.name())){
+            double montantConvertiCAD = montantFacturePayer*monnaieGroupe.getTauxDevise();
+            double montantConverti = montantConvertiCAD*monnaieUser.getTauxCad();
+            tvMontantConversion.setText(String.format(Locale.CANADA,"%.2f",montantConverti)+ monnaieUser.getSymbol());
+        }
     }
 
     @Override
