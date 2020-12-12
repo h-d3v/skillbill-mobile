@@ -37,6 +37,13 @@ public class PresenteurModifProfil implements IContratVPModifProfil.PresenteurMo
     private Thread filEsclave = null;
 
 
+    /**
+     *
+     * @param activite
+     * @param modele
+     * @param vue
+     * @param sourceDonnee
+     */
     @SuppressLint("HandlerLeak")
     public PresenteurModifProfil(Activity activite, Modele modele, VueModifProfil vue, ISourceDonnee sourceDonnee){
 
@@ -79,7 +86,12 @@ public class PresenteurModifProfil implements IContratVPModifProfil.PresenteurMo
     }
 
 
-
+    /**
+     * initie l'action de modifier la modification de profil. Les informations
+     * sont prises dans la vue et transmises à la source de données
+     * qui va les traitées. Un message est ensuite transmis au handler si la modification
+     * est réussie, échouée ou si la connexion à la source de données est impossible.
+     */
     @Override
     public void modifierProfil() {
         _vue.activerDescativerBtn();
@@ -111,21 +123,35 @@ public class PresenteurModifProfil implements IContratVPModifProfil.PresenteurMo
         filEsclave.start();
     }
 
+    /**
+     *
+     * @return l'email de l'utilisateur connecté
+     */
     @Override
     public String getEmailUserConnecte() {
         return _modele.getUtilisateurConnecte().getCourriel();
     }
 
+    /**
+     *
+     * @return le nom  de l'utilisateur connecté
+     */
     @Override
     public String getNomUserConnecte() {
         return _modele.getUtilisateurConnecte().getNom();
     }
 
+    /**
+     * @return la monnaie de l'utilisateur connecté
+     */
     @Override
     public Monnaie getMonnaieConnecte() {
         return _modele.getUtilisateurConnecte().getMonnaieUsuelle();
     }
 
+    /**
+     * @return le mdp
+     */
     @Override
     public String getMdpUserConnecte(){
         return _modele.getUtilisateurConnecte().getMotPasse();

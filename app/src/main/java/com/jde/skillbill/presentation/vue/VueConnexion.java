@@ -149,11 +149,10 @@ public class VueConnexion extends Fragment implements IContratVPConnexion.IVueCo
     }
 
     /**
-     * A des fins de tests, sera enlever a la livraison finale
+     * A des fins de tests, affiche un message lorsque l'utilisateur est connecté
      * @param email l'email de l'utilisateur
      * @param nom le nom de l'utilisateur
      */
-    
     public void afficherMsgConnecter(String email, String nom) {
         MaterialAlertDialogBuilder alertBuilder=new MaterialAlertDialogBuilder(this.requireContext());
         alertBuilder.setTitle("Connexion réussie!");

@@ -24,12 +24,22 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
     TextView tvMontant;
     TextView tvMontantConversion;
 
+    /**
+     *
+     * @param presenteur
+     */
     public RvVoirFactureAdapter(PresenteurVoirUnGroupe presenteur){
         super();
         _presenteur=presenteur;
     }
 
 
+    /**
+     *
+     * @param parent
+     * @param viewType
+     * @return viewHolder
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -37,6 +47,12 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
         return new  RecyclerView.ViewHolder(constraintLayout){};
     }
 
+    /**
+     * Affiche toutes les factures courrantes du groupe
+     * affiche le montant dans la devise du groupe et celle de l'utilisateur
+     * @param holder
+     * @param position de la facture
+     */
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
@@ -58,21 +74,37 @@ public class RvVoirFactureAdapter extends RecyclerView.Adapter implements IContr
         }
     }
 
+    /**
+     *
+     * @return nombre de facture
+     */
     @Override
     public int getItemCount() {
         if (_presenteur==null || _presenteur.getFacturesGroupe()==null) return 0;
         return _presenteur.getFacturesGroupe().size();
     }
 
+    /**
+     *
+     * @param nomActivite nom de la facture
+     */
     @Override
     public void setNomFacture(String nomActivite) {
     }
 
+    /**
+     *
+     * @param montant de la facture
+     */
     @Override
     public void setMontantFacture(double montant) {
 
     }
 
+    /**
+     *
+     * @param presenteur
+     */
     @Override
     public void setPresenteur(PresenteurVoirUnGroupe presenteur) {
         _presenteur=presenteur;
