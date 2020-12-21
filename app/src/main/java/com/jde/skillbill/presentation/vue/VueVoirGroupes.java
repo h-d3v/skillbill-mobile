@@ -90,7 +90,7 @@ public class VueVoirGroupes extends Fragment implements IContratVuePresenteurVoi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
             case R.id.nav_suggestions:
-                Toast.makeText(getContext(), "Écrivez nous à suggest@skillbill.ca", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Écrivez nous à hedio6695@gmail.com", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.nav_profil:
